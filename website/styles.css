@@ -1,0 +1,426 @@
+/* === NOIЯFRAME — theme tokens (Wedding Edition default; swap via [data-theme]) === */
+
+@import url("../FONTY/icons/phosphor-light.css");
+
+:root,
+[data-theme="wedding"] {
+  --nf-bg: #faf8f5;
+  --nf-surface: #fffef9;
+  --nf-accent: #e8dcc8;
+  --nf-warm: #d4c4a8;
+  --nf-gold: #c9a962;
+  --nf-text: #4a4540;
+  --nf-text-muted: #7a7268;
+  --nf-border: rgba(201, 169, 98, 0.35);
+  --nf-border-hover: rgba(201, 169, 98, 0.65);
+  --nf-shadow: rgba(74, 69, 64, 0.08);
+  --nf-shadow-hover: rgba(74, 69, 64, 0.14);
+  --nf-gallery-shadow: 0 36px 80px rgba(74, 69, 64, 0.32), 0 18px 42px rgba(74, 69, 64, 0.2), 0 6px 18px rgba(74, 69, 64, 0.12);
+  --nf-tile-bg: rgba(255, 254, 249, 0.72);
+  --nf-btn-bg: transparent;
+  --nf-btn-color: var(--nf-text);
+  --nf-font: "Inter", sans-serif;
+  --nf-font-display: "Inter", sans-serif;
+  --nf-transition: 0.28s ease;
+  --nf-hero-transition: 0.52s ease;
+}
+
+[data-theme="hard"] {
+  --nf-bg: rgb(38, 37, 37);
+  --nf-surface: rgb(44, 43, 43);
+  --nf-accent: rgba(79, 78, 78, 0.455);
+  --nf-warm: #7e797960;
+  --nf-gold: rgba(255, 255, 255, 0.75);
+  --nf-text: #ffffff;
+  --nf-text-muted: #bdbdbd;
+  --nf-border: rgba(255, 255, 255, 0.3);
+  --nf-border-hover: #ffffff;
+  --nf-shadow: rgba(0, 0, 0, 0.35);
+  --nf-shadow-hover: rgba(0, 0, 0, 0.45);
+  --nf-gallery-shadow: 0 36px 80px rgba(0, 0, 0, 0.55), 0 18px 42px rgba(0, 0, 0, 0.35), 0 6px 18px rgba(0, 0, 0, 0.2);
+  --nf-tile-bg: rgba(79, 78, 78, 0.455);
+  --nf-btn-bg: transparent;
+  --nf-btn-color: #ffffff;
+  --nf-font-display: serif;
+}
+
+/* === base === */
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--nf-bg);
+  margin: 0;
+  min-height: 100vh;
+  max-width: 100%;
+  font-family: var(--nf-font);
+  color: var(--nf-text);
+  overflow-x: hidden;
+}
+
+body:has(.container) {
+  overflow: hidden;
+  height: 100vh;
+  height: 100dvh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* === hero — 1920×1080 fullscreen cover === */
+
+.container {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--nf-bg);
+}
+
+.heroStage {
+  position: absolute;
+  inset: 0;
+}
+
+.heroArt {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+#enterButton {
+  position: absolute;
+  left: 50%;
+  bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 1;
+  margin: 0;
+  background: transparent;
+  color: var(--nf-text-muted);
+  border: 1px solid var(--nf-border);
+  padding: 10px 32px;
+  cursor: pointer;
+  font-family: var(--nf-font);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  transition: border-color var(--nf-transition), color var(--nf-transition);
+}
+
+#enterButton:hover,
+#enterButton:active {
+  border-color: var(--nf-border-hover);
+  color: var(--nf-text);
+}
+
+/* === menu === */
+
+.menuWrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px 60px;
+  box-sizing: border-box;
+  background: var(--nf-bg);
+}
+
+.nfLogo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 36px;
+  font-family: var(--nf-font-display);
+  font-size: 48px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--nf-warm);
+}
+
+.nfLogo span {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--nf-font);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.45em;
+  color: var(--nf-text-muted);
+  text-align: center;
+}
+
+.menu {
+  width: 100%;
+  max-width: 960px;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+.tile {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border: 1px solid var(--nf-border);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color var(--nf-transition), box-shadow var(--nf-transition);
+  box-shadow: 0 6px 16px var(--nf-shadow);
+  background: var(--nf-tile-bg);
+}
+
+.tile:hover,
+.tile:active {
+  border-color: var(--nf-border-hover);
+  box-shadow: 0 8px 20px var(--nf-shadow-hover);
+}
+
+.tile i {
+  font-size: 28px;
+  line-height: 1;
+  margin-bottom: 12px;
+  color: var(--nf-gold);
+}
+
+.tile span {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--nf-text);
+}
+
+/* === gallery === */
+
+.gallery {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--nf-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 36px 20px 72px;
+  box-sizing: border-box;
+}
+
+.gallery h1 {
+  letter-spacing: 0.35em;
+  font-weight: 300;
+  font-size: 22px;
+  margin: 0;
+  color: var(--nf-text);
+}
+
+.gallery > p {
+  font-style: italic;
+  color: var(--nf-text-muted);
+  margin: 0;
+}
+
+.gallery img,
+.member img,
+#motionVideo {
+  border: 1px solid var(--nf-border);
+  box-shadow: var(--nf-gallery-shadow);
+}
+
+.gallery img {
+  width: 700px;
+  max-width: 90%;
+  height: auto;
+  display: block;
+}
+
+#backToMenuButton {
+  background: var(--nf-btn-bg);
+  color: var(--nf-btn-color);
+  border: 1px solid var(--nf-border);
+  padding: 14px 36px;
+  cursor: pointer;
+  font-family: var(--nf-font);
+  font-size: 12px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  transition: border-color var(--nf-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+#backToMenuButton:hover,
+#backToMenuButton:active {
+  border-color: var(--nf-border-hover);
+}
+
+#backToMenuButton i {
+  font-size: 16px;
+  color: var(--nf-gold);
+}
+
+/* === about / contact / films === */
+
+.team {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 48px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+
+.member {
+  text-align: center;
+  max-width: 240px;
+}
+
+.member img {
+  width: 220px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.member h3 {
+  margin-top: 20px;
+  letter-spacing: 0.15em;
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--nf-text);
+}
+
+.member p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--nf-text-muted);
+}
+
+.contact-box {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-top: 32px;
+  align-items: center;
+}
+
+.contact-box p {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-style: normal;
+  color: var(--nf-text);
+}
+
+.contact-box i {
+  font-size: 18px;
+  color: var(--nf-gold);
+}
+
+#motionVideo {
+  width: 900px;
+  max-width: 92%;
+  height: auto;
+  margin-top: 20px;
+}
+
+/* === screen transitions === */
+
+.fade {
+  opacity: 0;
+  transition: opacity var(--nf-transition);
+}
+
+.fade.show {
+  opacity: 1;
+}
+
+.container.fade {
+  opacity: 1;
+  filter: blur(0);
+  transition: opacity var(--nf-hero-transition), filter var(--nf-hero-transition);
+}
+
+.container.fade:not(.show) {
+  opacity: 0;
+  filter: blur(18px);
+}
+
+.menuWrapper.fade {
+  opacity: 0;
+  filter: blur(12px);
+  transition: opacity var(--nf-hero-transition), filter var(--nf-hero-transition);
+}
+
+.menuWrapper.fade.show {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* === responsive === */
+
+@media (max-width: 900px) {
+  .menu {
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .tile {
+    width: 140px;
+    height: 140px;
+  }
+
+  .nfLogo {
+    margin-bottom: 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .tile {
+    width: 128px;
+    height: 128px;
+  }
+
+  #enterButton {
+    bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+    padding: 9px 24px;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+  }
+}
+
+@media (max-height: 700px) {
+  #enterButton {
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    padding: 8px 22px;
+    font-size: 10px;
+  }
+}
+
+@media (max-aspect-ratio: 1/1) {
+  .heroArt {
+    object-position: center center;
+  }
+}

@@ -1,0 +1,29 @@
+@font-face {
+  font-family: "Phosphor-Light";
+  src: url("./phosphor-light.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.ph-light {
+  font-family: "Phosphor-Light" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ph-light.ph-arrow-left:before { content: "\e058"; }
+.ph-light.ph-envelope:before { content: "\e214"; }
+.ph-light.ph-heart-straight:before { content: "\e2aa"; }
+.ph-light.ph-house:before { content: "\e2c2"; }
+.ph-light.ph-phone:before { content: "\e3b8"; }
+.ph-light.ph-user:before { content: "\e4c2"; }
+.ph-light.ph-user-focus:before { content: "\e6fc"; }
+.ph-light.ph-users:before { content: "\e4d6"; }
