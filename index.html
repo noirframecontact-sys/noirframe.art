@@ -11,9 +11,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
-<link rel="preload" as="image" href="images/hero01.jpg" media="(min-width: 900px)">
+<link rel="preload" as="image" href="images/hero01.jpg" media="(min-width: 900px) and (min-height: 521px)">
 <link rel="preload" as="image" href="images/hero-mobile/hero02.jpg" media="(max-width: 899px) and (orientation: portrait)">
-<link rel="preload" as="image" href="images/hero-mobile/hero03.jpg" media="(max-width: 899px) and (orientation: landscape)">
+<link rel="preload" as="image" href="images/hero-mobile/hero03.jpg" media="(orientation: landscape) and (max-height: 520px)">
 <link rel="stylesheet" href="website/styles.css">
 </head>
 
@@ -23,9 +23,9 @@
 
 <div class="heroStage">
 <picture class="heroPicture">
-<source media="(max-width: 899px) and (orientation: landscape)" srcset="images/hero-mobile/hero03.jpg">
+<source media="(orientation: landscape) and (max-height: 520px)" srcset="images/hero-mobile/hero03.jpg">
 <source media="(max-width: 899px) and (orientation: portrait)" srcset="images/hero-mobile/hero02.jpg">
-<img class="heroArt" src="images/hero01.jpg" alt="" width="1920" height="1080" fetchpriority="high" decoding="async">
+<img class="heroArt" src="images/hero01.jpg" alt="" fetchpriority="high" decoding="async">
 </picture>
 <button id="enterButton" type="button">ENTER</button>
 </div>

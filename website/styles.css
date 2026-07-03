@@ -89,18 +89,28 @@ button {
 .heroStage {
   position: absolute;
   inset: 0;
+  overflow: hidden;
 }
 
 .heroPicture {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .heroArt {
-  display: block;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  max-width: none;
+  transform: translate(-50%, -50%);
   object-fit: cover;
   object-position: center center;
 }
@@ -425,8 +435,14 @@ button {
   }
 }
 
-@media (max-aspect-ratio: 1/1) {
+@media (orientation: landscape) and (max-height: 520px) {
+  .container {
+    width: 100vw;
+    height: 100dvh;
+  }
+
   .heroArt {
-    object-position: center center;
+    min-width: 100vw;
+    min-height: 100dvh;
   }
 }
