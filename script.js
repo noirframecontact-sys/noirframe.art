@@ -1,10 +1,6 @@
 const FADE_MS = 520;
 
-const GALLERY_COUNTS = {
-  weddings: 6,
-  realestate: 6,
-  portrait: 6,
-};
+const galleryManifestCache = {};
 
 const enterButton = document.getElementById("enterButton");
 
@@ -51,18 +47,31 @@ function revealScreen(onReady) {
   }
 }
 
-function imageBase(folder, filename) {
+function galleryAssetPath(folder, filename) {
   return "images/" + folder + "/" + filename;
 }
 
-function galleryPhotoCount(folder) {
-  return GALLERY_COUNTS[folder] || 5;
+function fetchGalleryManifest(folder) {
+  if (galleryManifestCache[folder]) {
+    return Promise.resolve(galleryManifestCache[folder]);
+  }
+
+  return fetch(galleryAssetPath(folder, "gallery.json"))
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error("Gallery manifest not found");
+      }
+      return response.json();
+    })
+    .then(function (data) {
+      const images = Array.isArray(data) ? data : data.images || [];
+      galleryManifestCache[folder] = images;
+      return images;
+    });
 }
 
-function galleryImageTag(folder, index) {
-  const num = String(index).padStart(2, "0");
-  const src = imageBase(folder, "foto" + num) + ".jpg";
-  const isFirst = index === 1;
+function galleryImageTag(folder, filename, isFirst) {
+  const src = galleryAssetPath(folder, filename);
   const lazy = isFirst ? "" : ' loading="lazy"';
   const priority = isFirst ? ' fetchpriority="high"' : "";
 
@@ -134,19 +143,29 @@ function bindBackToMenu() {
 }
 
 function openGallery(folder) {
-  let imagesHtml = "";
-  const count = galleryPhotoCount(folder);
-  for (let i = 1; i <= count; i++) {
-    imagesHtml += galleryImageTag(folder, i);
-  }
+  fetchGalleryManifest(folder)
+    .then(function (images) {
+      let imagesHtml = "";
+      images.forEach(function (filename, index) {
+        imagesHtml += galleryImageTag(folder, filename, index === 0);
+      });
 
-  transitionBody(
-    '<div class="gallery fade">' +
-      imagesHtml +
-      backButtonHtml("backToMenuButton", "BACK TO MENU") +
-      "</div>",
-    bindBackToMenu
-  );
+      transitionBody(
+        '<div class="gallery fade">' +
+          imagesHtml +
+          backButtonHtml("backToMenuButton", "BACK TO MENU") +
+          "</div>",
+        bindBackToMenu
+      );
+    })
+    .catch(function () {
+      transitionBody(
+        '<div class="gallery fade">' +
+          backButtonHtml("backToMenuButton", "BACK TO MENU") +
+          "</div>",
+        bindBackToMenu
+      );
+    });
 }
 
 function showAbout() {
