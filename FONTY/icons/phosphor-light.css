@@ -27,3 +27,4 @@
 .ph-light.ph-user:before { content: "\e4c2"; }
 .ph-light.ph-user-focus:before { content: "\e6fc"; }
 .ph-light.ph-users:before { content: "\e4d6"; }
+.ph-light.ph-film-reel:before { content: "\e8c0"; }

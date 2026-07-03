@@ -91,6 +91,12 @@ button {
   inset: 0;
 }
 
+.heroPicture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .heroArt {
   display: block;
   width: 100%;

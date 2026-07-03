@@ -2,6 +2,8 @@ const FADE_MS = 520;
 
 const GALLERY_COUNTS = {
   weddings: 6,
+  realestate: 6,
+  portrait: 6,
 };
 
 const enterButton = document.getElementById("enterButton");
@@ -91,6 +93,7 @@ function showMenu(skipFadeOut) {
       '<div class="tile" id="weddingTile"><i class="ph-light ph-heart-straight"></i><span>Wedding</span></div>' +
       '<div class="tile" id="realEstateTile"><i class="ph-light ph-house"></i><span>Real Estate</span></div>' +
       '<div class="tile" id="portraitTile"><i class="ph-light ph-user-focus"></i><span>Portrait</span></div>' +
+      '<div class="tile" id="videoTile"><i class="ph-light ph-film-reel"></i><span>Video</span></div>' +
       '<div class="tile" id="aboutTile"><i class="ph-light ph-users"></i><span>About us</span></div>' +
       '<div class="tile" id="contactTile"><i class="ph-light ph-envelope"></i><span>Contact</span></div>' +
       "</div>" +
@@ -111,6 +114,10 @@ function setupTiles() {
 
   document.getElementById("portraitTile").addEventListener("click", function () {
     openGallery("portrait");
+  });
+
+  document.getElementById("videoTile").addEventListener("click", function () {
+    showFilms();
   });
 
   document.getElementById("aboutTile").addEventListener("click", function () {
@@ -176,7 +183,7 @@ function showContact() {
       "<h1>CONTACT</h1>" +
       '<div class="contact-box">' +
       "<p>NOIЯFRAME</p>" +
-      '<p><i class="ph-light ph-envelope"></i> noirframe.contact@gmail.com</p>' +
+      '<p><i class="ph-light ph-envelope"></i> info.noirframe@gmail.com</p>' +
       "<p><i class=\"ph-light ph-user\"></i> Marcin Porębski</p>" +
       '<p><i class="ph-light ph-phone"></i> 01774429815</p>' +
       "</div>" +
@@ -189,7 +196,7 @@ function showContact() {
 function showFilms() {
   transitionBody(
     '<div class="gallery fade">' +
-      "<h1>FILMS</h1>" +
+      "<h1>VIDEO</h1>" +
       "<p>31 seconds of NOIЯFRAME</p>" +
       '<video id="motionVideo" controls preload="metadata" playsinline>' +
       '<source src="images/motion/Video01.mp4" type="video/mp4">' +
