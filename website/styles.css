@@ -248,7 +248,7 @@ button {
 
 .gallery img,
 .member img,
-#motionVideo {
+.motionVideo {
   border: 1px solid var(--nf-border);
   box-shadow: var(--nf-gallery-shadow);
 }
@@ -345,7 +345,7 @@ button {
   color: var(--nf-gold);
 }
 
-#motionVideo {
+.motionVideo {
   width: 900px;
   max-width: 92%;
   height: auto;

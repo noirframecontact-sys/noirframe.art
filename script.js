@@ -216,10 +216,14 @@ function showFilms() {
   transitionBody(
     '<div class="gallery fade">' +
       "<h1>VIDEO</h1>" +
-      "<p>31 seconds of NOIЯFRAME</p>" +
-      '<video id="motionVideo" controls preload="metadata" playsinline>' +
+      '<video class="motionVideo" controls preload="metadata" playsinline>' +
       '<source src="images/motion/Video01.mp4" type="video/mp4">' +
       "</video>" +
+      "<p>32 seconds of NOIЯFRAME</p>" +
+      '<video class="motionVideo" controls preload="metadata" playsinline>' +
+      '<source src="images/motion/Video02.mp4" type="video/mp4">' +
+      "</video>" +
+      "<p>Henna Abend by NOIЯFRAME</p>" +
       "<p>Only light matters.</p>" +
       backButtonHtml("backToMenuButton", "BACK TO MENU") +
       "</div>",
