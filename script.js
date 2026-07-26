@@ -56,7 +56,7 @@ function fetchGalleryManifest(folder) {
     return Promise.resolve(galleryManifestCache[folder]);
   }
 
-  return fetch(galleryAssetPath(folder, "gallery.json"))
+  return fetch(galleryAssetPath(folder, "gallery.json"), { cache: "no-store" })
     .then(function (response) {
       if (!response.ok) {
         throw new Error("Gallery manifest not found");
