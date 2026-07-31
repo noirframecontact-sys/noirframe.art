@@ -100,7 +100,7 @@ function showMenu(skipFadeOut) {
       '<div class="nfLogo">NF<span>NOIЯFRAME</span></div>' +
       '<div class="menu">' +
       '<div class="tile" id="weddingTile"><i class="ph-light ph-heart-straight"></i><span>Wedding</span></div>' +
-      '<div class="tile" id="realEstateTile"><i class="ph-light ph-house"></i><span>Real Estate</span></div>' +
+      '<div class="tile" id="realEstateTile"><i class="ph-light ph-house"></i><span>Reportage</span></div>' +
       '<div class="tile" id="portraitTile"><i class="ph-light ph-user-focus"></i><span>Portrait</span></div>' +
       '<div class="tile" id="videoTile"><i class="ph-light ph-film-reel"></i><span>Video</span></div>' +
       '<div class="tile" id="aboutTile"><i class="ph-light ph-users"></i><span>About us</span></div>' +
