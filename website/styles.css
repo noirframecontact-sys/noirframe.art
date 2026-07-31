@@ -5,6 +5,7 @@
 :root,
 [data-theme="wedding"] {
   --nf-bg: #faf8f5;
+  --nf-menu-bg: #d9cdbf;
   --nf-surface: #fffef9;
   --nf-accent: #e8dcc8;
   --nf-warm: #d4c4a8;
@@ -108,8 +109,8 @@ button {
 #enterButton {
   position: absolute;
   left: 50%;
-  bottom: calc(28px + env(safe-area-inset-bottom, 0px));
-  transform: translateX(-50%);
+  top: 75%;
+  transform: translate(-50%, -50%);
   z-index: 1;
   margin: 0;
   background: transparent;
@@ -141,7 +142,7 @@ button {
   justify-content: center;
   padding: 40px 20px 60px;
   box-sizing: border-box;
-  background: var(--nf-bg);
+  background: var(--nf-menu-bg);
 }
 
 .nfLogo {
@@ -410,7 +411,6 @@ button {
   }
 
   #enterButton {
-    bottom: calc(22px + env(safe-area-inset-bottom, 0px));
     padding: 9px 24px;
     font-size: 10px;
     letter-spacing: 0.28em;
@@ -419,7 +419,6 @@ button {
 
 @media (max-height: 700px) {
   #enterButton {
-    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
     padding: 8px 22px;
     font-size: 10px;
   }
