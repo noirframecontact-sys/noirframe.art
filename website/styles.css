@@ -111,7 +111,7 @@ button {
   position: absolute;
   left: 50%;
   top: 75%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc(-50% + 40px));
   z-index: 1;
   margin: 0;
   background: transparent;
@@ -135,6 +135,15 @@ button {
 
 /* === menu === */
 
+.menuWrapper,
+.gallery {
+  background-color: var(--nf-menu-bg);
+  background-image: url("../images/layouts/layout_PC.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
 .menuWrapper {
   min-height: 100vh;
   display: flex;
@@ -143,7 +152,6 @@ button {
   justify-content: center;
   padding: 40px 20px 60px;
   box-sizing: border-box;
-  background: var(--nf-menu-bg);
 }
 
 .nfLogo {
@@ -225,7 +233,6 @@ button {
 .gallery {
   width: 100%;
   min-height: 100vh;
-  background: var(--nf-menu-bg);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -425,7 +432,19 @@ button {
   }
 }
 
+@media (max-width: 899px) and (orientation: portrait) {
+  .menuWrapper,
+  .gallery {
+    background-image: url("../images/layouts/layout_02.jpg");
+  }
+}
+
 @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+  .menuWrapper,
+  .gallery {
+    background-image: url("../images/layouts/layout_03.jpg");
+  }
+
   .heroArt {
     width: 100vw;
     height: 100dvh;
