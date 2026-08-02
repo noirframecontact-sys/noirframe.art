@@ -1,10 +1,16 @@
 const FADE_MS = 520;
+const HERO_HOLD_MS = 5000;
 
 const galleryManifestCache = {};
 
-const enterButton = document.getElementById("enterButton");
+let heroTransitionStarted = false;
 
-enterButton.addEventListener("click", function () {
+function openMenuFromHero() {
+  if (heroTransitionStarted) {
+    return;
+  }
+  heroTransitionStarted = true;
+
   const container = document.querySelector(".container");
   if (container) {
     container.classList.remove("show");
@@ -14,7 +20,9 @@ enterButton.addEventListener("click", function () {
     return;
   }
   showMenu();
-});
+}
+
+setTimeout(openMenuFromHero, HERO_HOLD_MS);
 
 function transitionBody(html, onReady, skipFadeOut) {
   const existing = document.body.firstElementChild;
