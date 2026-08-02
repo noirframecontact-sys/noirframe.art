@@ -107,32 +107,6 @@ button {
   object-position: center center;
 }
 
-#enterButton {
-  position: absolute;
-  left: 50%;
-  top: 75%;
-  transform: translate(-50%, calc(-50% + 40px));
-  z-index: 1;
-  margin: 0;
-  background: transparent;
-  color: var(--nf-text-muted);
-  border: 1px solid var(--nf-border);
-  padding: 10px 32px;
-  cursor: pointer;
-  font-family: var(--nf-font);
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  transition: border-color var(--nf-transition), color var(--nf-transition);
-}
-
-#enterButton:hover,
-#enterButton:active {
-  border-color: var(--nf-border-hover);
-  color: var(--nf-text);
-}
-
 /* === menu === */
 
 .menuWrapper,
@@ -416,19 +390,6 @@ button {
   .tile {
     width: 128px;
     height: 128px;
-  }
-
-  #enterButton {
-    padding: 9px 24px;
-    font-size: 10px;
-    letter-spacing: 0.28em;
-  }
-}
-
-@media (max-height: 700px) {
-  #enterButton {
-    padding: 8px 22px;
-    font-size: 10px;
   }
 }
 
