@@ -1,5 +1,5 @@
 const FADE_MS = 520;
-const HERO_HOLD_MS = 5000;
+const HERO_HOLD_MS = 3000;
 
 const galleryManifestCache = {};
 
