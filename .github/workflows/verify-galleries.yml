@@ -1,0 +1,23 @@
+name: Verify gallery manifests
+
+on:
+  push:
+    paths:
+      - "images/**"
+      - "sync-gallery-manifests.ps1"
+      - "verify-gallery-manifests.ps1"
+  pull_request:
+    paths:
+      - "images/**"
+      - "sync-gallery-manifests.ps1"
+      - "verify-gallery-manifests.ps1"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify gallery.json matches folder contents
+        shell: pwsh
+        run: ./verify-gallery-manifests.ps1

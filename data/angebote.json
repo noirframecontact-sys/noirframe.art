@@ -1,0 +1,15 @@
+{
+  "title": "ANGEBOTE",
+  "intro": "",
+  "items": [
+    { "title": "Hochzeit", "price": "ab 999 €" },
+    { "title": "Standesamt", "price": "ab 499 €" },
+    { "title": "Business", "price": "ab 450 €" },
+    { "title": "Verlobung / Engagement", "price": "ab 299 €" },
+    { "title": "Events & Feiern", "price": "ab 179 €" },
+    { "title": "Familie & Portrait", "price": "ab 129 €" }
+  ],
+  "noteLead": "Orientierungspreise – individuell vereinbar.",
+  "note": "Die genannten Preise dienen als erste Orientierung. Jedes Projekt ist individuell und wird nach Umfang, Dauer und Anforderungen persönlich kalkuliert. Der endgültige Preis wird nach weiterer Kontaktaufnahme und gemeinsamer Abstimmung vereinbart.",
+  "ctaLabel": "Anfrage senden"
+}

@@ -28,3 +28,5 @@
 .ph-light.ph-user-focus:before { content: "\e6fc"; }
 .ph-light.ph-users:before { content: "\e4d6"; }
 .ph-light.ph-film-reel:before { content: "\e8c0"; }
+.ph-light.ph-moon:before { content: "\e330"; }
+.ph-light.ph-device-rotate:before { content: "\edf2"; }
