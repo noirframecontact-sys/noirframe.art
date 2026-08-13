@@ -461,6 +461,8 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   padding: 0;
   overflow: hidden;
   overscroll-behavior: none;
+  --contact-gutter: max(16px, env(safe-area-inset-left));
+  --contact-menu-clearance: calc(env(safe-area-inset-top) + 12px + 36px + 12px);
   background-color: #e8e0d4;
   background-image: url("contact.png");
   background-size: cover;
@@ -485,15 +487,16 @@ body:has(.gallery--contact) {
 .gallery--contact .contactLayout__content {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: clamp(20px, 3vh, 32px);
   width: min(100%, 42vw);
   max-width: 520px;
   min-height: 100%;
   padding:
-    calc(var(--nf-nav-height) + clamp(20px, 4vh, 36px))
+    var(--contact-menu-clearance)
     clamp(20px, 4vw, 48px)
     clamp(24px, 4vh, 40px)
-    clamp(24px, 5vw, 64px);
+    var(--contact-gutter);
   box-sizing: border-box;
   text-align: left;
 }
@@ -518,10 +521,18 @@ body:has(.gallery--contact) {
   width: 100%;
   margin: 0;
   gap: clamp(16px, 2.5vh, 24px);
+  align-items: flex-start;
 }
 
 .gallery--contact .contact-group {
   gap: clamp(14px, 2vh, 18px);
+  align-items: flex-start;
+  width: 100%;
+}
+
+.gallery--contact .contact-box p {
+  justify-content: flex-start;
+  width: 100%;
 }
 
 .gallery--contact .contact-box__role {
@@ -539,6 +550,9 @@ body:has(.gallery--contact) {
 .gallery--contact .contactLayout__languages {
   margin-top: auto;
   padding-top: clamp(16px, 3vh, 28px);
+  align-self: stretch;
+  width: 100%;
+  text-align: left;
 }
 
 .gallery--contact .contactLayout__languagesLead,
@@ -982,12 +996,13 @@ body:has(.gallery--contact) {
     max-height: 100%;
     min-height: 0;
     overflow: hidden;
+    align-items: flex-start;
     gap: clamp(6px, 1.6svh, 20px);
     padding:
-      calc(env(safe-area-inset-top) + 44px)
+      var(--contact-menu-clearance)
       clamp(16px, 4vw, 24px)
       calc(env(safe-area-inset-bottom) + 6px)
-      clamp(16px, 5vw, 24px);
+      var(--contact-gutter);
     background: linear-gradient(
       to right,
       rgba(250, 248, 245, 0.94) 0%,
@@ -1036,10 +1051,6 @@ body:has(.gallery--contact) {
   .gallery.gallery--contact .contactLayout__languagesLead {
     margin-bottom: clamp(2px, 0.6svh, 8px);
   }
-
-  .gallery.gallery--contact .contactLayout__menu {
-    top: calc(env(safe-area-inset-top) + 8px);
-  }
 }
 
 @media (max-width: 899px) and (orientation: portrait) {
@@ -1064,10 +1075,10 @@ body:has(.gallery--contact) {
     width: min(100%, 62vw);
     gap: clamp(3px, 1.1svh, 10px);
     padding:
-      calc(env(safe-area-inset-top) + 34px)
+      var(--contact-menu-clearance)
       clamp(12px, 3vw, 20px)
       calc(env(safe-area-inset-bottom) + 4px)
-      clamp(12px, 4vw, 20px);
+      var(--contact-gutter);
   }
 
   .gallery.gallery--contact .contact-box {
