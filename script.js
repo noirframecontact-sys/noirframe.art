@@ -113,6 +113,10 @@ let darkSideNavRevealTimer = null;
 let darkSideVideoTimer = null;
 let darkSideClockTimer = null;
 let siteNav = null;
+let portfolioHoverOpenTimer = null;
+let portfolioHoverCloseTimer = null;
+const PORTFOLIO_HOVER_OPEN_MS = 400;
+const PORTFOLIO_HOVER_CLOSE_MS = 220;
 let menuHeroTrack = null;
 let menuHeroResizeHandler = null;
 let menuHeroFallbackTimer = null;
@@ -236,11 +240,73 @@ function releaseSiteNavFocus() {
   }
 }
 
+function isDesktopSiteNav() {
+  return window.matchMedia("(min-width: 901px) and (hover: hover) and (pointer: fine)").matches;
+}
+
+function clearPortfolioHoverTimers() {
+  if (portfolioHoverOpenTimer) {
+    clearTimeout(portfolioHoverOpenTimer);
+    portfolioHoverOpenTimer = null;
+  }
+  if (portfolioHoverCloseTimer) {
+    clearTimeout(portfolioHoverCloseTimer);
+    portfolioHoverCloseTimer = null;
+  }
+}
+
+function setPortfolioMenuOpen(open) {
+  const group = document.getElementById("siteNavPortfolio");
+  const trigger = document.getElementById("siteNavPortfolioTrigger");
+  if (!group || !trigger) {
+    return;
+  }
+
+  group.classList.toggle("is-open", open);
+  trigger.setAttribute("aria-expanded", open ? "true" : "false");
+}
+
+function bindPortfolioDesktopHover() {
+  const group = document.getElementById("siteNavPortfolio");
+  if (!group) {
+    return;
+  }
+
+  group.addEventListener("mouseenter", function () {
+    if (!isDesktopSiteNav()) {
+      return;
+    }
+
+    clearPortfolioHoverTimers();
+    portfolioHoverOpenTimer = setTimeout(function () {
+      portfolioHoverOpenTimer = null;
+      setPortfolioMenuOpen(true);
+    }, PORTFOLIO_HOVER_OPEN_MS);
+  });
+
+  group.addEventListener("mouseleave", function () {
+    if (!isDesktopSiteNav()) {
+      return;
+    }
+
+    if (portfolioHoverOpenTimer) {
+      clearTimeout(portfolioHoverOpenTimer);
+      portfolioHoverOpenTimer = null;
+    }
+
+    portfolioHoverCloseTimer = setTimeout(function () {
+      portfolioHoverCloseTimer = null;
+      setPortfolioMenuOpen(false);
+    }, PORTFOLIO_HOVER_CLOSE_MS);
+  });
+}
+
 function closeSiteNavPanels() {
   if (!siteNav) {
     return;
   }
 
+  clearPortfolioHoverTimers();
   siteNav.classList.remove("siteNav--open");
   const toggle = document.getElementById("siteNavToggle");
   if (toggle) {
@@ -290,10 +356,13 @@ function bindSiteNav() {
   });
 
   document.getElementById("siteNavPortfolioTrigger").addEventListener("click", function () {
+    clearPortfolioHoverTimers();
     const group = document.getElementById("siteNavPortfolio");
-    const isOpen = group.classList.toggle("is-open");
-    this.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    const isOpen = !group.classList.contains("is-open");
+    setPortfolioMenuOpen(isOpen);
   });
+
+  bindPortfolioDesktopHover();
 
   siteNav.querySelectorAll("[data-nav-action]").forEach(function (button) {
     button.addEventListener("click", function () {
@@ -964,27 +1033,50 @@ function showContact() {
   beginSubpageNavigation();
   transitionBody(
     '<div class="gallery gallery--contact fade">' +
-      '<button type="button" class="contactLayout__menu" id="backToMenuButton">MENÜ</button>' +
       '<div class="contactLayout">' +
+      '<div class="contactLayout__main">' +
+      '<button type="button" class="contactLayout__menu" id="backToMenuButton">MENÜ</button>' +
       '<div class="contactLayout__panel">' +
       "<p class=\"contactLayout__brand\">NOIЯFRAME</p>" +
       '<div class="contact-box">' +
       '<div class="contact-group">' +
-      '<p><i class="ph-light ph-user"></i> Marcin Porębski</p>' +
-      '<p class="contact-box__role"><i class="ph-light ph-camera"></i> Fotograf &amp; Inhaber</p>' +
-      '<p><i class="ph-light ph-phone"></i> 01774429815</p>' +
-      '<p><i class="ph-light ph-envelope"></i> info.noirframe@gmail.com</p>' +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
+      '<span class="contact-row__body">Marcin Porębski</span>' +
+      "</p>" +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-camera"></i></span>' +
+      '<span class="contact-row__body contact-box__role">Fotograf &amp; Inhaber</span>' +
+      "</p>" +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-phone"></i></span>' +
+      '<a class="contact-row__body" href="tel:+491774429815">01774429815</a>' +
+      "</p>" +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-envelope"></i></span>' +
+      '<a class="contact-row__body" href="mailto:info.noirframe@gmail.com">info.noirframe@gmail.com</a>' +
+      "</p>" +
       "</div>" +
       '<hr class="contactLayout__divider" aria-hidden="true">' +
       '<div class="contact-group">' +
-      "<p><i class=\"ph-light ph-user\"></i> Büro &amp; Organisation</p>" +
-      '<p><i class="ph-light ph-user"></i> Hr. Rinaldo</p>' +
-      '<p><i class="ph-light ph-phone"></i> 01739147605</p>' +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
+      '<span class="contact-row__body">Büro &amp; Organisation</span>' +
+      "</p>" +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
+      '<span class="contact-row__body">Hr. Rinaldo</span>' +
+      "</p>" +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-phone"></i></span>' +
+      '<a class="contact-row__body" href="tel:+491739147605">01739147605</a>' +
+      "</p>" +
       "</div>" +
       "</div>" +
       '<div class="contactLayout__languages">' +
       '<p class="contactLayout__languagesLead">Wir sprechen</p>' +
       '<p class="contactLayout__languagesList">Russisch · Polski · Deutsch · Italy</p>' +
+      "</div>" +
       "</div>" +
       "</div>" +
       '<div class="contactLayout__aside" aria-hidden="true"></div>' +
