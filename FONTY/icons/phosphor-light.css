@@ -24,6 +24,7 @@
 .ph-light.ph-heart-straight:before { content: "\e2aa"; }
 .ph-light.ph-house:before { content: "\e2c2"; }
 .ph-light.ph-phone:before { content: "\e3b8"; }
+.ph-light.ph-camera:before { content: "\e10e"; }
 .ph-light.ph-user:before { content: "\e4c2"; }
 .ph-light.ph-user-focus:before { content: "\e6fc"; }
 .ph-light.ph-users:before { content: "\e4d6"; }

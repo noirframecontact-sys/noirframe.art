@@ -963,23 +963,32 @@ function showContact() {
   cancelPendingGalleryLoads();
   beginSubpageNavigation();
   transitionBody(
-    '<div class="gallery fade">' +
-      "<h1>CONTACT</h1>" +
+    '<div class="gallery gallery--contact fade">' +
+      '<button type="button" class="contactLayout__menu" id="backToMenuButton">MENÜ</button>' +
+      '<div class="contactLayout">' +
+      '<div class="contactLayout__panel">' +
+      "<p class=\"contactLayout__brand\">NOIЯFRAME</p>" +
       '<div class="contact-box">' +
-      "<p class=\"contact-box__brand\">NOIЯFRAME</p>" +
       '<div class="contact-group">' +
       '<p><i class="ph-light ph-user"></i> Marcin Porębski</p>' +
-      "<p class=\"contact-box__role\">Fotograf &amp; Inhaber</p>" +
+      '<p class="contact-box__role"><i class="ph-light ph-camera"></i> Fotograf &amp; Inhaber</p>' +
       '<p><i class="ph-light ph-phone"></i> 01774429815</p>' +
       '<p><i class="ph-light ph-envelope"></i> info.noirframe@gmail.com</p>' +
       "</div>" +
+      '<hr class="contactLayout__divider" aria-hidden="true">' +
       '<div class="contact-group">' +
       "<p><i class=\"ph-light ph-user\"></i> Büro &amp; Organisation</p>" +
-      '<p><i class="ph-light ph-user"></i> Hr. Reynallo</p>' +
+      '<p><i class="ph-light ph-user"></i> Hr. Rinaldo</p>' +
       '<p><i class="ph-light ph-phone"></i> 01739147605</p>' +
       "</div>" +
       "</div>" +
-      backButtonHtml("backToMenuButton", "BACK TO MENU") +
+      '<div class="contactLayout__languages">' +
+      '<p class="contactLayout__languagesLead">Wir sprechen</p>' +
+      '<p class="contactLayout__languagesList">Russisch · Polski · Deutsch · Italy</p>' +
+      "</div>" +
+      "</div>" +
+      '<div class="contactLayout__aside" aria-hidden="true"></div>' +
+      "</div>" +
       "</div>",
     bindBackToMenu
   );
