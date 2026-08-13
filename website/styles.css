@@ -777,7 +777,7 @@ body:not(:has(.container)) .gallery {
 @media (max-width: 900px) {
   .menuHeroViewport {
     --hero-gap: clamp(12px, 3vw, 20px);
-    --hero-card-height: min(calc((100dvh - 220px) * 0.32), 250px, 40vw);
+    --hero-card-height: max(130px, min(calc((100dvh - 220px) * 0.32), 250px, 40vw));
   }
 
   .nfLogo {
