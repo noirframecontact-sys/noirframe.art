@@ -461,8 +461,6 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   padding: 0;
   overflow: hidden;
   overscroll-behavior: none;
-  --contact-gutter: max(16px, env(safe-area-inset-left));
-  --contact-menu-clearance: calc(env(safe-area-inset-top) + 12px + 36px + 12px);
   background-color: #e8e0d4;
   background-image: url("contact.png");
   background-size: cover;
@@ -493,12 +491,13 @@ body:has(.gallery--contact) {
   max-width: 520px;
   min-height: 100%;
   padding:
-    var(--contact-menu-clearance)
+    calc(var(--nf-nav-height) + clamp(20px, 4vh, 36px))
     clamp(20px, 4vw, 48px)
     clamp(24px, 4vh, 40px)
-    var(--contact-gutter);
+    clamp(24px, 5vw, 64px);
   box-sizing: border-box;
   text-align: left;
+  background: transparent;
 }
 
 .gallery--contact h1 {
@@ -964,7 +963,7 @@ body:has(.gallery--contact) {
   }
 }
 
-@media (max-width: 899px) {
+@media (max-width: 899px), (hover: none) and (pointer: coarse) {
   html:has(.gallery--contact),
   body:has(.gallery--contact) {
     height: 100svh;
@@ -974,6 +973,8 @@ body:has(.gallery--contact) {
   }
 
   .gallery.gallery--contact {
+    --contact-gutter: max(16px, env(safe-area-inset-left));
+    --contact-menu-clearance: calc(env(safe-area-inset-top) + 12px + 36px + 12px);
     height: 100svh;
     height: 100dvh;
     max-height: 100svh;
@@ -981,6 +982,7 @@ body:has(.gallery--contact) {
     min-height: 0;
     width: 100%;
     max-width: 100%;
+    background-image: url("contact.png");
   }
 
   .gallery.gallery--contact .contactLayout {
@@ -1003,13 +1005,7 @@ body:has(.gallery--contact) {
       clamp(16px, 4vw, 24px)
       calc(env(safe-area-inset-bottom) + 6px)
       var(--contact-gutter);
-    background: linear-gradient(
-      to right,
-      rgba(250, 248, 245, 0.94) 0%,
-      rgba(250, 248, 245, 0.88) 72%,
-      rgba(250, 248, 245, 0.45) 88%,
-      transparent 100%
-    );
+    background: transparent;
   }
 
   .gallery.gallery--contact .contact-box {
@@ -1053,64 +1049,40 @@ body:has(.gallery--contact) {
   }
 }
 
-@media (max-width: 899px) and (orientation: portrait) {
-  .gallery.gallery--contact {
-    background-image: url("contact.png");
-  }
-
+@media (max-width: 899px) and (orientation: portrait),
+       (hover: none) and (pointer: coarse) and (orientation: portrait) {
   .gallery.gallery--contact .contactLayout__content {
     width: 100%;
     max-width: none;
-    background: linear-gradient(
-      to bottom,
-      rgba(250, 248, 245, 0.96) 0%,
-      rgba(250, 248, 245, 0.9) 58%,
-      rgba(250, 248, 245, 0.55) 100%
-    );
   }
 }
 
-@media (max-width: 899px) and (orientation: landscape) {
+@media (max-width: 899px) and (orientation: landscape),
+       (hover: none) and (pointer: coarse) and (orientation: landscape) {
+  .gallery.gallery--contact .contactLayout {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
   .gallery.gallery--contact .contactLayout__content {
-    width: min(100%, 62vw);
-    gap: clamp(3px, 1.1svh, 10px);
+    width: min(100%, 58vw);
+    height: auto;
+    min-height: 100%;
+    max-height: none;
+    overflow: visible;
+    gap: clamp(4px, 1svh, 12px);
     padding:
       var(--contact-menu-clearance)
       clamp(12px, 3vw, 20px)
-      calc(env(safe-area-inset-bottom) + 4px)
+      calc(env(safe-area-inset-bottom) + 8px)
       var(--contact-gutter);
   }
 
-  .gallery.gallery--contact .contact-box {
-    gap: clamp(3px, 0.9svh, 10px);
-  }
-
-  .gallery.gallery--contact .contact-group {
-    gap: clamp(2px, 0.75svh, 8px);
-  }
-
-  .gallery.gallery--contact h1 {
-    font-size: clamp(12px, 2.8svh, 18px);
-  }
-
-  .gallery.gallery--contact .contactLayout__brand {
-    font-size: clamp(14px, 3.6svh, 22px);
-  }
-
-  .gallery.gallery--contact .contact-box p,
-  .gallery.gallery--contact .contactLayout__languagesLead,
-  .gallery.gallery--contact .contactLayout__languagesList {
-    font-size: clamp(10px, 2svh, 13px);
-  }
-
   .gallery.gallery--contact .contactLayout__languages {
-    padding-top: clamp(2px, 0.6svh, 8px);
-  }
-}
-
-@media (orientation: landscape) and (hover: none) and (pointer: coarse) {
-  .gallery.gallery--contact {
-    background-image: url("contact.png");
+    margin-top: auto;
+    padding-top: clamp(4px, 1svh, 12px);
   }
 }
 
