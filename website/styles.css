@@ -461,6 +461,8 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   max-width: 100%;
   min-height: 0;
   padding: 0;
+  --contact-photo-base: #3a322c;
+  --contact-photo-warm: #5c4f44;
   background-color: var(--nf-bg);
   background-image: none;
 }
@@ -492,9 +494,16 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 .gallery--contact .contactLayout__aside {
   display: none;
+  position: relative;
   box-sizing: border-box;
   overflow: hidden;
   min-height: 0;
+  background-color: var(--contact-photo-base);
+}
+
+.gallery--contact .contactLayout__aside picture {
+  position: relative;
+  z-index: 0;
 }
 
 .gallery--contact .contactLayout__aside picture,
@@ -504,6 +513,41 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   height: 100%;
   object-fit: cover;
   object-position: center center;
+}
+
+.gallery--contact .contactLayout__aside img {
+  filter: saturate(0.94) sepia(0.07);
+}
+
+.gallery--contact .contactLayout__aside::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    var(--nf-bg) 0%,
+    rgba(250, 248, 245, 0.94) 7%,
+    rgba(235, 226, 214, 0.62) 15%,
+    rgba(217, 205, 191, 0.28) 24%,
+    transparent 38%
+  );
+}
+
+.gallery--contact .contactLayout__aside::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(250, 248, 245, 0.1) 0%,
+    transparent 18%,
+    transparent 78%,
+    rgba(58, 50, 44, 0.35) 100%
+  );
 }
 
 .gallery--contact .contactLayout__brand {
@@ -697,6 +741,16 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
     min-height: 100svh;
     max-height: 100svh;
     overflow: hidden;
+    background-color: var(--nf-bg);
+    background-image: linear-gradient(
+      90deg,
+      var(--nf-bg) 0%,
+      var(--nf-bg) 38%,
+      #e8dfd3 42%,
+      #c9b8a4 46%,
+      var(--contact-photo-warm) 58%,
+      var(--contact-photo-base) 100%
+    );
   }
 
   .gallery--contact .contactLayout {
