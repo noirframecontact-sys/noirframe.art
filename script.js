@@ -958,50 +958,37 @@ function showAbout() {
   );
 }
 
-function contactFlagHtml(code, label) {
-  return (
-    '<img class="contact-flag" src="images/flags/' +
-    code +
-    '.svg" alt="' +
-    escapeHtml(label) +
-    '" title="' +
-    escapeHtml(label) +
-    '" width="24" height="16" loading="lazy" decoding="async">'
-  );
-}
 
 function showContact() {
   cancelPendingGalleryLoads();
   beginSubpageNavigation();
   transitionBody(
-    '<div class="gallery fade">' +
+    '<div class="gallery gallery--contact fade">' +
+      '<button type="button" class="contactLayout__menu" id="backToMenuButton">MENÜ</button>' +
+      '<div class="contactLayout">' +
+      '<div class="contactLayout__content">' +
       "<h1>CONTACT</h1>" +
+      "<p class=\"contactLayout__brand\">NOIЯFRAME</p>" +
       '<div class="contact-box">' +
-      "<p class=\"contact-box__brand\">NOIЯFRAME</p>" +
       '<div class="contact-group">' +
-      '<p class="contact-line contact-line--named">' +
-      '<span class="contact-line__main"><i class="ph-light ph-user"></i> Marcin Porębski</span>' +
-      '<span class="contact-flags">' +
-      contactFlagHtml("pl", "PL Polska") +
-      contactFlagHtml("de", "DE Niemcy") +
-      contactFlagHtml("ru", "RU Rosja") +
-      "</span></p>" +
-      "<p class=\"contact-box__role\">Fotograf &amp; Inhaber</p>" +
+      '<p><i class="ph-light ph-user"></i> Marcin Porębski</p>' +
+      '<p class="contact-box__role"><i class="ph-light ph-camera"></i> Fotograf &amp; Inhaber</p>' +
       '<p><i class="ph-light ph-phone"></i> 01774429815</p>' +
       '<p><i class="ph-light ph-envelope"></i> info.noirframe@gmail.com</p>' +
       "</div>" +
+      '<hr class="contactLayout__divider" aria-hidden="true">' +
       '<div class="contact-group">' +
       "<p><i class=\"ph-light ph-user\"></i> Büro &amp; Organisation</p>" +
-      '<p class="contact-line contact-line--named">' +
-      '<span class="contact-line__main"><i class="ph-light ph-user"></i> Hr. Reynallo</span>' +
-      '<span class="contact-flags">' +
-      contactFlagHtml("de", "DE Niemcy") +
-      contactFlagHtml("it", "ITA Włochy") +
-      "</span></p>" +
+      '<p><i class="ph-light ph-user"></i> Hr. Rinaldo</p>' +
       '<p><i class="ph-light ph-phone"></i> 01739147605</p>' +
       "</div>" +
       "</div>" +
-      backButtonHtml("backToMenuButton", "BACK TO MENU") +
+      '<div class="contactLayout__languages">' +
+      '<p class="contactLayout__languagesLead">Wir sprechen</p>' +
+      '<p class="contactLayout__languagesList">Russisch · Polski · Deutsch · Italy</p>' +
+      "</div>" +
+      "</div>" +
+      "</div>" +
       "</div>",
     bindBackToMenu
   );
