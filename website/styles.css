@@ -158,7 +158,7 @@ body:not(:has(.container)) .menuWrapper {
   padding-top: calc(var(--nf-nav-height) + clamp(12px, 2.5dvh, 36px));
 }
 
-body:not(:has(.container)) .gallery {
+body:not(:has(.container)) .gallery:not(.gallery--contact) {
   padding-top: calc(36px + var(--nf-nav-height));
 }
 
@@ -454,17 +454,24 @@ body:not(:has(.container)) .gallery {
 .gallery--contact {
   position: fixed;
   inset: 0;
-  min-height: 100dvh;
+  min-height: 0;
   align-items: stretch;
   justify-content: flex-start;
   gap: 0;
   padding: 0;
   overflow: hidden;
+  overscroll-behavior: none;
   background-color: #e8e0d4;
   background-image: url("contact.png");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
+}
+
+html:has(.gallery--contact),
+body:has(.gallery--contact) {
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 .gallery--contact .contactLayout {
@@ -944,8 +951,43 @@ body:not(:has(.container)) .gallery {
 }
 
 @media (max-width: 899px) {
+  html:has(.gallery--contact),
+  body:has(.gallery--contact) {
+    height: 100svh;
+    height: 100dvh;
+    max-height: 100svh;
+    max-height: 100dvh;
+  }
+
+  .gallery.gallery--contact {
+    height: 100svh;
+    height: 100dvh;
+    max-height: 100svh;
+    max-height: 100dvh;
+    min-height: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .gallery.gallery--contact .contactLayout {
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
   .gallery.gallery--contact .contactLayout__content {
     width: min(100%, 78vw);
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    gap: clamp(6px, 1.6svh, 20px);
+    padding:
+      calc(env(safe-area-inset-top) + 44px)
+      clamp(16px, 4vw, 24px)
+      calc(env(safe-area-inset-bottom) + 6px)
+      clamp(16px, 5vw, 24px);
     background: linear-gradient(
       to right,
       rgba(250, 248, 245, 0.94) 0%,
@@ -953,6 +995,50 @@ body:not(:has(.container)) .gallery {
       rgba(250, 248, 245, 0.45) 88%,
       transparent 100%
     );
+  }
+
+  .gallery.gallery--contact .contact-box {
+    gap: clamp(5px, 1.2svh, 16px);
+    min-height: 0;
+    flex-shrink: 1;
+  }
+
+  .gallery.gallery--contact .contact-group {
+    gap: clamp(4px, 1svh, 14px);
+  }
+
+  .gallery.gallery--contact h1 {
+    font-size: clamp(14px, 2.4svh, 22px);
+    flex-shrink: 0;
+  }
+
+  .gallery.gallery--contact .contactLayout__brand {
+    font-size: clamp(17px, 3.2svh, 28px);
+    flex-shrink: 0;
+  }
+
+  .gallery.gallery--contact .contact-box p,
+  .gallery.gallery--contact .contactLayout__languagesLead,
+  .gallery.gallery--contact .contactLayout__languagesList {
+    font-size: clamp(11px, 1.75svh, 14px);
+  }
+
+  .gallery.gallery--contact .contact-box i {
+    font-size: clamp(13px, 2svh, 18px);
+  }
+
+  .gallery.gallery--contact .contactLayout__languages {
+    margin-top: auto;
+    padding-top: clamp(4px, 1svh, 16px);
+    flex-shrink: 0;
+  }
+
+  .gallery.gallery--contact .contactLayout__languagesLead {
+    margin-bottom: clamp(2px, 0.6svh, 8px);
+  }
+
+  .gallery.gallery--contact .contactLayout__menu {
+    top: calc(env(safe-area-inset-top) + 8px);
   }
 }
 
@@ -970,6 +1056,44 @@ body:not(:has(.container)) .gallery {
       rgba(250, 248, 245, 0.9) 58%,
       rgba(250, 248, 245, 0.55) 100%
     );
+  }
+}
+
+@media (max-width: 899px) and (orientation: landscape) {
+  .gallery.gallery--contact .contactLayout__content {
+    width: min(100%, 62vw);
+    gap: clamp(3px, 1.1svh, 10px);
+    padding:
+      calc(env(safe-area-inset-top) + 34px)
+      clamp(12px, 3vw, 20px)
+      calc(env(safe-area-inset-bottom) + 4px)
+      clamp(12px, 4vw, 20px);
+  }
+
+  .gallery.gallery--contact .contact-box {
+    gap: clamp(3px, 0.9svh, 10px);
+  }
+
+  .gallery.gallery--contact .contact-group {
+    gap: clamp(2px, 0.75svh, 8px);
+  }
+
+  .gallery.gallery--contact h1 {
+    font-size: clamp(12px, 2.8svh, 18px);
+  }
+
+  .gallery.gallery--contact .contactLayout__brand {
+    font-size: clamp(14px, 3.6svh, 22px);
+  }
+
+  .gallery.gallery--contact .contact-box p,
+  .gallery.gallery--contact .contactLayout__languagesLead,
+  .gallery.gallery--contact .contactLayout__languagesList {
+    font-size: clamp(10px, 2svh, 13px);
+  }
+
+  .gallery.gallery--contact .contactLayout__languages {
+    padding-top: clamp(2px, 0.6svh, 8px);
   }
 }
 
