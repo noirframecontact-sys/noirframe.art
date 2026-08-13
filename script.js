@@ -32,6 +32,21 @@ const galleryManifestCache = {};
 let galleryLoadId = 0;
 let angeboteCache = null;
 let aktuellCache = null;
+let motionCache = null;
+
+const MOTION_FALLBACK = {
+  items: [
+    {
+      file: "Video01.mp4",
+      caption: "32 seconds of NOIЯFRAME",
+    },
+    {
+      file: "Video02.mp4",
+      caption: "Henna Abend by NOIЯFRAME",
+    },
+  ],
+  footer: "Only light matters.",
+};
 
 const ANGEBOTE_FALLBACK = {
   title: "ANGEBOTE",
@@ -992,25 +1007,84 @@ function showContact() {
   );
 }
 
+function fetchMotionManifest() {
+  if (motionCache) {
+    return Promise.resolve(motionCache);
+  }
+
+  return fetch("images/motion/motion.json", { cache: "no-store" })
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error("Motion manifest not found");
+      }
+      return response.json();
+    })
+    .then(function (data) {
+      motionCache = normalizeMotionData(data);
+      return motionCache;
+    });
+}
+
+function normalizeMotionData(data) {
+  const items = Array.isArray(data.items) ? data.items : [];
+  const normalizedItems = items
+    .map(function (item) {
+      if (!item || !item.file) {
+        return null;
+      }
+      return {
+        file: item.file,
+        caption: item.caption || "",
+      };
+    })
+    .filter(Boolean);
+
+  return {
+    items: normalizedItems.length ? normalizedItems : MOTION_FALLBACK.items,
+    footer: data.footer || MOTION_FALLBACK.footer,
+  };
+}
+
+function motionItemHtml(item) {
+  return (
+    '<video class="motionVideo" controls preload="metadata" playsinline>' +
+    '<source src="images/motion/' +
+    escapeHtml(item.file) +
+    '" type="video/mp4">' +
+    "</video>" +
+    "<p>" +
+    escapeHtml(item.caption) +
+    "</p>"
+  );
+}
+
+function motionScreenHtml(data) {
+  const itemsHtml = data.items.map(motionItemHtml).join("");
+  const footerHtml = data.footer
+    ? "<p>" + escapeHtml(data.footer) + "</p>"
+    : "";
+
+  return (
+    '<div class="gallery gallery--video fade">' +
+    "<h1>VIDEO</h1>" +
+    itemsHtml +
+    footerHtml +
+    backButtonHtml("backToMenuButton", "BACK TO MENU") +
+    "</div>"
+  );
+}
+
 function showFilms() {
   cancelPendingGalleryLoads();
   beginSubpageNavigation();
-  transitionBody(
-    '<div class="gallery gallery--video fade">' +
-      "<h1>VIDEO</h1>" +
-      '<video class="motionVideo" controls preload="metadata" playsinline>' +
-      '<source src="images/motion/Video01.mp4" type="video/mp4">' +
-      "</video>" +
-      "<p>32 seconds of NOIЯFRAME</p>" +
-      '<video class="motionVideo" controls preload="metadata" playsinline>' +
-      '<source src="images/motion/Video02.mp4" type="video/mp4">' +
-      "</video>" +
-      "<p>Henna Abend by NOIЯFRAME</p>" +
-      "<p>Only light matters.</p>" +
-      backButtonHtml("backToMenuButton", "BACK TO MENU") +
-      "</div>",
-    bindBackToMenu
-  );
+
+  fetchMotionManifest()
+    .then(function (data) {
+      transitionBody(motionScreenHtml(data), bindBackToMenu);
+    })
+    .catch(function () {
+      transitionBody(motionScreenHtml(MOTION_FALLBACK), bindBackToMenu);
+    });
 }
 
 function isCoarseMobile() {
