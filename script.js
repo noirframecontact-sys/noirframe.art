@@ -1079,7 +1079,12 @@ function showContact() {
       "</div>" +
       "</div>" +
       "</div>" +
-      '<div class="contactLayout__aside" aria-hidden="true"></div>' +
+      '<div class="contactLayout__aside" aria-hidden="true">' +
+      '<picture>' +
+      '<source srcset="images/contact/studio.webp" type="image/webp">' +
+      '<img src="images/contact/studio.jpg" alt="" width="1024" height="582" decoding="async" fetchpriority="low">' +
+      "</picture>" +
+      "</div>" +
       "</div>" +
       "</div>" +
       backButtonHtml("backToMenuButton", "BACK TO MENU") +
