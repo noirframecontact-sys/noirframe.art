@@ -1034,8 +1034,8 @@ function showContact() {
   transitionBody(
     '<div class="gallery gallery--contact fade">' +
       '<div class="contactLayout">' +
+      '<div class="contactLayout__frame">' +
       '<div class="contactLayout__main">' +
-      '<button type="button" class="contactLayout__menu" id="backToMenuButton">MENÜ</button>' +
       '<div class="contactLayout__panel">' +
       "<p class=\"contactLayout__brand\">NOIЯFRAME</p>" +
       '<div class="contact-box">' +
@@ -1081,6 +1081,8 @@ function showContact() {
       "</div>" +
       '<div class="contactLayout__aside" aria-hidden="true"></div>' +
       "</div>" +
+      "</div>" +
+      backButtonHtml("backToMenuButton", "BACK TO MENU") +
       "</div>",
     bindBackToMenu
   );

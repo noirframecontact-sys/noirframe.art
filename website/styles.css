@@ -470,38 +470,15 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   width: 100%;
 }
 
+.gallery--contact .contactLayout__frame {
+  box-sizing: border-box;
+  width: 100%;
+}
+
 .gallery--contact .contactLayout__main {
   box-sizing: border-box;
   width: 100%;
-  padding:
-    calc(env(safe-area-inset-top) + 16px)
-    clamp(20px, 5vw, 32px)
-    calc(env(safe-area-inset-bottom) + 24px)
-    clamp(20px, 5vw, 32px);
-}
-
-.gallery--contact .contactLayout__menu,
-.gallery--contact #backToMenuButton {
-  display: inline-block;
-  margin: 0 0 24px;
-  padding: 8px 14px;
-  border: 1px solid var(--nf-border);
-  border-radius: 0;
-  background: transparent;
-  color: var(--nf-text);
-  cursor: pointer;
-  font-family: var(--nf-font);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  transition: border-color var(--nf-transition);
-}
-
-.gallery--contact .contactLayout__menu:hover,
-.gallery--contact .contactLayout__menu:active,
-.gallery--contact #backToMenuButton:hover,
-.gallery--contact #backToMenuButton:active {
-  border-color: var(--nf-border-hover);
+  padding: 0;
 }
 
 .gallery--contact .contactLayout__panel {
@@ -515,7 +492,9 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 .gallery--contact .contactLayout__aside {
   display: none;
-  background-color: var(--nf-bg);
+  box-sizing: border-box;
+  border: 3px solid #ff0000;
+  background-color: transparent;
 }
 
 .gallery--contact .contactLayout__brand {
@@ -620,34 +599,86 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   letter-spacing: 0.04em;
 }
 
-@media (orientation: landscape) and (hover: none) and (pointer: coarse) {
-  .gallery--contact .contactLayout__main {
+@media (hover: none) and (pointer: coarse) {
+  .gallery--contact {
+    box-sizing: border-box;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .gallery--contact .contactLayout {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 0;
     padding:
-      calc(env(safe-area-inset-top) + 10px)
-      clamp(16px, 4vw, 28px)
-      calc(env(safe-area-inset-bottom) + 16px)
-      clamp(16px, 4vw, 28px);
+      calc(env(safe-area-inset-top) + 12px)
+      clamp(16px, 4vw, 24px)
+      12px;
   }
 
-  .gallery--contact .contactLayout__menu,
-  .gallery--contact #backToMenuButton {
-    margin-bottom: 14px;
+  .gallery--contact .contactLayout__frame {
+    box-sizing: border-box;
+    height: auto;
+    overflow: visible;
   }
 
+  .gallery--contact .contactLayout__main,
   .gallery--contact .contactLayout__panel {
-    gap: 16px;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
   }
 
-  .gallery--contact .contact-box {
-    gap: 12px;
+  .gallery--contact #backToMenuButton {
+    flex-shrink: 0;
+    align-self: center;
+    margin: 8px 0 calc(env(safe-area-inset-bottom) + 20px);
   }
 
-  .gallery--contact .contact-group {
-    gap: 10px;
+  @media (orientation: portrait) {
+    .gallery--contact .contactLayout__frame {
+      width: min(
+        100%,
+        92vw,
+        calc((100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 120px) * 9 / 16)
+      );
+      padding: clamp(20px, 5vw, 28px);
+    }
+
+    .gallery--contact .contactLayout__aside {
+      display: none;
+    }
   }
 
-  .gallery--contact .contactLayout__languages {
-    padding-top: 4px;
+  @media (orientation: landscape) {
+    .gallery--contact .contactLayout__frame {
+      width: min(94vw, 34rem);
+      padding: clamp(14px, 3vw, 22px);
+    }
+
+    .gallery--contact .contactLayout__aside {
+      display: none;
+    }
+  }
+
+  @media (orientation: landscape) and (min-width: 640px) {
+    .gallery--contact .contactLayout__frame {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: stretch;
+      width: min(96vw, 46rem);
+      padding: clamp(14px, 2.5vw, 22px);
+      column-gap: clamp(12px, 3vw, 20px);
+    }
+
+    .gallery--contact .contactLayout__aside {
+      display: block;
+      min-height: 0;
+    }
   }
 }
 
@@ -664,7 +695,16 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
     grid-template-columns: 42% 58%;
     flex: 1 1 auto;
     min-height: 0;
-    height: 100%;
+  }
+
+  .gallery--contact .contactLayout__frame {
+    display: contents;
+  }
+
+  .gallery--contact #backToMenuButton {
+    flex-shrink: 0;
+    align-self: center;
+    margin-bottom: calc(env(safe-area-inset-bottom) + 24px);
   }
 
   .gallery--contact .contactLayout__main {
