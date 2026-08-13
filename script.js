@@ -44,6 +44,10 @@ const MOTION_FALLBACK = {
       file: "Video02.mp4",
       caption: "Henna Abend by NOIЯFRAME",
     },
+    {
+      file: "Video03.mp4",
+      caption: "NOIЯFRAME motion",
+    },
   ],
   footer: "Only light matters.",
 };
