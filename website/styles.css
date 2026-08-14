@@ -563,7 +563,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 .gallery--contact .contact-box__role {
-  color: var(--nf-gold);
+  color: var(--nf-text);
 }
 
 .gallery--contact .contactLayout__divider {
@@ -593,7 +593,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 .gallery--contact .contactLayout__languagesList {
-  color: var(--nf-gold);
+  color: var(--nf-text);
   font-size: 14px;
   letter-spacing: 0.04em;
 }
