@@ -198,31 +198,6 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   margin-bottom: 0;
 }
 
-.menuBlogLink {
-  flex: 0 0 auto;
-  margin-top: clamp(10px, 2dvh, 20px);
-  padding: 10px 18px;
-  border: 1px solid var(--nf-border);
-  border-radius: 2px;
-  background: transparent;
-  color: var(--nf-gold);
-  cursor: pointer;
-  font-family: var(--nf-font);
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  transition:
-    border-color var(--nf-nav-ease),
-    color var(--nf-nav-ease);
-}
-
-.menuBlogLink:hover,
-.menuBlogLink:active {
-  border-color: var(--nf-border-hover);
-  color: var(--nf-text);
-}
-
 .menuHeroMachine {
   width: 100%;
   flex: 0 1 auto;

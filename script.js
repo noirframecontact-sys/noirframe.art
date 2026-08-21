@@ -961,9 +961,6 @@ function showMenu(skipFadeOut) {
           "</div>"
         : '<div class="nfLogo">NF<span>NOIЯFRAME</span></div>') +
       menuHeroHtml() +
-      (BLOG_ENABLED
-        ? '<button type="button" class="menuBlogLink" id="menuBlogLink">Blog · Behind the Scenes</button>'
-        : "") +
       "</div>",
     setupMenuScreen,
     skipFadeOut === true
@@ -976,13 +973,6 @@ function setupMenuScreen() {
     if (moonButton) {
       moonButton.addEventListener("click", enterDarkSide);
     }
-  }
-
-  const blogButton = document.getElementById("menuBlogLink");
-  if (blogButton) {
-    blogButton.addEventListener("click", function () {
-      showBlog();
-    });
   }
 
   setupMenuHero();
