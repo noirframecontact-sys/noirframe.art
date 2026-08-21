@@ -1245,9 +1245,7 @@ function blogItemHtml(item) {
 }
 
 function blogScreenHtml(data) {
-  const itemsHtml = data.items.length
-    ? data.items.map(blogItemHtml).join("")
-    : "<p>Coming soon.</p>";
+  const itemsHtml = data.items.length ? data.items.map(blogItemHtml).join("") : "";
   const footerHtml = data.footer ? "<p>" + escapeHtml(data.footer) + "</p>" : "";
 
   return (
