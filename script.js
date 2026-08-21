@@ -4,7 +4,7 @@ const HERO_HOLD_MS = 3000;
 /* Dark Side — set false before production push */
 const DARK_SIDE_ENABLED = true;
 /* Blog / BTS — true gdy są wpisy w data/blog.json i gotowe na menu */
-const BLOG_ENABLED = false;
+const BLOG_ENABLED = true;
 const DARK_FADE_IN_MS = 1000;
 const DARK_FADE_OUT_MS = 1200;
 const DARK_NAV_REVEAL_LEAD_MS = 420;
