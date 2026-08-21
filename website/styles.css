@@ -1015,6 +1015,38 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   transform: none;
 }
 
+.gallery--blog .motionVideo,
+.gallery--blog h1,
+.gallery--blog p {
+  transition: none;
+}
+
+.blogList {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.blogItem {
+  margin-top: 24px;
+}
+
+.blogItem p {
+  max-width: 720px;
+  margin: 12px auto 0;
+  text-align: center;
+}
+
+.gallery--blog #backToMenuButton {
+  transition: border-color 0.01ms;
+}
+
+.gallery--blog #backToMenuButton:hover,
+.gallery--blog #backToMenuButton:active {
+  border-color: var(--nf-border);
+  transform: none;
+}
+
 /* === screen transitions === */
 
 .fade {

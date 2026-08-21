@@ -3,6 +3,8 @@ const HERO_HOLD_MS = 3000;
 
 /* Dark Side — set false before production push */
 const DARK_SIDE_ENABLED = true;
+/* Blog / BTS — true gdy są wpisy w data/blog.json i gotowe na menu */
+const BLOG_ENABLED = false;
 const DARK_FADE_IN_MS = 1000;
 const DARK_FADE_OUT_MS = 1200;
 const DARK_NAV_REVEAL_LEAD_MS = 420;
@@ -32,6 +34,7 @@ const galleryManifestCache = {};
 let galleryLoadId = 0;
 let angeboteCache = null;
 let aktuellCache = null;
+let blogCache = null;
 let motionCache = null;
 
 const MOTION_FALLBACK = {
@@ -63,6 +66,13 @@ const ANGEBOTE_FALLBACK = {
   note:
     "Die genannten Preise dienen als erste Orientierung. Jedes Projekt ist individuell und wird nach Umfang, Dauer und Anforderungen persönlich kalkuliert. Der endgültige Preis wird nach weiterer Kontaktaufnahme und gemeinsamer Abstimmung vereinbart.",
   ctaLabel: "Anfrage senden",
+};
+
+const BLOG_FALLBACK = {
+  title: "BLOG",
+  intro: "Behind the scenes — prep, making of and what goes into a Noir Frame session.",
+  items: [],
+  footer: "",
 };
 
 const AKTUELL_FALLBACK = {
@@ -218,6 +228,10 @@ function ensureSiteNav() {
     '<button type="button" class="siteNav__link" data-nav-action="angebote">Angebote</button>' +
     '<hr class="siteNav__divider" aria-hidden="true">' +
     '<button type="button" class="siteNav__link" data-nav-action="aktuell">Aktuell bei uns</button>' +
+    (BLOG_ENABLED
+      ? '<hr class="siteNav__divider" aria-hidden="true">' +
+        '<button type="button" class="siteNav__link" data-nav-action="blog">Blog</button>'
+      : "") +
     '<hr class="siteNav__divider" aria-hidden="true">' +
     '<button type="button" class="siteNav__link" data-nav-action="about">About Us</button>' +
     '<hr class="siteNav__divider" aria-hidden="true">' +
@@ -379,6 +393,10 @@ function bindSiteNav() {
       }
       if (action === "aktuell") {
         showAktuell();
+        return;
+      }
+      if (action === "blog") {
+        showBlog();
         return;
       }
       if (action === "video") {
@@ -1164,6 +1182,97 @@ function showFilms() {
     })
     .catch(function () {
       transitionBody(motionScreenHtml(MOTION_FALLBACK), bindBackToMenu);
+    });
+}
+
+function fetchBlogManifest() {
+  if (blogCache) {
+    return Promise.resolve(blogCache);
+  }
+
+  return fetch("data/blog.json", { cache: "no-store" })
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error("Blog manifest not found");
+      }
+      return response.json();
+    })
+    .then(function (data) {
+      blogCache = normalizeBlogData(data);
+      return blogCache;
+    });
+}
+
+function normalizeBlogData(data) {
+  const items = Array.isArray(data.items) ? data.items : [];
+  const normalizedItems = items
+    .map(function (item) {
+      if (!item || !item.file) {
+        return null;
+      }
+      return {
+        file: item.file,
+        caption: item.caption || "",
+      };
+    })
+    .filter(Boolean);
+
+  return {
+    title: data.title || BLOG_FALLBACK.title,
+    intro: data.intro || BLOG_FALLBACK.intro,
+    items: normalizedItems,
+    footer: data.footer || "",
+  };
+}
+
+function blogItemHtml(item) {
+  return (
+    '<article class="blogItem">' +
+    '<video class="motionVideo blogVideo" controls preload="metadata" playsinline>' +
+    '<source src="images/blog/' +
+    escapeHtml(item.file) +
+    '" type="video/mp4">' +
+    "</video>" +
+    "<p>" +
+    escapeHtml(item.caption) +
+    "</p>" +
+    "</article>"
+  );
+}
+
+function blogScreenHtml(data) {
+  const itemsHtml = data.items.length
+    ? data.items.map(blogItemHtml).join("")
+    : "<p>Coming soon.</p>";
+  const footerHtml = data.footer ? "<p>" + escapeHtml(data.footer) + "</p>" : "";
+
+  return (
+    '<div class="gallery gallery--blog fade">' +
+    "<h1>" +
+    escapeHtml(data.title) +
+    "</h1>" +
+    "<p>" +
+    escapeHtml(data.intro) +
+    "</p>" +
+    '<div class="blogList">' +
+    itemsHtml +
+    "</div>" +
+    footerHtml +
+    backButtonHtml("backToMenuButton", "BACK TO MENU") +
+    "</div>"
+  );
+}
+
+function showBlog() {
+  cancelPendingGalleryLoads();
+  beginSubpageNavigation();
+
+  fetchBlogManifest()
+    .then(function (data) {
+      transitionBody(blogScreenHtml(data), bindBackToMenu);
+    })
+    .catch(function () {
+      transitionBody(blogScreenHtml(BLOG_FALLBACK), bindBackToMenu);
     });
 }
 
