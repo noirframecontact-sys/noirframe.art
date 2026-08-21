@@ -194,15 +194,7 @@ function revealScreen(onReady) {
 }
 
 function ensureSiteNav() {
-  if (siteNav) {
-    return;
-  }
-
-  siteNav = document.createElement("nav");
-  siteNav.id = "siteNav";
-  siteNav.className = "siteNav siteNav--hidden";
-  siteNav.setAttribute("aria-label", "Hauptnavigation");
-  siteNav.innerHTML =
+  const navHtml =
     '<div class="siteNav__bar">' +
     '<button type="button" class="siteNav__toggle" id="siteNavToggle" aria-expanded="false" aria-controls="siteNavPanel">' +
     '<i class="ph-light ph-list"></i>' +
@@ -239,6 +231,18 @@ function ensureSiteNav() {
     "</div>" +
     "</div>" +
     "</div>";
+
+  if (siteNav) {
+    siteNav.innerHTML = navHtml;
+    bindSiteNav();
+    return;
+  }
+
+  siteNav = document.createElement("nav");
+  siteNav.id = "siteNav";
+  siteNav.className = "siteNav siteNav--hidden";
+  siteNav.setAttribute("aria-label", "Hauptnavigation");
+  siteNav.innerHTML = navHtml;
 
   document.documentElement.appendChild(siteNav);
   bindSiteNav();
@@ -957,6 +961,9 @@ function showMenu(skipFadeOut) {
           "</div>"
         : '<div class="nfLogo">NF<span>NOIЯFRAME</span></div>') +
       menuHeroHtml() +
+      (BLOG_ENABLED
+        ? '<button type="button" class="menuBlogLink" id="menuBlogLink">Blog · Behind the Scenes</button>'
+        : "") +
       "</div>",
     setupMenuScreen,
     skipFadeOut === true
@@ -969,6 +976,13 @@ function setupMenuScreen() {
     if (moonButton) {
       moonButton.addEventListener("click", enterDarkSide);
     }
+  }
+
+  const blogButton = document.getElementById("menuBlogLink");
+  if (blogButton) {
+    blogButton.addEventListener("click", function () {
+      showBlog();
+    });
   }
 
   setupMenuHero();
