@@ -1229,6 +1229,20 @@ function normalizeBlogData(data) {
   };
 }
 
+function blogCaptionHtml(caption) {
+  if (!caption || !caption.trim()) {
+    return "";
+  }
+
+  return caption
+    .trim()
+    .split(/\n\s*\n/)
+    .map(function (paragraph) {
+      return "<p>" + escapeHtml(paragraph.trim()) + "</p>";
+    })
+    .join("");
+}
+
 function blogItemHtml(item) {
   return (
     '<article class="blogItem">' +
@@ -1237,9 +1251,7 @@ function blogItemHtml(item) {
     escapeHtml(item.file) +
     '" type="video/mp4">' +
     "</video>" +
-    "<p>" +
-    escapeHtml(item.caption) +
-    "</p>" +
+    blogCaptionHtml(item.caption) +
     "</article>"
   );
 }
