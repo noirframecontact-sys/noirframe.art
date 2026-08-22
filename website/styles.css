@@ -1028,7 +1028,18 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 .blogItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
   margin-top: 24px;
+}
+
+.gallery--blog .motionVideo {
+  display: block;
+  width: min(900px, 92%);
+  max-width: 100%;
+  margin-inline: auto;
 }
 
 .blogItem p {
