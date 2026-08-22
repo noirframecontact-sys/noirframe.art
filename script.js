@@ -75,6 +75,8 @@ const BLOG_FALLBACK = {
   footer: "",
 };
 
+const BLOG_SIGNATURE = "– Noir Frame | Only Light Matters";
+
 const AKTUELL_FALLBACK = {
   title: "AKTUELL BEI UNS",
   intro: "Aktuelle Aktionen, Mini-Sessions und saisonale Angebote von Noir Frame.",
@@ -1229,14 +1231,23 @@ function normalizeBlogData(data) {
   };
 }
 
-function blogCaptionHtml(caption) {
+function blogCaptionBody(caption) {
   if (!caption || !caption.trim()) {
     return "";
   }
 
   return caption
     .trim()
-    .split(/\n\s*\n/)
+    .replace(/\n*–\s*Noir Frame\s*\|\s*Only Light Matters\s*$/i, "")
+    .trim();
+}
+
+function blogCaptionHtml(caption) {
+  const body = blogCaptionBody(caption);
+  const paragraphs = body ? body.split(/\n\s*\n/) : [];
+  paragraphs.push(BLOG_SIGNATURE);
+
+  return paragraphs
     .map(function (paragraph) {
       return "<p>" + escapeHtml(paragraph.trim()) + "</p>";
     })
