@@ -76,6 +76,7 @@ const BLOG_FALLBACK = {
 };
 
 const BLOG_SIGNATURE = "– Noir Frame | Only Light Matters";
+const BLOG_CHAPTER_SEPARATOR = "☙✤❧";
 
 const AKTUELL_FALLBACK = {
   title: "AKTUELL BEI UNS",
@@ -689,9 +690,20 @@ function teamImageTag(filename) {
   );
 }
 
-function backButtonHtml(id, label) {
+function backButtonHtml(id, label, extraClass) {
+  const classes = ["backToMenuButton"];
+  if (extraClass) {
+    extraClass.split(/\s+/).forEach(function (className) {
+      if (className) {
+        classes.push(className);
+      }
+    });
+  }
+
   return (
-    '<button type="button" id="' +
+    '<button type="button" class="' +
+    classes.join(" ") +
+    '" id="' +
     id +
     '"><i class="ph-light ph-arrow-left"></i> ' +
     label +
@@ -1248,8 +1260,11 @@ function blogCaptionHtml(caption) {
   paragraphs.push(BLOG_SIGNATURE);
 
   return paragraphs
-    .map(function (paragraph) {
-      return "<p>" + escapeHtml(paragraph.trim()) + "</p>";
+    .map(function (paragraph, index) {
+      const isSignature =
+        index === paragraphs.length - 1 && paragraph.trim() === BLOG_SIGNATURE;
+      const className = isSignature ? ' class="blogItem__signature"' : "";
+      return "<p" + className + ">" + escapeHtml(paragraph.trim()) + "</p>";
     })
     .join("");
 }
@@ -1296,8 +1311,13 @@ function blogItemHtml(item) {
 
   return (
     '<article class="blogItem">' +
+    '<p class="blogItem__separator" aria-hidden="true">' +
+    BLOG_CHAPTER_SEPARATOR +
+    "</p>" +
     mediaHtml +
+    '<div class="blogItem__caption">' +
     blogCaptionHtml(item.caption) +
+    "</div>" +
     "</article>"
   );
 }
@@ -1308,17 +1328,20 @@ function blogScreenHtml(data) {
 
   return (
     '<div class="gallery gallery--blog fade">' +
+    '<div class="blogToolbar">' +
+    backButtonHtml("backToMenuButtonTop", "BACK TO MENU", "blogBackButton blogBackButton--top") +
+    "</div>" +
     "<h1>" +
     escapeHtml(data.title) +
     "</h1>" +
-    "<p>" +
+    '<p class="blogIntro">' +
     escapeHtml(data.intro) +
     "</p>" +
     '<div class="blogList">' +
     itemsHtml +
     "</div>" +
     footerHtml +
-    backButtonHtml("backToMenuButton", "BACK TO MENU") +
+    backButtonHtml("backToMenuButton", "BACK TO MENU", "blogBackButton blogBackButton--bottom") +
     "</div>"
   );
 }
@@ -1636,7 +1659,7 @@ ensureSiteNav();
 updateSiteNavVisibility();
 
 document.addEventListener("click", function (event) {
-  if (!event.target.closest("#backToMenuButton")) {
+  if (!event.target.closest(".backToMenuButton")) {
     return;
   }
 

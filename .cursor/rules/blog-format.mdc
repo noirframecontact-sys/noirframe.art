@@ -1,0 +1,39 @@
+---
+description: Blog section layout, typography, and content rules for noirframe.art
+globs: data/blog.json,script.js,website/styles.css,images/blog/**
+alwaysApply: false
+---
+
+# Blog — format i redakcja
+
+## Układ (WWW)
+
+- Każdy wpis (`items[]`) to jeden **wątek**: separator → media → opis.
+- Szerokość tekstu = szerokość kontenera wideo/zdjęcia: `min(900px, 92%)` — **nigdy szerszej**.
+- Jedna kolumna, tekst główny **wyjustowany** (`text-align: justify`).
+- Pierwszy akapit wpisu (tytuł/temat) — **wyśrodkowany**.
+- Podpis `– Noir Frame | Only Light Matters` dopina się w JS — **nie wpisuj** go w `caption`.
+- Podpis jest wyśrodkowany i kursywą.
+
+## Separator rozdziałów
+
+- Każdy wątek zaczyna się od: **☙✤❧** (renderowany w JS, nie w JSON).
+- Odstęp między wątkami: **10mm** (`--blog-topic-gap`).
+
+## `data/blog.json`
+
+```json
+{
+  "file": "BTS04.jpg",
+  "caption": "Tytuł wpisu\n\nPierwszy akapit…\n\nKolejny akapit…"
+}
+```
+
+- Akapity oddzielaj **pustą linią** (`\n\n`).
+- Kolejność w `items[]` = kolejność na stronie (pierwszy = góra).
+- Pliki w `images/blog/`: `BTS00`, `BTS01`, … — MP4, JPG, PNG, WebP.
+
+## Nawigacja
+
+- Blog ma **BACK TO MENU** u góry (sticky) i na dole.
+- Nie polegać na przycisku wstecz przeglądarki (wraca do hero).
