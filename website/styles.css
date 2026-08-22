@@ -1016,6 +1016,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 .gallery--blog .motionVideo,
+.gallery--blog .blogMedia,
 .gallery--blog h1,
 .gallery--blog p {
   transition: none;
@@ -1035,11 +1036,15 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   margin-top: 24px;
 }
 
-.gallery--blog .motionVideo {
+.gallery--blog .motionVideo,
+.gallery--blog .blogMedia {
   display: block;
   width: min(900px, 92%);
   max-width: 100%;
+  height: auto;
   margin-inline: auto;
+  border: 1px solid var(--nf-border);
+  box-shadow: var(--nf-gallery-shadow);
 }
 
 .blogItem p {

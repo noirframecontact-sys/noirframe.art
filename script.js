@@ -1243,14 +1243,49 @@ function blogCaptionHtml(caption) {
     .join("");
 }
 
+function blogFileExtension(file) {
+  const dot = file.lastIndexOf(".");
+  if (dot === -1) {
+    return "";
+  }
+  return file.slice(dot + 1).toLowerCase();
+}
+
+function isBlogImageFile(file) {
+  const ext = blogFileExtension(file);
+  return ext === "jpg" || ext === "jpeg" || ext === "png" || ext === "webp";
+}
+
+function isBlogVideoFile(file) {
+  const ext = blogFileExtension(file);
+  return ext === "mp4" || ext === "webm";
+}
+
 function blogItemHtml(item) {
+  const src = "images/blog/" + escapeHtml(item.file);
+  let mediaHtml = "";
+
+  if (isBlogImageFile(item.file)) {
+    mediaHtml =
+      '<img class="blogMedia" src="' +
+      src +
+      '" alt="" loading="lazy" decoding="async">';
+  } else if (isBlogVideoFile(item.file)) {
+    mediaHtml =
+      '<video class="motionVideo blogVideo blogMedia" controls preload="metadata" playsinline>' +
+      '<source src="' +
+      src +
+      '" type="video/' +
+      (blogFileExtension(item.file) === "webm" ? "webm" : "mp4") +
+      '">' +
+      "</video>";
+  } else {
+    return "";
+  }
+
   return (
     '<article class="blogItem">' +
-    '<video class="motionVideo blogVideo" controls preload="metadata" playsinline>' +
-    '<source src="images/blog/' +
-    escapeHtml(item.file) +
-    '" type="video/mp4">' +
-    "</video>" +
+    mediaHtml +
     blogCaptionHtml(item.caption) +
     "</article>"
   );
