@@ -1329,7 +1329,7 @@ function blogScreenHtml(data) {
   return (
     '<div class="gallery gallery--blog fade">' +
     '<div class="blogToolbar">' +
-    backButtonHtml("backToMenuButtonTop", "BACK TO MENU", "blogBackButton blogBackButton--top") +
+    backButtonHtml("backToMenuButtonTop", "BACK TO MENU") +
     "</div>" +
     "<h1>" +
     escapeHtml(data.title) +
@@ -1341,7 +1341,7 @@ function blogScreenHtml(data) {
     itemsHtml +
     "</div>" +
     footerHtml +
-    backButtonHtml("backToMenuButton", "BACK TO MENU", "blogBackButton blogBackButton--bottom") +
+    backButtonHtml("backToMenuButton", "BACK TO MENU") +
     "</div>"
   );
 }

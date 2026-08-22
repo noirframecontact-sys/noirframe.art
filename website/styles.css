@@ -303,7 +303,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   display: block;
 }
 
-#backToMenuButton {
+.backToMenuButton {
   background: var(--nf-btn-bg);
   color: var(--nf-btn-color);
   border: 1px solid var(--nf-border);
@@ -320,12 +320,12 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   margin-top: 12px;
 }
 
-#backToMenuButton:hover,
-#backToMenuButton:active {
+.backToMenuButton:hover,
+.backToMenuButton:active {
   border-color: var(--nf-border-hover);
 }
 
-#backToMenuButton i {
+.backToMenuButton i {
   font-size: 16px;
   color: var(--nf-gold);
 }
@@ -632,7 +632,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
     overflow: visible;
   }
 
-  .gallery--contact #backToMenuButton {
+  .gallery--contact .backToMenuButton {
     flex-shrink: 0;
     align-self: center;
     margin: 8px 0 calc(env(safe-area-inset-bottom) + 20px);
@@ -683,7 +683,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
     display: contents;
   }
 
-  .gallery--contact #backToMenuButton {
+  .gallery--contact .backToMenuButton {
     flex-shrink: 0;
     align-self: center;
     margin-bottom: calc(env(safe-area-inset-bottom) + 24px);
@@ -816,20 +816,20 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 .gallery--angebote .angebotCard,
 .gallery--angebote .angeboteCta,
-.gallery--angebote #backToMenuButton {
+.gallery--angebote .backToMenuButton {
   transition: none;
 }
 
 .gallery--angebote .angebotCard:hover,
 .gallery--angebote .angeboteCta:hover,
-.gallery--angebote #backToMenuButton:hover {
+.gallery--angebote .backToMenuButton:hover {
   transform: none;
   box-shadow: 0 6px 16px var(--nf-shadow);
   border-color: var(--nf-border);
 }
 
-.gallery--angebote #backToMenuButton:hover,
-.gallery--angebote #backToMenuButton:active {
+.gallery--angebote .backToMenuButton:hover,
+.gallery--angebote .backToMenuButton:active {
   border-color: var(--nf-border-hover);
 }
 
@@ -954,12 +954,12 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 .gallery--aktuell .aktuellItem,
-.gallery--aktuell #backToMenuButton {
+.gallery--aktuell .backToMenuButton {
   transition: none;
 }
 
-.gallery--aktuell #backToMenuButton:hover,
-.gallery--aktuell #backToMenuButton:active {
+.gallery--aktuell .backToMenuButton:hover,
+.gallery--aktuell .backToMenuButton:active {
   transform: none;
   border-color: var(--nf-border-hover);
 }
@@ -1005,12 +1005,12 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   transition: none;
 }
 
-.gallery--video #backToMenuButton {
+.gallery--video .backToMenuButton {
   transition: border-color 0.01ms;
 }
 
-.gallery--video #backToMenuButton:hover,
-.gallery--video #backToMenuButton:active {
+.gallery--video .backToMenuButton:hover,
+.gallery--video .backToMenuButton:active {
   border-color: var(--nf-border);
   transform: none;
 }
@@ -1042,21 +1042,12 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   display: flex;
   justify-content: center;
   width: 100%;
-  padding: 8px 0 4px;
+  padding: 0;
   margin: 0;
-  background: linear-gradient(
-    to bottom,
-    var(--nf-menu-bg) 70%,
-    rgba(0, 0, 0, 0)
-  );
 }
 
-.blogBackButton--top {
-  margin-top: 0;
-}
-
-.blogBackButton--bottom {
-  margin-top: 8px;
+.blogToolbar .backToMenuButton {
+  margin-top: 12px;
 }
 
 .blogList {
@@ -1133,15 +1124,12 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   letter-spacing: 0.04em;
 }
 
-.gallery--blog #backToMenuButton,
-.gallery--blog #backToMenuButtonTop {
+.gallery--blog .backToMenuButton {
   transition: border-color 0.01ms;
 }
 
-.gallery--blog #backToMenuButton:hover,
-.gallery--blog #backToMenuButton:active,
-.gallery--blog #backToMenuButtonTop:hover,
-.gallery--blog #backToMenuButtonTop:active {
+.gallery--blog .backToMenuButton:hover,
+.gallery--blog .backToMenuButton:active {
   border-color: var(--nf-border);
   transform: none;
 }
