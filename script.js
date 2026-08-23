@@ -70,7 +70,7 @@ const ANGEBOTE_FALLBACK = {
 
 const BLOG_FALLBACK = {
   title: "BLOG",
-  intro: "Behind the scenes — prep, making of and what goes into a Noir Frame session.",
+  intro: "Fotografie. Erinnerungen. Geschichten.\n\nVon alten Familienbildern über analoge Fotografie bis zu den aktuellen Projekten von Noir Frame.",
   items: [],
   footer: "",
 };
@@ -1322,6 +1322,26 @@ function blogItemHtml(item) {
   );
 }
 
+function blogIntroHtml(intro) {
+  if (!intro || !intro.trim()) {
+    return "";
+  }
+
+  const parts = intro.trim().split(/\n\s*\n/);
+  if (parts.length === 1) {
+    return '<p class="blogIntro">' + escapeHtml(parts[0]) + "</p>";
+  }
+
+  return (
+    '<p class="blogIntro blogIntro__headline">' +
+    escapeHtml(parts[0]) +
+    "</p>" +
+    '<p class="blogIntro blogIntro__lead">' +
+    escapeHtml(parts.slice(1).join("\n\n")) +
+    "</p>"
+  );
+}
+
 function blogScreenHtml(data) {
   const itemsHtml = data.items.length ? data.items.map(blogItemHtml).join("") : "";
   const footerHtml = data.footer ? "<p>" + escapeHtml(data.footer) + "</p>" : "";
@@ -1334,9 +1354,7 @@ function blogScreenHtml(data) {
     "<h1>" +
     escapeHtml(data.title) +
     "</h1>" +
-    '<p class="blogIntro">' +
-    escapeHtml(data.intro) +
-    "</p>" +
+    blogIntroHtml(data.intro) +
     '<div class="blogList">' +
     itemsHtml +
     "</div>" +

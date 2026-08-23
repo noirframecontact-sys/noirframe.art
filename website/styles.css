@@ -1032,7 +1032,19 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   max-width: var(--blog-content-width);
   margin: 0 auto;
   text-align: center;
+}
+
+.gallery--blog .blogIntro__headline {
+  margin: 0;
+  font-style: normal;
+  letter-spacing: 0.1em;
+  color: var(--nf-text);
+}
+
+.gallery--blog .blogIntro__lead {
+  margin: 10px auto 0;
   font-style: italic;
+  color: var(--nf-text-muted);
 }
 
 .blogToolbar {
