@@ -1,21 +1,24 @@
 {
-    "images":  [
-                   "foto01.jpg",
-                   "foto02.jpg",
-                   "foto03.jpg",
-                   "foto04.jpg",
-                   "foto05.jpg",
-                   "foto06.jpg",
-                   "foto07.jpg",
-                   "foto08.jpg",
-                   "foto09.jpg",
-                   "foto10.jpg",
-                   "foto11.jpg",
-                   "foto12.jpg",
-                   "foto13.jpg",
-                   "foto14.jpg",
-                   "foto15.jpg",
-                   "foto16.jpg",
-                   "foto17.jpg"
-               ]
+  "images": [
+    "foto01.jpg",
+    "foto02.jpg",
+    "foto03.jpg",
+    "foto04.jpg",
+    "foto05.jpg",
+    "foto06.jpg",
+    "foto07.jpg",
+    "foto08.jpg",
+    "foto09.jpg",
+    "foto10.jpg",
+    "foto11.jpg",
+    "foto12.jpg",
+    "foto13.jpg",
+    "foto14.jpg",
+    "foto15.jpg",
+    "foto16.jpg",
+    "foto17.jpg",
+    "foto18.jpg",
+    "foto19.jpg",
+    "foto20.jpg"
+  ]
 }
