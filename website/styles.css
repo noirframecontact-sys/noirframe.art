@@ -470,12 +470,12 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   background-repeat: no-repeat;
 }
 
-/* Jawne tlo — dziala tez przy file:// i lokalnym index (CSS background bywa blokowany) */
+/* Jawne tlo PC — tylko desktop; mobile uzywa CSS background + osobnych layoutow */
 .contactBgPhoto {
   position: absolute;
   inset: 0;
   z-index: 0;
-  display: block;
+  display: none;
   width: 100%;
   height: 100%;
   margin: 0;
@@ -489,6 +489,16 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   height: 100%;
   object-fit: cover;
   object-position: center center;
+}
+
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
+  .contactBgPhoto {
+    display: block;
+  }
+
+  .gallery--contact {
+    background-image: none;
+  }
 }
 
 .gallery--contact .contactLayout,
@@ -745,7 +755,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 @media (max-width: 899px) and (orientation: portrait) {
   .gallery--contact {
-    background-image: var(--contact-bg-landscape, url("../images/layouts/layout_02_CONTACT.jpg"));
+    background-image: var(--contact-bg-portrait, url("../images/layouts/layout_03_CONTACT.jpg"));
   }
 
   .menuWrapper,
@@ -1270,7 +1280,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 @media (max-width: 899px) and (orientation: portrait) {
   .gallery--contact {
-    background-image: var(--contact-bg-landscape, url("../images/layouts/layout_02_CONTACT.jpg"));
+    background-image: var(--contact-bg-portrait, url("../images/layouts/layout_03_CONTACT.jpg"));
   }
 
   .menuWrapper,
@@ -1284,7 +1294,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
   .gallery--contact {
-    background-image: var(--contact-bg-portrait, url("../images/layouts/layout_03_CONTACT.jpg"));
+    background-image: var(--contact-bg-landscape, url("../images/layouts/layout_02_CONTACT.jpg"));
   }
 
   .menuWrapper,
@@ -1300,6 +1310,12 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
     height: 100dvh;
     object-fit: cover;
     object-position: center center;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+  .gallery--contact {
+    background-image: var(--contact-bg-portrait, url("../images/layouts/layout_03_CONTACT.jpg"));
   }
 }
 
