@@ -1023,14 +1023,28 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 .gallery--blog {
-  --blog-content-width: min(900px, 92%);
-  --blog-media-aspect: 16 / 9;
-  --blog-topic-gap: 10mm;
+  --blog-column-width: min(900px, 92vw);
+  --blog-topic-gap: clamp(16px, 4vw, 10mm);
   gap: 28px;
 }
 
+/* Jedna niewidzialna kolumna — tytuł, media i tekst tej samej szerokości */
+.blogColumn {
+  width: var(--blog-column-width);
+  max-width: 100%;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+.gallery--blog .blogColumn > h1,
+.gallery--blog .blogColumn > p {
+  width: 100%;
+  max-width: 100%;
+}
+
 .gallery--blog .blogIntro {
-  max-width: var(--blog-content-width);
+  max-width: none;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
 }
@@ -1065,14 +1079,13 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 .blogList {
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .blogItem {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
   margin: 0;
 }
@@ -1082,9 +1095,9 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 .blogItem__separator {
-  width: var(--blog-content-width);
+  width: 100%;
   max-width: 100%;
-  margin: 0 auto 14px;
+  margin: 0 0 14px;
   padding: 0;
   border: 0;
   text-align: center;
@@ -1095,9 +1108,9 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 .blogItem__media {
-  width: var(--blog-content-width);
+  width: 100%;
   max-width: 100%;
-  margin-inline: auto;
+  margin-inline: 0;
   box-sizing: border-box;
   aspect-ratio: auto;
   overflow: visible;
@@ -1107,14 +1120,17 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 .gallery--blog .blogItem__media .blogMedia,
-.gallery--blog .blogItem__media .motionVideo {
+.gallery--blog .blogItem__media .motionVideo,
+.gallery--blog .blogItem__media .blogVideo {
   display: block;
   width: 100%;
+  max-width: 100%;
   height: auto;
   margin: 0;
   border: 1px solid var(--nf-border);
   box-shadow: var(--nf-gallery-shadow);
   object-fit: unset;
+  box-sizing: border-box;
 }
 
 .gallery--blog .motionVideo,
@@ -1123,9 +1139,9 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 .blogItem__caption {
-  width: var(--blog-content-width);
+  width: 100%;
   max-width: 100%;
-  margin-inline: auto;
+  margin-inline: 0;
 }
 
 .blogItem__caption p {

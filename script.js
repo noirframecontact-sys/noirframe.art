@@ -1495,6 +1495,7 @@ function blogScreenHtml(data) {
     '<div class="blogToolbar">' +
     backButtonHtml("backToMenuButtonTop", "BACK TO MENU") +
     "</div>" +
+    '<div class="blogColumn">' +
     "<h1>" +
     escapeHtml(data.title) +
     "</h1>" +
@@ -1503,6 +1504,7 @@ function blogScreenHtml(data) {
     itemsHtml +
     "</div>" +
     footerHtml +
+    "</div>" +
     backButtonHtml("backToMenuButton", "BACK TO MENU") +
     "</div>"
   );
