@@ -1037,6 +1037,7 @@ function openGallery(folder) {
 function showAbout() {
   cancelPendingGalleryLoads();
   beginSubpageNavigation();
+  aboutCache = null;
   fetchAboutData()
     .then(function (about) {
       transitionBody(renderAboutHtml(about), bindBackToMenu);
