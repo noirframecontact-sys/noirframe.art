@@ -77,7 +77,6 @@ const BLOG_FALLBACK = {
 };
 
 const BLOG_SIGNATURE = "– Noir Frame | Only Light Matters";
-const BLOG_CHAPTER_SEPARATOR = "☙✤❧";
 
 const AKTUELL_FALLBACK = {
   title: "AKTUELL BEI UNS",
@@ -1455,9 +1454,6 @@ function blogItemHtml(item) {
 
   return (
     '<article class="blogItem">' +
-    '<p class="blogItem__separator" aria-hidden="true">' +
-    BLOG_CHAPTER_SEPARATOR +
-    "</p>" +
     mediaHtml +
     '<div class="blogItem__caption">' +
     blogCaptionHtml(item.caption) +
@@ -1496,10 +1492,12 @@ function blogScreenHtml(data) {
     backButtonHtml("backToMenuButtonTop", "BACK TO MENU") +
     "</div>" +
     '<div class="blogColumn">' +
+    '<header class="blogHeader">' +
     "<h1>" +
     escapeHtml(data.title) +
     "</h1>" +
     blogIntroHtml(data.intro) +
+    "</header>" +
     '<div class="blogList">' +
     itemsHtml +
     "</div>" +
