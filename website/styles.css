@@ -1099,10 +1099,6 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   max-width: 100%;
   margin-inline: auto;
   box-sizing: border-box;
-}
-
-/* Zdjęcia — pełna szerokość okna jak Video, bez pustego kontenera */
-.blogItem__media:has(> .blogMedia) {
   aspect-ratio: auto;
   overflow: visible;
   background: transparent;
@@ -1110,33 +1106,15 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   box-shadow: none;
 }
 
-/* Wideo — stała ramka 16:9 */
-.blogItem__media:has(> .motionVideo) {
-  aspect-ratio: var(--blog-media-aspect);
-  overflow: hidden;
-  border: 1px solid var(--nf-border);
-  box-shadow: var(--nf-gallery-shadow);
-  background: var(--nf-bg, #0a0a0a);
-}
-
-.gallery--blog .blogItem__media .blogMedia {
+.gallery--blog .blogItem__media .blogMedia,
+.gallery--blog .blogItem__media .motionVideo {
   display: block;
   width: 100%;
   height: auto;
   margin: 0;
-  object-fit: unset;
   border: 1px solid var(--nf-border);
   box-shadow: var(--nf-gallery-shadow);
-}
-
-.gallery--blog .blogItem__media .motionVideo {
-  display: block;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  object-fit: contain;
-  border: none;
-  box-shadow: none;
+  object-fit: unset;
 }
 
 .gallery--blog .motionVideo,

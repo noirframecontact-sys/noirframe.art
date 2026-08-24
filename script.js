@@ -1441,7 +1441,7 @@ function blogItemHtml(item) {
   } else if (isBlogVideoFile(item.file)) {
     mediaHtml =
       '<div class="blogItem__media">' +
-      '<video class="motionVideo blogVideo blogMedia" controls preload="metadata" playsinline>' +
+      '<video class="motionVideo blogVideo" controls preload="metadata" playsinline>' +
       '<source src="' +
       src +
       '" type="video/' +
