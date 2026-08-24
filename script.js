@@ -1169,18 +1169,38 @@ function fetchContactData() {
     });
 }
 
+function contactBgPhotoHtml(contact) {
+  var bgDesktop = contact.backgroundDesktop || "images/layouts/layout_PC_CONTACT.jpg";
+  var bgLandscape = contact.backgroundMobileLandscape || bgDesktop;
+  var bgPortrait = contact.backgroundMobilePortrait || bgDesktop;
+
+  return (
+    '<picture class="contactBgPhoto" aria-hidden="true">' +
+    '<source media="(max-width: 899px) and (orientation: portrait)" srcset="' +
+    escapeHtml(bgPortrait) +
+    '">' +
+    '<source media="(orientation: landscape) and (hover: none) and (pointer: coarse)" srcset="' +
+    escapeHtml(bgLandscape) +
+    '">' +
+    '<img src="' +
+    escapeHtml(bgDesktop) +
+    '" alt="" loading="eager" decoding="async">' +
+    "</picture>"
+  );
+}
+
 function renderContactHtml(contact) {
   var ownerTel = contactTelHref(contact.ownerPhone);
   var officeTel = contactTelHref(contact.officePhone);
   var bgDesktop = contact.backgroundDesktop || "images/layouts/layout_PC_CONTACT.jpg";
   var bgStyle =
-    'background-image:url("' + bgDesktop + '");' +
     "--contact-bg-desktop:url('" + bgDesktop + "');" +
     "--contact-bg-landscape:url('" + (contact.backgroundMobileLandscape || bgDesktop) + "');" +
     "--contact-bg-portrait:url('" + (contact.backgroundMobilePortrait || bgDesktop) + "');";
 
   return (
     '<div class="gallery gallery--contact fade" style="' + bgStyle + '">' +
+      contactBgPhotoHtml(contact) +
       '<div class="contactLayout">' +
       '<div class="contactLayout__frame">' +
       '<div class="contactLayout__main">' +
