@@ -1,0 +1,21 @@
+{
+  "headline": "ABOUT US",
+  "subline": "Three people. One workflow.",
+  "members": [
+    {
+      "file": "foto01.jpg",
+      "role": "Photo / Video Operator / Drohne Pilot",
+      "description": "People, light and emotions."
+    },
+    {
+      "file": "foto02.jpg",
+      "role": "Second Shooter",
+      "description": "Details and perspective."
+    },
+    {
+      "file": "foto03.jpg",
+      "role": "Coordination",
+      "description": "Behind the scenes.\nMaking everything work."
+    }
+  ]
+}
