@@ -1,0 +1,40 @@
+---
+description: DSOTL product vision — moon bonus video vs full vernissage engine. Do not dilute or rename.
+alwaysApply: true
+---
+
+# The Dark Side of the Light (DSOTL) — product vision (PO lock)
+
+**Owner:** Marcin / Noir Frame. This is an **authorial vernissage**, not a generic feature or Easter egg playground.
+
+## Non‑negotiable name and idea
+
+- The project is **The Dark Side of the Light** (DSOTL).
+- Do **not** rename, merge into “blog”, replace with clock toys, or reinterpret as a generic dark mode / gimmick.
+- If a change **contradicts this document**, stop and push back — explain why it breaks PO intent before implementing alternatives.
+
+## Two separate things (do not conflate)
+
+### 1. Moon on `noirframe.art` (main menu)
+
+- **Only** a **bonus video** (material in production).
+- Flow: click moon → play bonus video → **return to main menu**. End.
+- No gallery, no labyrinth, no extra scenes on the main site beyond that video (unless PO explicitly updates this rule).
+- Prototype code (clock, fade paths) is **temporary** until the bonus video ships; then simplify to video → menu.
+
+### 2. DSOTL (full experience)
+
+- A **specially modified Noir Frame engine** — separate from the casual moon click on the public menu.
+- Opens a **strong gallery / vernissage**: curated author exhibition, not portfolio tiles.
+- Content policy: **no violence, no pedophilia, no pornography** — artistic, author-controlled work only.
+
+## Implementation guardrails
+
+- Do not expand moon click into DSOTL gallery on the same URL without PO approval.
+- Do not add social features, likes, or CMS scope to DSOTL unless PO requests it.
+- Prefer `DARK_SIDE_ENABLED` / feature flags until DSOTL engine and assets are ready.
+- When implementing DSOTL engine, treat it as its own module or fork — not a patch on Contact/Portfolio geometry.
+
+## Reference
+
+See `DSOTL-001_The_Dark_Side_of_the_Light.md` in repo root for full spec text.

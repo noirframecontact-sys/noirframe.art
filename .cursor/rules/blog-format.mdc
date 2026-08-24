@@ -10,9 +10,9 @@ alwaysApply: false
 
 - Każdy wpis (`items[]`) to jeden **wątek**: separator → media → opis.
 - Szerokość tekstu = szerokość kontenera wideo/zdjęcia: `min(900px, 92%)` — **nigdy szerszej**.
+- **Okno media** (FOTO i VIDEO): stały kontener `16:9`, `object-fit: contain` — ta sama wielkość ramki dla każdego wątku.
 - Jedna kolumna, tekst główny **wyjustowany** (`text-align: justify`).
-- Pierwszy akapit wpisu (tytuł/temat) — **wyśrodkowany**.
-- Podpis `– Noir Frame | Only Light Matters` dopina się w JS — **nie wpisuj** go w `caption`.
+- Pierwszy akapit wpisu (tytuł/temat) — **wyśrodkowany**.- Podpis `– Noir Frame | Only Light Matters` dopina się w JS — **nie wpisuj** go w `caption`.
 - Podpis jest wyśrodkowany i kursywą.
 
 ## Separator rozdziałów

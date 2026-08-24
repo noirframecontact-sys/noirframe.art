@@ -462,7 +462,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   min-height: 0;
   padding: 0;
   background-color: var(--nf-menu-bg);
-  background-image: url("../images/layouts/layout_PC_CONTACT.jpg");
+  background-image: var(--contact-bg-desktop, url("../images/layouts/layout_PC_CONTACT.jpg"));
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -716,7 +716,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 @media (max-width: 899px) and (orientation: portrait) {
   .gallery--contact {
-    background-image: url("../images/layouts/layout_02_CONTACT.jpg");
+    background-image: var(--contact-bg-landscape, url("../images/layouts/layout_02_CONTACT.jpg"));
   }
 
   .menuWrapper,
@@ -1024,6 +1024,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 .gallery--blog {
   --blog-content-width: min(900px, 92%);
+  --blog-media-aspect: 16 / 9;
   --blog-topic-gap: 10mm;
   gap: 28px;
 }
@@ -1093,15 +1094,31 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   line-height: 1;
 }
 
-.gallery--blog .motionVideo,
-.gallery--blog .blogMedia {
-  display: block;
+.blogItem__media {
   width: var(--blog-content-width);
   max-width: 100%;
-  height: auto;
+  aspect-ratio: var(--blog-media-aspect);
   margin-inline: auto;
+  overflow: hidden;
   border: 1px solid var(--nf-border);
   box-shadow: var(--nf-gallery-shadow);
+  background: var(--nf-bg, #0a0a0a);
+}
+
+.gallery--blog .blogItem__media .motionVideo,
+.gallery--blog .blogItem__media .blogMedia {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  object-fit: contain;
+  border: none;
+  box-shadow: none;
+}
+
+.gallery--blog .motionVideo,
+.gallery--blog .blogMedia {
+  transition: none;
 }
 
 .blogItem__caption {
@@ -1201,7 +1218,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 @media (max-width: 899px) and (orientation: portrait) {
   .gallery--contact {
-    background-image: url("../images/layouts/layout_02_CONTACT.jpg");
+    background-image: var(--contact-bg-landscape, url("../images/layouts/layout_02_CONTACT.jpg"));
   }
 
   .menuWrapper,
@@ -1215,7 +1232,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
   .gallery--contact {
-    background-image: url("../images/layouts/layout_03_CONTACT.jpg");
+    background-image: var(--contact-bg-portrait, url("../images/layouts/layout_03_CONTACT.jpg"));
   }
 
   .menuWrapper,

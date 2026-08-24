@@ -35,6 +35,7 @@ let galleryLoadId = 0;
 let angeboteCache = null;
 let aktuellCache = null;
 let blogCache = null;
+let contactCache = null;
 let motionCache = null;
 
 const MOTION_FALLBACK = {
@@ -1036,30 +1037,200 @@ function openGallery(folder) {
 function showAbout() {
   cancelPendingGalleryLoads();
   beginSubpageNavigation();
-  transitionBody(
+  fetchAboutData()
+    .then(function (about) {
+      transitionBody(renderAboutHtml(about), bindBackToMenu);
+    })
+    .catch(function () {
+      transitionBody(renderAboutHtml(defaultAboutData()), bindBackToMenu);
+    });
+}
+
+var aboutCache = null;
+
+function defaultAboutData() {
+  return {
+    headline: "ABOUT US",
+    subline: "Three people. One workflow.",
+    members: [
+      {
+        file: "foto01.jpg",
+        role: "Photo / Video Operator",
+        description: "People, light and emotions.",
+      },
+      {
+        file: "foto02.jpg",
+        role: "Second Shooter",
+        description: "Details and perspective.",
+      },
+      {
+        file: "foto03.jpg",
+        role: "Coordination",
+        description: "Behind the scenes.\nMaking everything work.",
+      },
+    ],
+  };
+}
+
+function fetchAboutData() {
+  if (aboutCache) {
+    return Promise.resolve(aboutCache);
+  }
+
+  return fetch("data/about.json", { cache: "no-store" })
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error("About manifest not found");
+      }
+      return response.json();
+    })
+    .then(function (data) {
+      aboutCache = data;
+      return aboutCache;
+    });
+}
+
+function aboutDescriptionHtml(text) {
+  return escapeHtml(String(text || "")).replace(/\n/g, "<br>");
+}
+
+function aboutPhotoTag(file) {
+  var name = String(file || "").trim();
+  if (!name) {
+    return "";
+  }
+  return (
+    '<img src="images/team/' +
+    encodeURI(name) +
+    '" loading="lazy" decoding="async" alt="">'
+  );
+}
+
+function renderAboutHtml(about) {
+  var members = Array.isArray(about.members) ? about.members : [];
+  var membersHtml = members
+    .map(function (member) {
+      return (
+        '<div class="member">' +
+        aboutPhotoTag(member.file) +
+        "<h3>" +
+        escapeHtml(member.role || "") +
+        "</h3>" +
+        "<p>" +
+        aboutDescriptionHtml(member.description) +
+        "</p>" +
+        "</div>"
+      );
+    })
+    .join("");
+
+  return (
     '<div class="gallery fade">' +
-      "<h1>ABOUT US</h1>" +
-      "<p>Three people. One workflow.</p>" +
-      '<div class="team">' +
-      '<div class="member">' +
-      teamImageTag("foto01") +
-      "<h3>Photo / Video Operator</h3>" +
-      "<p>People, light and emotions.</p>" +
+    "<h1>" +
+    escapeHtml(about.headline || "ABOUT US") +
+    "</h1>" +
+    "<p>" +
+    escapeHtml(about.subline || "") +
+    "</p>" +
+    '<div class="team">' +
+    membersHtml +
+    "</div>" +
+    backButtonHtml("backToMenuButton", "BACK TO MENU") +
+    "</div>"
+  );
+}
+
+function contactTelHref(displayPhone) {
+  var digits = String(displayPhone || "").replace(/\D/g, "");
+  if (!digits) {
+    return "";
+  }
+  if (digits.charAt(0) === "0") {
+    digits = "49" + digits.slice(1);
+  }
+  return "+" + digits;
+}
+
+function fetchContactData() {
+  if (contactCache) {
+    return Promise.resolve(contactCache);
+  }
+
+  return fetch("data/contact.json", { cache: "no-store" })
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error("Contact manifest not found");
+      }
+      return response.json();
+    })
+    .then(function (data) {
+      contactCache = data;
+      return contactCache;
+    });
+}
+
+function renderContactHtml(contact) {
+  var ownerTel = contactTelHref(contact.ownerPhone);
+  var officeTel = contactTelHref(contact.officePhone);
+  var bgDesktop = contact.backgroundDesktop || "images/layouts/layout_PC_CONTACT.jpg";
+  var bgStyle =
+    'background-image:url("' + bgDesktop + '");' +
+    "--contact-bg-desktop:url('" + bgDesktop + "');" +
+    "--contact-bg-landscape:url('" + (contact.backgroundMobileLandscape || bgDesktop) + "');" +
+    "--contact-bg-portrait:url('" + (contact.backgroundMobilePortrait || bgDesktop) + "');";
+
+  return (
+    '<div class="gallery gallery--contact fade" style="' + bgStyle + '">' +
+      '<div class="contactLayout">' +
+      '<div class="contactLayout__frame">' +
+      '<div class="contactLayout__main">' +
+      '<div class="contactLayout__panel">' +
+      '<p class="contactLayout__brand">' + escapeHtml(contact.brand || "NOIЯFRAME") + "</p>" +
+      '<div class="contact-box">' +
+      '<div class="contact-group">' +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
+      '<span class="contact-row__body">' + escapeHtml(contact.ownerName || "") + "</span>" +
+      "</p>" +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-camera"></i></span>' +
+      '<span class="contact-row__body contact-box__role">' + escapeHtml(contact.ownerRole || "") + "</span>" +
+      "</p>" +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-phone"></i></span>' +
+      '<a class="contact-row__body" href="tel:' + escapeHtml(ownerTel) + '">' + escapeHtml(contact.ownerPhone || "") + "</a>" +
+      "</p>" +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-envelope"></i></span>' +
+      '<a class="contact-row__body" href="mailto:' + escapeHtml(contact.ownerEmail || "") + '">' + escapeHtml(contact.ownerEmail || "") + "</a>" +
+      "</p>" +
       "</div>" +
-      '<div class="member">' +
-      teamImageTag("foto02") +
-      "<h3>Second Shooter</h3>" +
-      "<p>Details and perspective.</p>" +
+      '<hr class="contactLayout__divider" aria-hidden="true">' +
+      '<div class="contact-group">' +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
+      '<span class="contact-row__body">' + escapeHtml(contact.officeLabel || "") + "</span>" +
+      "</p>" +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
+      '<span class="contact-row__body">' + escapeHtml(contact.officeContact || "") + "</span>" +
+      "</p>" +
+      '<p class="contact-row">' +
+      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-phone"></i></span>' +
+      '<a class="contact-row__body" href="tel:' + escapeHtml(officeTel) + '">' + escapeHtml(contact.officePhone || "") + "</a>" +
+      "</p>" +
       "</div>" +
-      '<div class="member">' +
-      teamImageTag("foto03") +
-      "<h3>Coordination</h3>" +
-      "<p>Behind the scenes.<br>Making everything work.</p>" +
+      "</div>" +
+      '<div class="contactLayout__languages">' +
+      '<p class="contactLayout__languagesLead">' + escapeHtml(contact.languagesLead || "Wir sprechen") + "</p>" +
+      '<p class="contactLayout__languagesList">' + escapeHtml(contact.languages || "") + "</p>" +
+      "</div>" +
+      "</div>" +
+      "</div>" +
       "</div>" +
       "</div>" +
       backButtonHtml("backToMenuButton", "BACK TO MENU") +
-      "</div>",
-    bindBackToMenu
+      "</div>"
   );
 }
 
@@ -1067,60 +1238,28 @@ function showAbout() {
 function showContact() {
   cancelPendingGalleryLoads();
   beginSubpageNavigation();
-  transitionBody(
-    '<div class="gallery gallery--contact fade">' +
-      '<div class="contactLayout">' +
-      '<div class="contactLayout__frame">' +
-      '<div class="contactLayout__main">' +
-      '<div class="contactLayout__panel">' +
-      "<p class=\"contactLayout__brand\">NOIЯFRAME</p>" +
-      '<div class="contact-box">' +
-      '<div class="contact-group">' +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
-      '<span class="contact-row__body">Marcin Porębski</span>' +
-      "</p>" +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-camera"></i></span>' +
-      '<span class="contact-row__body contact-box__role">Fotograf &amp; Inhaber</span>' +
-      "</p>" +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-phone"></i></span>' +
-      '<a class="contact-row__body" href="tel:+491774429815">01774429815</a>' +
-      "</p>" +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-envelope"></i></span>' +
-      '<a class="contact-row__body" href="mailto:info.noirframe@gmail.com">info.noirframe@gmail.com</a>' +
-      "</p>" +
-      "</div>" +
-      '<hr class="contactLayout__divider" aria-hidden="true">' +
-      '<div class="contact-group">' +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
-      '<span class="contact-row__body">Büro &amp; Organisation</span>' +
-      "</p>" +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
-      '<span class="contact-row__body">Hr. Rinaldo</span>' +
-      "</p>" +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-phone"></i></span>' +
-      '<a class="contact-row__body" href="tel:+491739147605">01739147605</a>' +
-      "</p>" +
-      "</div>" +
-      "</div>" +
-      '<div class="contactLayout__languages">' +
-      '<p class="contactLayout__languagesLead">Wir sprechen</p>' +
-      '<p class="contactLayout__languagesList">Russisch · Polski · Deutsch · Italy</p>' +
-      "</div>" +
-      "</div>" +
-      "</div>" +
-      "</div>" +
-      "</div>" +
-      backButtonHtml("backToMenuButton", "BACK TO MENU") +
-      "</div>",
-    bindBackToMenu
-  );
+  fetchContactData()
+    .then(function (contact) {
+      transitionBody(renderContactHtml(contact), bindBackToMenu);
+    })
+    .catch(function () {
+      transitionBody(
+        renderContactHtml({
+          brand: "NOIЯFRAME",
+          ownerName: "Marcin Porębski",
+          ownerRole: "Fotograf & Inhaber",
+          ownerPhone: "01774429815",
+          ownerEmail: "info.noirframe@gmail.com",
+          officeLabel: "Büro & Organisation",
+          officeContact: "Hr. Rinaldo",
+          officePhone: "01739147605",
+          languagesLead: "Wir sprechen",
+          languages: "Russisch · Polski · Deutsch · Italy",
+          backgroundDesktop: "images/layouts/layout_PC_CONTACT.jpg",
+        }),
+        bindBackToMenu
+      );
+    });
 }
 
 function fetchMotionManifest() {
@@ -1293,18 +1432,22 @@ function blogItemHtml(item) {
 
   if (isBlogImageFile(item.file)) {
     mediaHtml =
+      '<div class="blogItem__media">' +
       '<img class="blogMedia" src="' +
       src +
-      '" alt="" loading="lazy" decoding="async">';
+      '" alt="" loading="lazy" decoding="async">' +
+      "</div>";
   } else if (isBlogVideoFile(item.file)) {
     mediaHtml =
+      '<div class="blogItem__media">' +
       '<video class="motionVideo blogVideo blogMedia" controls preload="metadata" playsinline>' +
       '<source src="' +
       src +
       '" type="video/' +
       (blogFileExtension(item.file) === "webm" ? "webm" : "mp4") +
       '">' +
-      "</video>";
+      "</video>" +
+      "</div>";
   } else {
     return "";
   }
