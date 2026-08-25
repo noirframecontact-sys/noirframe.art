@@ -1,15 +1,37 @@
 {
-  "title": "ANGEBOTE",
+  "ctaLabel": "Anfrage senden",
   "intro": "",
   "items": [
-    { "title": "Hochzeit", "price": "ab 999 €" },
-    { "title": "Standesamt", "price": "ab 499 €" },
-    { "title": "Business", "price": "ab 450 €" },
-    { "title": "Verlobung / Engagement", "price": "ab 299 €" },
-    { "title": "Events & Feiern", "price": "ab 179 €" },
-    { "title": "Familie & Portrait", "price": "ab 129 €" }
+    {
+      "price": "ab 999 €",
+      "title": "Hochzeit"
+    },
+    {
+      "price": "ab 499 €",
+      "title": "Standesamt"
+    },
+    {
+      "price": "ab 450 €",
+      "title": "Business"
+    },
+    {
+      "price": "ab 299 €",
+      "title": "Verlobung / Engagement"
+    },
+    {
+      "price": "ab 179 €",
+      "title": "Events & Feiern"
+    },
+    {
+      "price": "ab 129 €",
+      "title": "Familie & Portrait"
+    },
+    {
+      "price": "ab 99 €",
+      "title": "Aktion!!! Familie & Kinder ca. 30 min 10 PICS"
+    }
   ],
-  "noteLead": "Orientierungspreise – individuell vereinbar.",
   "note": "Die genannten Preise dienen als erste Orientierung. Jedes Projekt ist individuell und wird nach Umfang, Dauer und Anforderungen persönlich kalkuliert. Der endgültige Preis wird nach weiterer Kontaktaufnahme und gemeinsamer Abstimmung vereinbart.",
-  "ctaLabel": "Anfrage senden"
+  "noteLead": "Orientierungspreise – individuell vereinbar.",
+  "title": "ANGEBOTE"
 }
