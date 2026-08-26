@@ -498,6 +498,7 @@ function angeboteScreenHtml(data) {
 
   return (
     '<div class="gallery gallery--angebote fade">' +
+    pageBgPhotoHtml() +
     "<h1>" +
     escapeHtml(data.title) +
     "</h1>" +
@@ -630,6 +631,7 @@ function aktuellScreenHtml(data) {
 
   return (
     '<div class="gallery gallery--aktuell fade">' +
+    pageBgPhotoHtml() +
     "<h1>" +
     escapeHtml(data.title) +
     "</h1>" +
@@ -966,6 +968,7 @@ function showMenu(skipFadeOut) {
   cancelPendingGalleryLoads();
   transitionBody(
     '<div class="menuWrapper fade">' +
+      pageBgPhotoHtml() +
       (DARK_SIDE_ENABLED
         ? '<div class="menuIntro">' +
           '<button type="button" class="darkSideMoon" id="darkSideMoon" aria-label="The Dark Side">' +
@@ -1013,6 +1016,7 @@ function openGallery(folder) {
 
       transitionBody(
         '<div class="gallery fade">' +
+          pageBgPhotoHtml() +
           imagesHtml +
           backButtonHtml("backToMenuButton", "BACK TO MENU") +
           "</div>",
@@ -1026,6 +1030,7 @@ function openGallery(folder) {
 
       transitionBody(
         '<div class="gallery fade">' +
+          pageBgPhotoHtml() +
           backButtonHtml("backToMenuButton", "BACK TO MENU") +
           "</div>",
         bindBackToMenu
@@ -1126,6 +1131,7 @@ function renderAboutHtml(about) {
 
   return (
     '<div class="gallery fade">' +
+    pageBgPhotoHtml() +
     "<h1>" +
     escapeHtml(about.headline || "ABOUT US") +
     "</h1>" +
@@ -1169,13 +1175,13 @@ function fetchContactData() {
     });
 }
 
-function contactBgPhotoHtml(contact) {
-  var bgDesktop = contact.backgroundDesktop || "images/layouts/layout_PC_CONTACT.jpg";
-  var bgLandscape = contact.backgroundMobileLandscape || bgDesktop;
-  var bgPortrait = contact.backgroundMobilePortrait || bgDesktop;
+function pageBgPhotoHtml(desktop, portrait, landscape) {
+  var bgDesktop = desktop || "images/layouts/layout_PC.jpg";
+  var bgPortrait = portrait || "images/layouts/layout_02.jpg";
+  var bgLandscape = landscape || "images/layouts/layout_03.jpg";
 
   return (
-    '<picture class="contactBgPhoto" aria-hidden="true">' +
+    '<picture class="pageBgPhoto" aria-hidden="true">' +
     '<source media="(max-width: 899px) and (orientation: portrait)" srcset="' +
     escapeHtml(bgPortrait) +
     '">' +
@@ -1189,17 +1195,21 @@ function contactBgPhotoHtml(contact) {
   );
 }
 
+function contactBgPhotoHtml(contact) {
+  var bgDesktop = contact.backgroundDesktop || "images/layouts/layout_PC_CONTACT.jpg";
+  return pageBgPhotoHtml(
+    bgDesktop,
+    contact.backgroundMobilePortrait || bgDesktop,
+    contact.backgroundMobileLandscape || bgDesktop
+  );
+}
+
 function renderContactHtml(contact) {
   var ownerTel = contactTelHref(contact.ownerPhone);
   var officeTel = contactTelHref(contact.officePhone);
-  var bgDesktop = contact.backgroundDesktop || "images/layouts/layout_PC_CONTACT.jpg";
-  var bgStyle =
-    "--contact-bg-desktop:url('" + bgDesktop + "');" +
-    "--contact-bg-landscape:url('" + (contact.backgroundMobileLandscape || bgDesktop) + "');" +
-    "--contact-bg-portrait:url('" + (contact.backgroundMobilePortrait || bgDesktop) + "');";
 
   return (
-    '<div class="gallery gallery--contact fade" style="' + bgStyle + '">' +
+    '<div class="gallery gallery--contact fade">' +
       contactBgPhotoHtml(contact) +
       '<div class="contactLayout">' +
       '<div class="contactLayout__frame">' +
@@ -1341,6 +1351,7 @@ function motionScreenHtml(data) {
 
   return (
     '<div class="gallery gallery--video fade">' +
+    pageBgPhotoHtml() +
     "<h1>VIDEO</h1>" +
     itemsHtml +
     footerHtml +
@@ -1508,6 +1519,7 @@ function blogScreenHtml(data) {
 
   return (
     '<div class="gallery gallery--blog fade">' +
+    pageBgPhotoHtml() +
     '<div class="blogToolbar">' +
     backButtonHtml("backToMenuButtonTop", "BACK TO MENU") +
     "</div>" +

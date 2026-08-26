@@ -128,11 +128,10 @@ button {
 
 .menuWrapper,
 .gallery {
+  position: relative;
+  isolation: isolate;
   background-color: var(--nf-menu-bg);
-  background-image: url("../images/layouts/layout_PC.jpg");
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
+  background-image: none;
 }
 
 .menuWrapper {
@@ -453,6 +452,32 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 /* === contact page === */
 
+.pageBgPhoto {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
+.pageBgPhoto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.menuWrapper > :not(.pageBgPhoto),
+.gallery > :not(.pageBgPhoto) {
+  position: relative;
+  z-index: 1;
+}
+
 .gallery--contact {
   position: relative;
   isolation: isolate;
@@ -464,41 +489,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   min-height: 0;
   padding: 0;
   background-color: var(--nf-menu-bg);
-  background-image: var(--contact-bg-desktop, url("../images/layouts/layout_PC_CONTACT.jpg"));
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-}
-
-/* Jawne tlo PC — tylko desktop; mobile uzywa CSS background + osobnych layoutow */
-.contactBgPhoto {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  display: none;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  pointer-events: none;
-}
-
-.contactBgPhoto img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-}
-
-@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
-  .contactBgPhoto {
-    display: block;
-  }
-
-  .gallery--contact {
-    background-image: none;
-  }
+  background-image: none;
 }
 
 .gallery--contact .contactLayout,
@@ -754,12 +745,6 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 @media (max-width: 899px) and (orientation: portrait) {
-  .gallery--contact {
-    background-image: var(--contact-bg-portrait, url("../images/layouts/layout_03_CONTACT.jpg"));
-  }
-
-  .menuWrapper,
-  .gallery:not(.gallery--contact),
   .siteNav__bar,
   .siteNav__panel,
   .siteNav__fadeSurface::before {
@@ -1279,12 +1264,6 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 @media (max-width: 899px) and (orientation: portrait) {
-  .gallery--contact {
-    background-image: var(--contact-bg-portrait, url("../images/layouts/layout_03_CONTACT.jpg"));
-  }
-
-  .menuWrapper,
-  .gallery:not(.gallery--contact),
   .siteNav__bar,
   .siteNav__panel,
   .siteNav__fadeSurface::before {
@@ -1293,12 +1272,6 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
-  .gallery--contact {
-    background-image: var(--contact-bg-landscape, url("../images/layouts/layout_02_CONTACT.jpg"));
-  }
-
-  .menuWrapper,
-  .gallery:not(.gallery--contact),
   .siteNav__bar,
   .siteNav__panel,
   .siteNav__fadeSurface::before {
@@ -1310,12 +1283,6 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
     height: 100dvh;
     object-fit: cover;
     object-position: center center;
-  }
-}
-
-@media (hover: none) and (pointer: coarse) and (orientation: portrait) {
-  .gallery--contact {
-    background-image: var(--contact-bg-portrait, url("../images/layouts/layout_03_CONTACT.jpg"));
   }
 }
 
