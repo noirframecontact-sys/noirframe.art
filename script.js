@@ -1125,7 +1125,7 @@ function renderAboutHtml(about) {
     .join("");
 
   return (
-    '<div class="gallery fade">' +
+    '<div class="gallery gallery--about fade">' +
     "<h1>" +
     escapeHtml(about.headline || "ABOUT US") +
     "</h1>" +
@@ -1249,7 +1249,7 @@ function showContact() {
           officePhone: "01739147605",
           languagesLead: "Wir sprechen",
           languages: "Russisch · Polski · Deutsch · Italy",
-          backgroundDesktop: "images/layouts/layout_PC_CONTACT.jpg",
+          backgroundDesktop: "images/layouts/layout_PC.jpg",
         }),
         bindBackToMenu
       );

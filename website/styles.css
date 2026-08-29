@@ -35,10 +35,6 @@
   --nf-nav-height: 56px;
   --nf-layout-desktop: url("../images/layouts/layout_PC.jpg");
   --nf-layout-portrait: url("../images/layouts/layout_02.jpg");
-  --nf-layout-landscape: url("../images/layouts/layout_03.jpg");
-  --nf-layout-contact-desktop: url("../images/layouts/layout_PC_CONTACT.jpg");
-  --nf-layout-contact-portrait: url("../images/layouts/layout_02_CONTACT.jpg");
-  --nf-layout-contact-landscape: url("../images/layouts/layout_03_CONTACT.jpg");
 }
 
 [data-theme="hard"] {
@@ -340,6 +336,19 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 /* === about / contact / films === */
 
+.gallery--about {
+  background-image: var(--nf-layout-desktop);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+
+@media (orientation: portrait) {
+  .gallery--about {
+    background-image: var(--nf-layout-portrait);
+  }
+}
+
 .team {
   display: flex;
   justify-content: center;
@@ -472,7 +481,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   min-height: 0;
   padding: 0;
   background-color: var(--nf-menu-bg);
-  background-image: var(--nf-layout-contact-desktop);
+  background-image: var(--nf-layout-desktop);
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -730,6 +739,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   }
 }
 
+/* Mobile portrait: layout_02; desktop, tablet, mobile landscape: layout_PC */
 @media (orientation: portrait) {
   .menuWrapper,
   .gallery:not(.gallery--contact) {
@@ -737,30 +747,13 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   }
 
   .gallery--contact {
-    background-image: var(--nf-layout-contact-portrait);
+    background-image: var(--nf-layout-portrait);
   }
 
   .siteNav__bar,
   .siteNav__panel,
   .siteNav__fadeSurface::before {
     background-image: var(--nf-layout-portrait);
-  }
-}
-
-@media (orientation: landscape) and (max-width: 1366px) {
-  .menuWrapper,
-  .gallery:not(.gallery--contact) {
-    background-image: var(--nf-layout-landscape);
-  }
-
-  .gallery--contact {
-    background-image: var(--nf-layout-contact-landscape);
-  }
-
-  .siteNav__bar,
-  .siteNav__panel,
-  .siteNav__fadeSurface::before {
-    background-image: var(--nf-layout-landscape);
   }
 }
 
@@ -1079,7 +1072,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 .blogHeader__nav {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   width: 100%;
   margin-bottom: clamp(20px, 4vw, 36px);
 }
