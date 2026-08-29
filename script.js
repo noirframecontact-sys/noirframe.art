@@ -498,7 +498,6 @@ function angeboteScreenHtml(data) {
 
   return (
     '<div class="gallery gallery--angebote fade">' +
-    pageBgPhotoHtml() +
     "<h1>" +
     escapeHtml(data.title) +
     "</h1>" +
@@ -631,7 +630,6 @@ function aktuellScreenHtml(data) {
 
   return (
     '<div class="gallery gallery--aktuell fade">' +
-    pageBgPhotoHtml() +
     "<h1>" +
     escapeHtml(data.title) +
     "</h1>" +
@@ -968,7 +966,6 @@ function showMenu(skipFadeOut) {
   cancelPendingGalleryLoads();
   transitionBody(
     '<div class="menuWrapper fade">' +
-      pageBgPhotoHtml() +
       (DARK_SIDE_ENABLED
         ? '<div class="menuIntro">' +
           '<button type="button" class="darkSideMoon" id="darkSideMoon" aria-label="The Dark Side">' +
@@ -1016,7 +1013,6 @@ function openGallery(folder) {
 
       transitionBody(
         '<div class="gallery fade">' +
-          pageBgPhotoHtml() +
           imagesHtml +
           backButtonHtml("backToMenuButton", "BACK TO MENU") +
           "</div>",
@@ -1030,7 +1026,6 @@ function openGallery(folder) {
 
       transitionBody(
         '<div class="gallery fade">' +
-          pageBgPhotoHtml() +
           backButtonHtml("backToMenuButton", "BACK TO MENU") +
           "</div>",
         bindBackToMenu
@@ -1131,7 +1126,6 @@ function renderAboutHtml(about) {
 
   return (
     '<div class="gallery fade">' +
-    pageBgPhotoHtml() +
     "<h1>" +
     escapeHtml(about.headline || "ABOUT US") +
     "</h1>" +
@@ -1175,42 +1169,12 @@ function fetchContactData() {
     });
 }
 
-function pageBgPhotoHtml(desktop, portrait, landscape) {
-  var bgDesktop = desktop || "images/layouts/layout_PC.jpg";
-  var bgPortrait = portrait || "images/layouts/layout_02.jpg";
-  var bgLandscape = landscape || "images/layouts/layout_03.jpg";
-
-  return (
-    '<picture class="pageBgPhoto" aria-hidden="true">' +
-    '<source media="(max-width: 899px) and (orientation: portrait)" srcset="' +
-    escapeHtml(bgPortrait) +
-    '">' +
-    '<source media="(orientation: landscape) and (hover: none) and (pointer: coarse)" srcset="' +
-    escapeHtml(bgLandscape) +
-    '">' +
-    '<img src="' +
-    escapeHtml(bgDesktop) +
-    '" alt="" loading="eager" decoding="async">' +
-    "</picture>"
-  );
-}
-
-function contactBgPhotoHtml(contact) {
-  var bgDesktop = contact.backgroundDesktop || "images/layouts/layout_PC_CONTACT.jpg";
-  return pageBgPhotoHtml(
-    bgDesktop,
-    contact.backgroundMobilePortrait || bgDesktop,
-    contact.backgroundMobileLandscape || bgDesktop
-  );
-}
-
 function renderContactHtml(contact) {
   var ownerTel = contactTelHref(contact.ownerPhone);
   var officeTel = contactTelHref(contact.officePhone);
 
   return (
     '<div class="gallery gallery--contact fade">' +
-      contactBgPhotoHtml(contact) +
       '<div class="contactLayout">' +
       '<div class="contactLayout__frame">' +
       '<div class="contactLayout__main">' +
@@ -1351,7 +1315,6 @@ function motionScreenHtml(data) {
 
   return (
     '<div class="gallery gallery--video fade">' +
-    pageBgPhotoHtml() +
     "<h1>VIDEO</h1>" +
     itemsHtml +
     footerHtml +
@@ -1519,17 +1482,18 @@ function blogScreenHtml(data) {
 
   return (
     '<div class="gallery gallery--blog fade">' +
-    pageBgPhotoHtml() +
-    '<div class="blogToolbar">' +
+    '<header class="blogHeader">' +
+    '<div class="blogHeader__nav">' +
     backButtonHtml("backToMenuButtonTop", "BACK TO MENU") +
     "</div>" +
-    '<div class="blogColumn">' +
-    '<header class="blogHeader">' +
+    '<div class="blogHeader__title">' +
     "<h1>" +
     escapeHtml(data.title) +
     "</h1>" +
+    "</div>" +
     blogIntroHtml(data.intro) +
     "</header>" +
+    '<div class="blogColumn">' +
     '<div class="blogList">' +
     itemsHtml +
     "</div>" +

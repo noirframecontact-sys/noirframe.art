@@ -10,6 +10,6 @@
   "languagesLead": "Wir sprechen",
   "languages": "Russisch · Polski · Deutsch · Italy",
   "backgroundDesktop": "images/layouts/layout_PC_CONTACT.jpg",
-  "backgroundMobileLandscape": "images/layouts/layout_02_CONTACT.jpg",
-  "backgroundMobilePortrait": "images/layouts/layout_03_CONTACT.jpg"
+  "backgroundMobileLandscape": "images/layouts/layout_03_CONTACT.jpg",
+  "backgroundMobilePortrait": "images/layouts/layout_02_CONTACT.jpg"
 }

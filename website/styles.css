@@ -33,6 +33,12 @@
   --nf-nav-font: 10px;
   --nf-nav-font-hover: 11px;
   --nf-nav-height: 56px;
+  --nf-layout-desktop: url("../images/layouts/layout_PC.jpg");
+  --nf-layout-portrait: url("../images/layouts/layout_02.jpg");
+  --nf-layout-landscape: url("../images/layouts/layout_03.jpg");
+  --nf-layout-contact-desktop: url("../images/layouts/layout_PC_CONTACT.jpg");
+  --nf-layout-contact-portrait: url("../images/layouts/layout_02_CONTACT.jpg");
+  --nf-layout-contact-landscape: url("../images/layouts/layout_03_CONTACT.jpg");
 }
 
 [data-theme="hard"] {
@@ -131,7 +137,10 @@ button {
   position: relative;
   isolation: isolate;
   background-color: var(--nf-menu-bg);
-  background-image: none;
+  background-image: var(--nf-layout-desktop);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: 0 0;
 }
 
 .menuWrapper {
@@ -452,32 +461,6 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 /* === contact page === */
 
-.pageBgPhoto {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  pointer-events: none;
-}
-
-.pageBgPhoto img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-}
-
-.menuWrapper > :not(.pageBgPhoto),
-.gallery > :not(.pageBgPhoto) {
-  position: relative;
-  z-index: 1;
-}
-
 .gallery--contact {
   position: relative;
   isolation: isolate;
@@ -489,7 +472,10 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   min-height: 0;
   padding: 0;
   background-color: var(--nf-menu-bg);
-  background-image: none;
+  background-image: var(--nf-layout-contact-desktop);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: 0 0;
 }
 
 .gallery--contact .contactLayout,
@@ -744,11 +730,37 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   }
 }
 
-@media (max-width: 899px) and (orientation: portrait) {
+@media (orientation: portrait) {
+  .menuWrapper,
+  .gallery:not(.gallery--contact) {
+    background-image: var(--nf-layout-portrait);
+  }
+
+  .gallery--contact {
+    background-image: var(--nf-layout-contact-portrait);
+  }
+
   .siteNav__bar,
   .siteNav__panel,
   .siteNav__fadeSurface::before {
-    background-image: url("../images/layouts/layout_02.jpg");
+    background-image: var(--nf-layout-portrait);
+  }
+}
+
+@media (orientation: landscape) and (max-width: 1366px) {
+  .menuWrapper,
+  .gallery:not(.gallery--contact) {
+    background-image: var(--nf-layout-landscape);
+  }
+
+  .gallery--contact {
+    background-image: var(--nf-layout-contact-landscape);
+  }
+
+  .siteNav__bar,
+  .siteNav__panel,
+  .siteNav__fadeSurface::before {
+    background-image: var(--nf-layout-landscape);
   }
 }
 
@@ -1052,24 +1064,36 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   gap: 28px;
 }
 
-/* Jedna niewidzialna kolumna — tytuł, media i tekst tej samej szerokości */
-.blogColumn {
-  width: var(--blog-column-width);
-  max-width: 100%;
-  margin-inline: auto;
-  box-sizing: border-box;
-}
-
-/* Stały nagłówek sekcji — wyśrodkowany, z oddechem przed wpisami */
+/* Nagłówek sekcji — pełna szerokość viewportu, wiersze bez nakładania */
 .blogHeader {
+  align-self: stretch;
   width: 100%;
+  max-width: 100%;
   margin: 0 0 clamp(40px, 8vw, 72px);
-  padding: 0 0 clamp(24px, 5vw, 40px);
-  text-align: center;
+  padding:
+    0
+    clamp(16px, 4vw, 36px)
+    clamp(24px, 5vw, 40px);
   box-sizing: border-box;
 }
 
-.gallery--blog .blogHeader h1 {
+.blogHeader__nav {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-bottom: clamp(20px, 4vw, 36px);
+}
+
+.blogHeader__nav .backToMenuButton {
+  margin-top: 0;
+}
+
+.blogHeader__title {
+  width: 100%;
+  text-align: center;
+}
+
+.gallery--blog .blogHeader__title h1 {
   width: 100%;
   max-width: 100%;
   margin: 0 0 clamp(18px, 3.5vw, 28px);
@@ -1087,6 +1111,14 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   text-align: center;
 }
 
+/* Jedna niewidzialna kolumna — media i tekst wpisów tej samej szerokości */
+.blogColumn {
+  width: var(--blog-column-width);
+  max-width: 100%;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
 .gallery--blog .blogIntro__headline {
   margin: 0;
   font-style: normal;
@@ -1102,21 +1134,6 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   font-size: clamp(14px, 1.9vw, 16px);
   line-height: 1.75;
   color: var(--nf-text-muted);
-}
-
-.blogToolbar {
-  position: sticky;
-  top: calc(var(--nf-nav-height) + env(safe-area-inset-top));
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-}
-
-.blogToolbar .backToMenuButton {
-  margin-top: 12px;
 }
 
 .blogList {
@@ -1263,21 +1280,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   }
 }
 
-@media (max-width: 899px) and (orientation: portrait) {
-  .siteNav__bar,
-  .siteNav__panel,
-  .siteNav__fadeSurface::before {
-    background-image: url("../images/layouts/layout_02.jpg");
-  }
-}
-
 @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
-  .siteNav__bar,
-  .siteNav__panel,
-  .siteNav__fadeSurface::before {
-    background-image: url("../images/layouts/layout_03.jpg");
-  }
-
   .heroArt {
     width: 100vw;
     height: 100dvh;
@@ -1299,10 +1302,10 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   inset: 0;
   z-index: 0;
   background-color: var(--nf-menu-bg);
-  background-image: url("../images/layouts/layout_PC.jpg");
-  background-size: cover;
-  background-position: center top;
+  background-image: var(--nf-layout-desktop);
+  background-size: 100% 100%;
   background-repeat: no-repeat;
+  background-position: 0 0;
   -webkit-mask-image: linear-gradient(
     to right,
     #000 0%,
@@ -1389,10 +1392,10 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   padding: 0 max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left));
   padding-top: env(safe-area-inset-top);
   background-color: var(--nf-menu-bg);
-  background-image: url("../images/layouts/layout_PC.jpg");
-  background-size: cover;
-  background-position: center top;
+  background-image: var(--nf-layout-desktop);
+  background-size: 100% 100%;
   background-repeat: no-repeat;
+  background-position: 0 0;
   border-bottom: 1px solid var(--nf-border);
 }
 
