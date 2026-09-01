@@ -1,0 +1,29 @@
+---
+description: WWW-001 Frozen UI — P0/P1 brand and system labels; P3 marketing stays editable
+globs: script.js,website/frozen-ui.js,website/styles.css,index.html,data/*.json
+alwaysApply: true
+---
+
+# WWW-001 — Frozen UI (noirframe.art)
+
+Navigation labels, menu items, section titles (P0), system layout labels (P1), and button captions like BACK TO MENU are **brand assets**. They must never be translated, localized, auto-rewritten, or modified by browser translation. Treat them as **immutable UI identifiers**.
+
+**P2 Content** (bios, prices, blog posts, contact data, language list values) and **P3 Marketing** (tagline, CTA, subtitles, footers) **are editable** via JSON/NFST.
+
+## Sources
+
+- P0/P1 strings: `website/frozen-ui.js` → rendered in `script.js` (JSON cannot override at render time for P0/P1)
+- P3 defaults: `MARKETING_DEFAULTS` in `frozen-ui.js` — not frozen
+- Publish guards: NFST `publisher/frozen_ui.rs` blocks P0/P1 JSON mutations on Publish Live
+
+## Do not
+
+- Move section H1 or nav labels into editable JSON without updating guards
+- Freeze taglines, CTAs, or marketing copy (P3)
+- Edit protected CSS selectors in `WWW-001A_Protected_Selectors.md` without WWW-002 snapshots
+
+## Layout
+
+NFST must not change geometry. See `WWW-001A_Protected_Selectors.md` and `WWW-002_Layout_Freeze.md`.
+
+See `WWW-001_UI_Freeze_v1.md`.

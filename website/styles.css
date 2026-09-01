@@ -1,5 +1,11 @@
 /* === NOIЯFRAME — theme tokens (Wedding Edition default; swap via [data-theme]) === */
 
+/* WWW-001: frozen UI — per-element notranslate; no visual override */
+.ui-frozen.notranslate {
+  -webkit-translate: no;
+  translate: no;
+}
+
 @import url("../FONTY/icons/phosphor-light.css");
 
 :root,
@@ -77,7 +83,9 @@ body {
 body:has(.container),
 body:has(.menuWrapper),
 body:has(.darkSideOverlay.is-active),
-html:has(.darkSideOverlay.is-active) {
+body:has(.gallery--contact),
+html:has(.darkSideOverlay.is-active),
+html:has(.gallery--contact) {
   overflow: hidden;
   height: 100%;
   max-height: 100dvh;
@@ -346,6 +354,73 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 @media (orientation: portrait) {
   .gallery--about {
     background-image: var(--nf-layout-portrait);
+  }
+}
+
+@media (max-width: 899px) and (orientation: portrait) {
+  .gallery--about {
+    box-sizing: border-box;
+    min-height: 100svh;
+    min-height: 100dvh;
+    max-height: none;
+    padding:
+      calc(env(safe-area-inset-top) + var(--nf-nav-height) + 12px)
+      clamp(12px, 4vw, 20px)
+      calc(env(safe-area-inset-bottom) + 16px);
+    gap: clamp(12px, 2.5svh, 28px);
+    overflow-x: hidden;
+  }
+
+  .gallery--about h1 {
+    font-size: clamp(16px, 2.8svh, 22px);
+  }
+
+  .gallery--about > p {
+    font-size: clamp(12px, 2svh, 15px);
+  }
+
+  .gallery--about .team {
+    width: 100%;
+    max-width: 100%;
+    margin-top: clamp(8px, 1.5svh, 24px);
+    gap: clamp(16px, 3svh, 32px);
+  }
+
+  .gallery--about .member {
+    max-width: min(100%, 280px);
+  }
+
+  .gallery--about .team .member img {
+    width: min(220px, 78vw);
+    height: clamp(96px, 16svh, 150px);
+  }
+
+  .gallery--about .member h3 {
+    margin-top: clamp(8px, 1.5svh, 16px);
+    font-size: clamp(11px, 1.8svh, 14px);
+  }
+
+  .gallery--about .member p {
+    font-size: clamp(11px, 1.7svh, 14px);
+    line-height: 1.45;
+  }
+
+  .gallery--about .backToMenuButton {
+    margin-top: clamp(8px, 1.5svh, 16px);
+    padding: clamp(10px, 1.8svh, 14px) clamp(24px, 8vw, 36px);
+    font-size: clamp(10px, 1.6svh, 12px);
+  }
+}
+
+@media (max-width: 480px) and (orientation: portrait) {
+  .gallery--about .team {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .gallery--about .team .member img {
+    width: min(240px, 86vw);
+    height: clamp(100px, 14svh, 132px);
   }
 }
 
@@ -623,12 +698,29 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   letter-spacing: 0.04em;
 }
 
-@media (hover: none) and (pointer: coarse) {
+@media (max-width: 899px) {
+  html:has(.gallery--contact),
+  body:has(.gallery--contact) {
+    height: 100svh;
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+
   .gallery--contact {
+    position: fixed;
+    inset: 0;
     box-sizing: border-box;
-    min-height: 100dvh;
+    width: 100%;
+    height: 100svh;
+    height: 100dvh;
+    max-height: 100dvh;
+    min-height: 0;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    overscroll-behavior: none;
+    padding: 0;
+    gap: 0;
   }
 
   .gallery--contact .contactLayout {
@@ -638,54 +730,113 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
     justify-content: center;
     width: 100%;
     min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
     padding:
-      calc(env(safe-area-inset-top) + 12px)
-      clamp(16px, 4vw, 24px)
-      12px;
+      calc(env(safe-area-inset-top) + 8px)
+      clamp(12px, 3.5vw, 20px)
+      0;
   }
 
   .gallery--contact .contactLayout__frame {
     box-sizing: border-box;
+    width: 100%;
     height: auto;
-    overflow: visible;
+    max-height: 100%;
+    min-height: 0;
+    overflow: hidden;
   }
 
   .gallery--contact .contactLayout__main,
   .gallery--contact .contactLayout__panel {
     height: auto;
+    max-height: 100%;
     min-height: 0;
-    overflow: visible;
+    overflow: hidden;
+  }
+
+  .gallery--contact .contactLayout__panel {
+    gap: clamp(10px, 2svh, 24px);
+  }
+
+  .gallery--contact .contactLayout__brand {
+    font-size: clamp(18px, 3.4svh, 26px);
+  }
+
+  .gallery--contact .contact-box {
+    gap: clamp(8px, 1.6svh, 18px);
+  }
+
+  .gallery--contact .contact-group {
+    gap: clamp(6px, 1.2svh, 14px);
+  }
+
+  .gallery--contact .contact-row__body,
+  .gallery--contact .contactLayout__languagesLead,
+  .gallery--contact .contactLayout__languagesList {
+    font-size: clamp(11px, 1.8svh, 14px);
+  }
+
+  .gallery--contact .contactLayout__languages {
+    padding-top: clamp(4px, 1svh, 10px);
   }
 
   .gallery--contact .backToMenuButton {
     flex-shrink: 0;
     align-self: center;
-    margin: 8px 0 calc(env(safe-area-inset-bottom) + 20px);
+    margin: clamp(6px, 1.2svh, 10px) 0 calc(env(safe-area-inset-bottom) + 12px);
+    padding: clamp(10px, 1.8svh, 14px) clamp(24px, 8vw, 36px);
+    font-size: clamp(10px, 1.6svh, 12px);
+  }
+}
+
+@media (max-width: 899px) and (orientation: portrait) {
+  .gallery--contact .contactLayout__frame {
+    width: min(100%, 92vw);
+    padding: clamp(14px, 3.5svh, 24px);
+  }
+}
+
+@media (max-width: 899px) and (orientation: landscape) {
+  .gallery--contact .contactLayout {
+    padding-top: calc(env(safe-area-inset-top) + 4px);
   }
 
-  @media (orientation: portrait) {
-    .gallery--contact .contactLayout__frame {
-      width: min(
-        100%,
-        92vw,
-        calc((100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 120px) * 9 / 16)
-      );
-      padding: clamp(20px, 5vw, 28px);
-    }
+  .gallery--contact .contactLayout__frame {
+    width: min(94vw, 34rem);
+    padding: clamp(10px, 2.5svh, 18px);
   }
 
-  @media (orientation: landscape) {
-    .gallery--contact .contactLayout__frame {
-      width: min(94vw, 34rem);
-      padding: clamp(14px, 3vw, 22px);
-    }
+  .gallery--contact .contactLayout__brand {
+    font-size: clamp(15px, 3svh, 22px);
   }
 
-  @media (orientation: landscape) and (min-width: 640px) {
-    .gallery--contact .contactLayout__frame {
-      width: min(96vw, 46rem);
-      padding: clamp(14px, 2.5vw, 22px);
-    }
+  .gallery--contact .contact-box {
+    gap: clamp(4px, 1svh, 12px);
+  }
+
+  .gallery--contact .contact-group {
+    gap: clamp(4px, 0.9svh, 10px);
+  }
+
+  .gallery--contact .backToMenuButton {
+    margin-bottom: calc(env(safe-area-inset-bottom) + 6px);
+  }
+}
+
+@media (max-width: 899px) and (orientation: landscape) and (min-width: 640px) {
+  .gallery--contact .contactLayout__frame {
+    width: min(96vw, 46rem);
+    padding: clamp(10px, 2svh, 18px);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .gallery--contact .contactLayout {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
   }
 }
 

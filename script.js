@@ -1,3 +1,8 @@
+const FU = window.FROZEN_UI;
+if (!FU) {
+  throw new Error("WWW-001: load website/frozen-ui.js before script.js");
+}
+
 const FADE_MS = 520;
 const HERO_HOLD_MS = 3000;
 
@@ -53,7 +58,7 @@ const MOTION_FALLBACK = {
 };
 
 const ANGEBOTE_FALLBACK = {
-  title: "ANGEBOTE",
+  title: FU.SECTION.ANGEBOTE,
   intro: "",
   items: [
     { title: "Hochzeit", price: "ab 999 €" },
@@ -70,16 +75,18 @@ const ANGEBOTE_FALLBACK = {
 };
 
 const BLOG_FALLBACK = {
-  title: "BLOG",
+  title: FU.SECTION.BLOG,
   intro: "Fotografie. Erinnerungen. Geschichten.\n\nVon alten Familienbildern über analoge Fotografie bis zu den aktuellen Projekten von Noir Frame.",
   items: [],
   footer: "",
 };
 
-const BLOG_SIGNATURE = "– Noir Frame | Only Light Matters";
+const BLOG_SIGNATURE =
+  (window.MARKETING_DEFAULTS && window.MARKETING_DEFAULTS.BLOG_SIGNATURE) ||
+  "– Noir Frame | Only Light Matters";
 
 const AKTUELL_FALLBACK = {
-  title: "AKTUELL BEI UNS",
+  title: FU.SECTION.AKTUELL,
   intro: "Aktuelle Aktionen, Mini-Sessions und saisonale Angebote von Noir Frame.",
   items: [
     {
@@ -199,38 +206,58 @@ function revealScreen(onReady) {
 function ensureSiteNav() {
   const navHtml =
     '<div class="siteNav__bar">' +
-    '<button type="button" class="siteNav__toggle" id="siteNavToggle" aria-expanded="false" aria-controls="siteNavPanel">' +
+    '<button type="button" class="siteNav__toggle ui-frozen notranslate" id="siteNavToggle" aria-expanded="false" aria-controls="siteNavPanel" translate="no">' +
     '<i class="ph-light ph-list"></i>' +
-    '<span>Menü</span>' +
+    "<span>" +
+    FU.NAV.MENU_TOGGLE +
+    "</span>" +
     "</button>" +
     '<div class="siteNav__panel siteNav__fadeSurface" id="siteNavPanel">' +
     '<div class="siteNav__panelInner">' +
     '<div class="siteNav__group" id="siteNavPortfolio">' +
-    '<button type="button" class="siteNav__trigger" id="siteNavPortfolioTrigger" aria-expanded="false" aria-controls="siteNavPortfolioMenu">' +
-    "Portfolio / Galerie" +
+    '<button type="button" class="siteNav__trigger ui-frozen notranslate" id="siteNavPortfolioTrigger" aria-expanded="false" aria-controls="siteNavPortfolioMenu" translate="no">' +
+    FU.NAV.PORTFOLIO +
     '<i class="ph-light ph-caret-down siteNav__caret"></i>' +
     "</button>" +
     '<div class="siteNav__dropdown siteNav__fadeSurface" id="siteNavPortfolioMenu">' +
     '<div class="siteNav__dropdownGrid">' +
-    '<button type="button" class="siteNav__dropdownItem" data-nav-action="gallery" data-gallery-folder="weddings">Wedding</button>' +
-    '<button type="button" class="siteNav__dropdownItem" data-nav-action="gallery" data-gallery-folder="portrait">Portrait</button>' +
-    '<button type="button" class="siteNav__dropdownItem" data-nav-action="gallery" data-gallery-folder="realestate">Reportage</button>' +
-    '<button type="button" class="siteNav__dropdownItem" data-nav-action="video">Video</button>' +
+    '<button type="button" class="siteNav__dropdownItem ui-frozen notranslate" data-nav-action="gallery" data-gallery-folder="weddings" translate="no">' +
+    FU.NAV.WEDDING +
+    "</button>" +
+    '<button type="button" class="siteNav__dropdownItem ui-frozen notranslate" data-nav-action="gallery" data-gallery-folder="portrait" translate="no">' +
+    FU.NAV.PORTRAIT +
+    "</button>" +
+    '<button type="button" class="siteNav__dropdownItem ui-frozen notranslate" data-nav-action="gallery" data-gallery-folder="realestate" translate="no">' +
+    FU.NAV.REPORTAGE +
+    "</button>" +
+    '<button type="button" class="siteNav__dropdownItem ui-frozen notranslate" data-nav-action="video" translate="no">' +
+    FU.NAV.VIDEO +
+    "</button>" +
     "</div>" +
     "</div>" +
     "</div>" +
     '<hr class="siteNav__divider" aria-hidden="true">' +
-    '<button type="button" class="siteNav__link" data-nav-action="angebote">Angebote</button>' +
+    '<button type="button" class="siteNav__link ui-frozen notranslate" data-nav-action="angebote" translate="no">' +
+    FU.NAV.ANGEBOTE +
+    "</button>" +
     '<hr class="siteNav__divider" aria-hidden="true">' +
-    '<button type="button" class="siteNav__link" data-nav-action="aktuell">Aktuell bei uns</button>' +
+    '<button type="button" class="siteNav__link ui-frozen notranslate" data-nav-action="aktuell" translate="no">' +
+    FU.NAV.AKTUELL +
+    "</button>" +
     (BLOG_ENABLED
       ? '<hr class="siteNav__divider" aria-hidden="true">' +
-        '<button type="button" class="siteNav__link" data-nav-action="blog">Blog</button>'
+        '<button type="button" class="siteNav__link ui-frozen notranslate" data-nav-action="blog" translate="no">' +
+        FU.NAV.BLOG +
+        "</button>"
       : "") +
     '<hr class="siteNav__divider" aria-hidden="true">' +
-    '<button type="button" class="siteNav__link" data-nav-action="about">About Us</button>' +
+    '<button type="button" class="siteNav__link ui-frozen notranslate" data-nav-action="about" translate="no">' +
+    FU.NAV.ABOUT_US +
+    "</button>" +
     '<hr class="siteNav__divider" aria-hidden="true">' +
-    '<button type="button" class="siteNav__link" data-nav-action="contact">Kontakt</button>' +
+    '<button type="button" class="siteNav__link ui-frozen notranslate" data-nav-action="contact" translate="no">' +
+    FU.NAV.KONTAKT +
+    "</button>" +
     "</div>" +
     "</div>" +
     "</div>";
@@ -244,7 +271,7 @@ function ensureSiteNav() {
   siteNav = document.createElement("nav");
   siteNav.id = "siteNav";
   siteNav.className = "siteNav siteNav--hidden";
-  siteNav.setAttribute("aria-label", "Hauptnavigation");
+  siteNav.setAttribute("aria-label", FU.NAV.ARIA);
   siteNav.innerHTML = navHtml;
 
   document.documentElement.appendChild(siteNav);
@@ -464,7 +491,7 @@ function fetchAngebote() {
 function normalizeAngeboteData(data) {
   const items = Array.isArray(data.items) ? data.items : [];
   return {
-    title: data.title || ANGEBOTE_FALLBACK.title,
+    title: FU.SECTION.ANGEBOTE,
     intro: data.intro || "",
     items: items.length ? items : ANGEBOTE_FALLBACK.items,
     noteLead: data.noteLead || ANGEBOTE_FALLBACK.noteLead,
@@ -498,7 +525,7 @@ function angeboteScreenHtml(data) {
 
   return (
     '<div class="gallery gallery--angebote fade">' +
-    "<h1>" +
+    frozenOpenTag("h1") +
     escapeHtml(data.title) +
     "</h1>" +
     introHtml +
@@ -516,7 +543,7 @@ function angeboteScreenHtml(data) {
     '<button type="button" class="angeboteCta" id="angeboteCtaButton">' +
     escapeHtml(data.ctaLabel) +
     "</button>" +
-    backButtonHtml("backToMenuButton", "BACK TO MENU") +
+    backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
     "</div>"
   );
 }
@@ -567,7 +594,7 @@ function fetchAktuell() {
 function normalizeAktuellData(data) {
   const items = Array.isArray(data.items) ? data.items : [];
   return {
-    title: data.title || AKTUELL_FALLBACK.title,
+    title: FU.SECTION.AKTUELL,
     intro: data.intro || AKTUELL_FALLBACK.intro,
     items: items.length ? items : AKTUELL_FALLBACK.items,
   };
@@ -585,7 +612,7 @@ function aktuellItemHtml(item) {
       '<img src="' +
       escapeHtml(item.qrCode) +
       '" alt="' +
-      escapeHtml(item.qrAlt || "QR-Code scannen") +
+      escapeHtml(item.qrAlt || FU.SYSTEM.QR_ALT) +
       '" width="128" height="128" loading="lazy" decoding="async">' +
       "</div>"
     : "";
@@ -630,7 +657,7 @@ function aktuellScreenHtml(data) {
 
   return (
     '<div class="gallery gallery--aktuell fade">' +
-    "<h1>" +
+    frozenOpenTag("h1") +
     escapeHtml(data.title) +
     "</h1>" +
     "<p>" +
@@ -639,7 +666,7 @@ function aktuellScreenHtml(data) {
     '<div class="aktuellList">' +
     itemsHtml +
     "</div>" +
-    backButtonHtml("backToMenuButton", "BACK TO MENU") +
+    backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
     "</div>"
   );
 }
@@ -703,9 +730,9 @@ function backButtonHtml(id, label, extraClass) {
   return (
     '<button type="button" class="' +
     classes.join(" ") +
-    '" id="' +
+    ' ui-frozen notranslate" id="' +
     id +
-    '"><i class="ph-light ph-arrow-left"></i> ' +
+    '" translate="no"><i class="ph-light ph-arrow-left"></i> ' +
     label +
     "</button>"
   );
@@ -968,12 +995,22 @@ function showMenu(skipFadeOut) {
     '<div class="menuWrapper fade">' +
       (DARK_SIDE_ENABLED
         ? '<div class="menuIntro">' +
-          '<button type="button" class="darkSideMoon" id="darkSideMoon" aria-label="The Dark Side">' +
+          '<button type="button" class="darkSideMoon ui-frozen notranslate" id="darkSideMoon" aria-label="' +
+          escapeHtml(FU.SYSTEM.DARK_SIDE_ARIA) +
+          '" translate="no">' +
           DARK_MOON_ICON +
           "</button>" +
-          '<div class="nfLogo">NF<span>NOIЯFRAME</span></div>' +
+          '<div class="nfLogo ui-frozen notranslate" translate="no">' +
+          FU.BRAND.LOGO_MARK +
+          "<span>" +
+          FU.BRAND.LOGO_WORDMARK +
+          "</span></div>" +
           "</div>"
-        : '<div class="nfLogo">NF<span>NOIЯFRAME</span></div>') +
+        : '<div class="nfLogo ui-frozen notranslate" translate="no">' +
+          FU.BRAND.LOGO_MARK +
+          "<span>" +
+          FU.BRAND.LOGO_WORDMARK +
+          "</span></div>") +
       menuHeroHtml() +
       "</div>",
     setupMenuScreen,
@@ -1014,7 +1051,7 @@ function openGallery(folder) {
       transitionBody(
         '<div class="gallery fade">' +
           imagesHtml +
-          backButtonHtml("backToMenuButton", "BACK TO MENU") +
+          backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
           "</div>",
         bindBackToMenu
       );
@@ -1026,7 +1063,7 @@ function openGallery(folder) {
 
       transitionBody(
         '<div class="gallery fade">' +
-          backButtonHtml("backToMenuButton", "BACK TO MENU") +
+          backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
           "</div>",
         bindBackToMenu
       );
@@ -1050,7 +1087,7 @@ var aboutCache = null;
 
 function defaultAboutData() {
   return {
-    headline: "ABOUT US",
+    headline: FU.SECTION.ABOUT_US,
     subline: "Three people. One workflow.",
     members: [
       {
@@ -1126,8 +1163,8 @@ function renderAboutHtml(about) {
 
   return (
     '<div class="gallery gallery--about fade">' +
-    "<h1>" +
-    escapeHtml(about.headline || "ABOUT US") +
+    frozenOpenTag("h1") +
+    escapeHtml(FU.SECTION.ABOUT_US) +
     "</h1>" +
     "<p>" +
     escapeHtml(about.subline || "") +
@@ -1135,7 +1172,7 @@ function renderAboutHtml(about) {
     '<div class="team">' +
     membersHtml +
     "</div>" +
-    backButtonHtml("backToMenuButton", "BACK TO MENU") +
+    backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
     "</div>"
   );
 }
@@ -1179,7 +1216,9 @@ function renderContactHtml(contact) {
       '<div class="contactLayout__frame">' +
       '<div class="contactLayout__main">' +
       '<div class="contactLayout__panel">' +
-      '<p class="contactLayout__brand">' + escapeHtml(contact.brand || "NOIЯFRAME") + "</p>" +
+      '<p class="contactLayout__brand ui-frozen notranslate" translate="no">' +
+      escapeHtml(FU.CONTACT.BRAND) +
+      "</p>" +
       '<div class="contact-box">' +
       '<div class="contact-group">' +
       '<p class="contact-row">' +
@@ -1203,7 +1242,9 @@ function renderContactHtml(contact) {
       '<div class="contact-group">' +
       '<p class="contact-row">' +
       '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
-      '<span class="contact-row__body">' + escapeHtml(contact.officeLabel || "") + "</span>" +
+      '<span class="contact-row__body ui-frozen notranslate" translate="no">' +
+      escapeHtml(FU.CONTACT.OFFICE_LABEL) +
+      "</span>" +
       "</p>" +
       '<p class="contact-row">' +
       '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
@@ -1216,14 +1257,16 @@ function renderContactHtml(contact) {
       "</div>" +
       "</div>" +
       '<div class="contactLayout__languages">' +
-      '<p class="contactLayout__languagesLead">' + escapeHtml(contact.languagesLead || "Wir sprechen") + "</p>" +
+      '<p class="contactLayout__languagesLead ui-frozen notranslate" translate="no">' +
+      escapeHtml(FU.CONTACT.LANGUAGES_LEAD) +
+      "</p>" +
       '<p class="contactLayout__languagesList">' + escapeHtml(contact.languages || "") + "</p>" +
       "</div>" +
       "</div>" +
       "</div>" +
       "</div>" +
       "</div>" +
-      backButtonHtml("backToMenuButton", "BACK TO MENU") +
+      backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
       "</div>"
   );
 }
@@ -1239,16 +1282,16 @@ function showContact() {
     .catch(function () {
       transitionBody(
         renderContactHtml({
-          brand: "NOIЯFRAME",
+          brand: FU.CONTACT.BRAND,
           ownerName: "Marcin Porębski",
           ownerRole: "Fotograf & Inhaber",
           ownerPhone: "01774429815",
           ownerEmail: "info.noirframe@gmail.com",
-          officeLabel: "Büro & Organisation",
+          officeLabel: FU.CONTACT.OFFICE_LABEL,
           officeContact: "Hr. Rinaldo",
           officePhone: "01739147605",
-          languagesLead: "Wir sprechen",
-          languages: "Russisch · Polski · Deutsch · Italy",
+          languagesLead: FU.CONTACT.LANGUAGES_LEAD,
+          languages: "Russisch · Polnisch · Deutsch · Italienisch",
           backgroundDesktop: "images/layouts/layout_PC.jpg",
         }),
         bindBackToMenu
@@ -1315,10 +1358,12 @@ function motionScreenHtml(data) {
 
   return (
     '<div class="gallery gallery--video fade">' +
-    "<h1>VIDEO</h1>" +
+    frozenOpenTag("h1") +
+    FU.SECTION.VIDEO +
+    "</h1>" +
     itemsHtml +
     footerHtml +
-    backButtonHtml("backToMenuButton", "BACK TO MENU") +
+    backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
     "</div>"
   );
 }
@@ -1369,7 +1414,7 @@ function normalizeBlogData(data) {
     .filter(Boolean);
 
   return {
-    title: data.title || BLOG_FALLBACK.title,
+    title: FU.SECTION.BLOG,
     intro: data.intro || BLOG_FALLBACK.intro,
     items: normalizedItems,
     footer: data.footer || "",
@@ -1484,11 +1529,11 @@ function blogScreenHtml(data) {
     '<div class="gallery gallery--blog fade">' +
     '<header class="blogHeader">' +
     '<div class="blogHeader__nav">' +
-    backButtonHtml("backToMenuButtonTop", "BACK TO MENU") +
+    backButtonHtml("backToMenuButtonTop", FU.BUTTON.BACK_TO_MENU) +
     "</div>" +
     '<div class="blogHeader__title">' +
-    "<h1>" +
-    escapeHtml(data.title) +
+    frozenOpenTag("h1") +
+    escapeHtml(FU.SECTION.BLOG) +
     "</h1>" +
     "</div>" +
     blogIntroHtml(data.intro) +
@@ -1499,7 +1544,7 @@ function blogScreenHtml(data) {
     "</div>" +
     footerHtml +
     "</div>" +
-    backButtonHtml("backToMenuButton", "BACK TO MENU") +
+    backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
     "</div>"
   );
 }

@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "critical": [
+    "images/layouts/layout_PC.jpg",
+    "images/layouts/layout_02.jpg",
+    "website/styles.css",
+    "website/frozen-ui.js",
+    "script.js",
+    "index.html"
+  ],
+  "protectedFromNfstPublish": [
+    "script.js",
+    "index.html",
+    "website/",
+    "images/layouts/"
+  ],
+  "nfstAllowedPrefixes": [
+    "data/",
+    "images/weddings/",
+    "images/portrait/",
+    "images/realestate/",
+    "images/motion/",
+    "images/team/",
+    "images/blog/",
+    "images/aktuell/"
+  ],
+  "notes": {
+    "layouts": "Shared 2-tier backgrounds: layout_PC (desktop/landscape), layout_02 (portrait). NFST must never publish images/layouts/.",
+    "deprecated": "layout_*_CONTACT.jpg names removed — do not reintroduce via NFST."
+  }
+}
