@@ -1,21 +1,18 @@
 {
   "headline": "ABOUT US",
-  "subline": "Three people. One workflow.",
+  "subline": "Two people. One workflow.",
   "members": [
     {
       "file": "foto01.jpg",
-      "role": "Photo / Video Operator / Drohne Pilot",
-      "description": "People, light and emotions."
+      "name": "Marcin Porębski",
+      "role": "Founder & Photographer",
+      "description": "Ich bin Marcin – Fotograf, Musiker und visueller Geschichtenerzähler. Mich interessieren echte Menschen, ungestellte Momente und das Licht zwischen Hell und Dunkel. Ich suche nicht nach Perfektion, sondern nach Charakter, Atmosphäre und Bildern, die etwas fühlen lassen."
     },
     {
       "file": "foto02.jpg",
+      "name": "Sarina Skrobanek",
       "role": "Second Shooter",
-      "description": "Details and perspective."
-    },
-    {
-      "file": "foto03.jpg",
-      "role": "Coordination",
-      "description": "Behind the scenes.\nMaking everything work."
+      "description": "Ich bin Sarina und liebe es, mit meiner Kamera echte Momente und Emotionen einzufangen. Besonders faszinieren mich die kleinen, oft unscheinbaren Augenblicke, die eine Geschichte erzählen und Erinnerungen lebendig machen. Mir ist es wichtig, nicht nur festzuhalten, wie etwas aussieht, sondern vor allem, wie es sich anfühlt. Dabei achte ich besonders auf die Stimmung, die kleinen Details und die natürlichen Momente, die oft ganz nebenbei entstehen. Ich mag Bilder, die nicht perfekt inszeniert sein müssen, sondern authentisch sind und echte Gefühle widerspiegeln. Denn für mich sind es gerade die kleinen Dinge, die einen Moment besonders und einzigartig machen."
     }
   ]
 }
