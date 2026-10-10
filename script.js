@@ -48,7 +48,7 @@ const PORTFOLIO_HERO_SRC = Object.freeze({
 
 const galleryManifestCache = {};
 /** Bump when wedding/gallery JPGs or gallery.json change (cache-bust same filenames). */
-const GALLERY_ASSET_VERSION = "20261010-portfolio-heroes";
+const GALLERY_ASSET_VERSION = "20261010-wedding-foto07";
 let galleryLoadId = 0;
 let angeboteCache = null;
 let aktuellCache = null;
