@@ -35,7 +35,20 @@ const DARK_ROTATE_ICON =
   '<path fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" d="M176 88h32l-24-24"></path>' +
   "</svg>";
 
+/**
+ * WWW-004D.1 — docelowe HERO (JPG). Puste = neutralny placeholder w UI.
+ * Po wyborze PO ustaw np.:
+ *   bright: "images/portfolio/hero-bright.jpg"
+ *   dark: "images/portfolio/hero-dark.jpg"
+ */
+const PORTFOLIO_HERO_SRC = Object.freeze({
+  bright: "images/weddings/foto01.jpg",
+  dark: "images/portfolio/hero-dark.jpg",
+});
+
 const galleryManifestCache = {};
+/** Bump when wedding/gallery JPGs or gallery.json change (cache-bust same filenames). */
+const GALLERY_ASSET_VERSION = "20261010-portfolio-heroes";
 let galleryLoadId = 0;
 let angeboteCache = null;
 let aktuellCache = null;
@@ -160,8 +173,6 @@ function openMenuFromHero() {
   showMenu();
 }
 
-setTimeout(openMenuFromHero, HERO_HOLD_MS);
-
 function transitionBody(html, onReady, skipFadeOut) {
   stopMenuHero();
   const existing = document.body.firstElementChild;
@@ -214,28 +225,9 @@ function ensureSiteNav() {
     "</button>" +
     '<div class="siteNav__panel siteNav__fadeSurface" id="siteNavPanel">' +
     '<div class="siteNav__panelInner">' +
-    '<div class="siteNav__group" id="siteNavPortfolio">' +
-    '<button type="button" class="siteNav__trigger ui-frozen notranslate" id="siteNavPortfolioTrigger" aria-expanded="false" aria-controls="siteNavPortfolioMenu" translate="no">' +
+    '<button type="button" class="siteNav__link ui-frozen notranslate" data-nav-action="portfolio" translate="no">' +
     FU.NAV.PORTFOLIO +
-    '<i class="ph-light ph-caret-down siteNav__caret"></i>' +
     "</button>" +
-    '<div class="siteNav__dropdown siteNav__fadeSurface" id="siteNavPortfolioMenu">' +
-    '<div class="siteNav__dropdownGrid">' +
-    '<button type="button" class="siteNav__dropdownItem ui-frozen notranslate" data-nav-action="gallery" data-gallery-folder="weddings" translate="no">' +
-    FU.NAV.WEDDING +
-    "</button>" +
-    '<button type="button" class="siteNav__dropdownItem ui-frozen notranslate" data-nav-action="gallery" data-gallery-folder="portrait" translate="no">' +
-    FU.NAV.PORTRAIT +
-    "</button>" +
-    '<button type="button" class="siteNav__dropdownItem ui-frozen notranslate" data-nav-action="gallery" data-gallery-folder="realestate" translate="no">' +
-    FU.NAV.REPORTAGE +
-    "</button>" +
-    '<button type="button" class="siteNav__dropdownItem ui-frozen notranslate" data-nav-action="video" translate="no">' +
-    FU.NAV.VIDEO +
-    "</button>" +
-    "</div>" +
-    "</div>" +
-    "</div>" +
     '<hr class="siteNav__divider" aria-hidden="true">' +
     '<button type="button" class="siteNav__link ui-frozen notranslate" data-nav-action="angebote" translate="no">' +
     FU.NAV.ANGEBOTE +
@@ -403,20 +395,15 @@ function bindSiteNav() {
     this.setAttribute("aria-expanded", isOpen ? "true" : "false");
   });
 
-  document.getElementById("siteNavPortfolioTrigger").addEventListener("click", function () {
-    clearPortfolioHoverTimers();
-    const group = document.getElementById("siteNavPortfolio");
-    const isOpen = !group.classList.contains("is-open");
-    setPortfolioMenuOpen(isOpen);
-  });
-
-  bindPortfolioDesktopHover();
-
   siteNav.querySelectorAll("[data-nav-action]").forEach(function (button) {
     button.addEventListener("click", function () {
       const action = button.getAttribute("data-nav-action");
       beginSubpageNavigation();
 
+      if (action === "portfolio") {
+        showPortfolioPicker();
+        return;
+      }
       if (action === "gallery") {
         openGallery(button.getAttribute("data-gallery-folder"));
         return;
@@ -459,7 +446,9 @@ function bindSiteNav() {
 }
 
 function galleryAssetPath(folder, filename) {
-  return "images/" + folder + "/" + filename;
+  return (
+    "images/" + folder + "/" + filename + "?v=" + encodeURIComponent(GALLERY_ASSET_VERSION)
+  );
 }
 
 function escapeHtml(value) {
@@ -1033,6 +1022,97 @@ function bindBackToMenu() {
   /* Back navigation uses a single document listener (see bottom of script). */
 }
 
+function galleryEmptyScreenHtml(message) {
+  return (
+    '<div class="gallery fade">' +
+    '<p class="galleryEmptyMessage ui-frozen notranslate" translate="no">' +
+    escapeHtml(message) +
+    "</p>" +
+    backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
+    "</div>"
+  );
+}
+
+function galleryUnavailableMessage(folder) {
+  if (folder === "dsotl") {
+    return FU.PORTFOLIO.DSOTL_UNAVAILABLE;
+  }
+  return FU.PORTFOLIO.GALLERY_UNAVAILABLE;
+}
+
+function portfolioHeroMediaHtml(imageKey) {
+  var src = String(PORTFOLIO_HERO_SRC[imageKey] || "").trim();
+  if (src) {
+    src =
+      src +
+      (src.indexOf("?") >= 0 ? "&" : "?") +
+      "v=" +
+      encodeURIComponent(GALLERY_ASSET_VERSION);
+    var priority = imageKey === "bright" ? "high" : "auto";
+    return (
+      '<img class="portfolioPicker__image" src="' +
+      escapeHtml(src) +
+      '" alt="" decoding="async" fetchpriority="' +
+      priority +
+      '">'
+    );
+  }
+
+  return (
+    '<span class="portfolioPicker__heroPlaceholder ui-frozen notranslate" translate="no">' +
+    escapeHtml(FU.PORTFOLIO.HERO_PLACEHOLDER) +
+    "</span>"
+  );
+}
+
+function portfolioTileHtml(galleryFolder, imageKey, label) {
+  var darkClass = imageKey === "dark" ? " portfolioPicker__tile--dark" : "";
+  var brightClass = imageKey === "bright" ? " portfolioPicker__tile--bright" : "";
+  return (
+    '<button type="button" class="portfolioPicker__tile ui-frozen notranslate' +
+    darkClass +
+    brightClass +
+    '" data-portfolio-gallery="' +
+    escapeHtml(galleryFolder) +
+    '" translate="no">' +
+    '<span class="portfolioPicker__media">' +
+    portfolioHeroMediaHtml(imageKey) +
+    "</span>" +
+    '<span class="portfolioPicker__label">' +
+    escapeHtml(label) +
+    "</span>" +
+    "</button>"
+  );
+}
+
+function portfolioPickerHtml() {
+  return (
+    '<div class="gallery gallery--portfolio fade">' +
+    '<div class="portfolioPicker" role="group" aria-label="' +
+    escapeHtml(FU.NAV.PORTFOLIO) +
+    '">' +
+    portfolioTileHtml("weddings", "bright", FU.PORTFOLIO.BRIGHT_SIDE) +
+    portfolioTileHtml("dsotl", "dark", FU.PORTFOLIO.DARK_SIDE) +
+    "</div>" +
+    backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
+    "</div>"
+  );
+}
+
+function bindPortfolioPickerScreen() {
+  document.querySelectorAll("[data-portfolio-gallery]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      openGallery(button.getAttribute("data-portfolio-gallery"));
+    });
+  });
+}
+
+function showPortfolioPicker() {
+  cancelPendingGalleryLoads();
+  beginSubpageNavigation();
+  transitionBody(portfolioPickerHtml(), bindPortfolioPickerScreen);
+}
+
 function openGallery(folder) {
   beginSubpageNavigation();
   const loadId = ++galleryLoadId;
@@ -1040,6 +1120,11 @@ function openGallery(folder) {
   fetchGalleryManifest(folder)
     .then(function (images) {
       if (loadId !== galleryLoadId) {
+        return;
+      }
+
+      if (!Array.isArray(images) || images.length === 0) {
+        transitionBody(galleryEmptyScreenHtml(galleryUnavailableMessage(folder)), bindBackToMenu);
         return;
       }
 
@@ -1061,12 +1146,7 @@ function openGallery(folder) {
         return;
       }
 
-      transitionBody(
-        '<div class="gallery fade">' +
-          backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
-          "</div>",
-        bindBackToMenu
-      );
+      transitionBody(galleryEmptyScreenHtml(galleryUnavailableMessage(folder)), bindBackToMenu);
     });
 }
 
@@ -1076,34 +1156,34 @@ function showAbout() {
   aboutCache = null;
   fetchAboutData()
     .then(function (about) {
-      transitionBody(renderAboutHtml(about), bindBackToMenu);
+      transitionBody(renderAboutHtml(about), bindAboutTeam);
     })
     .catch(function () {
-      transitionBody(renderAboutHtml(defaultAboutData()), bindBackToMenu);
+      transitionBody(renderAboutHtml(defaultAboutData()), bindAboutTeam);
     });
 }
 
 var aboutCache = null;
+var ABOUT_TEAM_MOTTO = "NOIR FRAME — Only Light Matters.";
 
 function defaultAboutData() {
   return {
     headline: FU.SECTION.ABOUT_US,
-    subline: "Three people. One workflow.",
+    subline: "Two people. One workflow.",
     members: [
       {
         file: "foto01.jpg",
-        role: "Photo / Video Operator",
-        description: "People, light and emotions.",
+        name: "Marcin Porębski",
+        role: "Founder & Photographer",
+        description:
+          "Ich bin Marcin – Fotograf, Musiker und visueller Geschichtenerzähler. Mich interessieren echte Menschen, ungestellte Momente und das Licht zwischen Hell und Dunkel. Ich suche nicht nach Perfektion, sondern nach Charakter, Atmosphäre und Bildern, die etwas fühlen lassen.",
       },
       {
         file: "foto02.jpg",
+        name: "Sarina Skrobanek",
         role: "Second Shooter",
-        description: "Details and perspective.",
-      },
-      {
-        file: "foto03.jpg",
-        role: "Coordination",
-        description: "Behind the scenes.\nMaking everything work.",
+        description:
+          "Ich bin Sarina und liebe es, mit meiner Kamera echte Momente und Emotionen einzufangen. Besonders faszinieren mich die kleinen, oft unscheinbaren Augenblicke, die eine Geschichte erzählen und Erinnerungen lebendig machen. Mir ist es wichtig, nicht nur festzuhalten, wie etwas aussieht, sondern vor allem, wie es sich anfühlt. Dabei achte ich besonders auf die Stimmung, die kleinen Details und die natürlichen Momente, die oft ganz nebenbei entstehen. Ich mag Bilder, die nicht perfekt inszeniert sein müssen, sondern authentisch sind und echte Gefühle widerspiegeln. Denn für mich sind es gerade die kleinen Dinge, die einen Moment besonders und einzigartig machen.",
       },
     ],
   };
@@ -1131,31 +1211,261 @@ function aboutDescriptionHtml(text) {
   return escapeHtml(String(text || "")).replace(/\n/g, "<br>");
 }
 
-function aboutPhotoTag(file) {
-  var name = String(file || "").trim();
-  if (!name) {
+function aboutMemberBioHtml(description, memberIndex) {
+  var body = String(description || "").trim();
+  if (!body) {
     return "";
   }
+
+  var bodyId = "about-bio-body-" + memberIndex;
   return (
-    '<img src="images/team/' +
-    encodeURI(name) +
-    '" loading="lazy" decoding="async" alt="">'
+    '<div class="member__bio">' +
+    '<div class="member__bioBody member__bioBody--collapsed" id="' +
+    bodyId +
+    '">' +
+    '<div class="member__bioContent">' +
+    aboutDescriptionHtml(body) +
+    "</div>" +
+    "</div>" +
+    '<button type="button" class="member__bioToggle" aria-expanded="false" aria-controls="' +
+    bodyId +
+    '">MEHR LESEN</button>' +
+    "</div>"
   );
+}
+
+function resetAboutMemberBioUi(memberEl) {
+  if (!memberEl) {
+    return;
+  }
+  var toggle = memberEl.querySelector(".member__bioToggle");
+  if (!toggle) {
+    return;
+  }
+  var bodyId = toggle.getAttribute("aria-controls");
+  var body = bodyId ? document.getElementById(bodyId) : null;
+  if (!body) {
+    return;
+  }
+  body.classList.add("member__bioBody--collapsed");
+  body.classList.remove("member__bioBody--expanded");
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.textContent = "MEHR LESEN";
+}
+
+var ABOUT_TEAM_FOCUS_MS = 500;
+
+function aboutTeamPrefersReducedMotion() {
+  return (
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
+function clearAboutTeamFocusTimers(team) {
+  if (!team) {
+    return;
+  }
+  if (team._aboutFocusTimer) {
+    window.clearTimeout(team._aboutFocusTimer);
+    delete team._aboutFocusTimer;
+  }
+}
+
+function applyAboutTeamFocusImmediate(focusedMemberEl) {
+  var team = document.querySelector(".gallery--about .team");
+  if (!team) {
+    return;
+  }
+  clearAboutTeamFocusTimers(team);
+  team.classList.remove("team--focus-reveal");
+  if (focusedMemberEl) {
+    team.classList.add("team--focus");
+    team.querySelectorAll(".member").forEach(function (memberEl) {
+      var isFocused = memberEl === focusedMemberEl;
+      memberEl.classList.remove("member--leaving", "member--rejoin");
+      memberEl.classList.toggle("member--focus", isFocused);
+      if (isFocused) {
+        memberEl.removeAttribute("hidden");
+        memberEl.removeAttribute("inert");
+      } else {
+        memberEl.setAttribute("hidden", "");
+        memberEl.setAttribute("inert", "");
+      }
+    });
+  } else {
+    team.classList.remove("team--focus");
+    team.querySelectorAll(".member").forEach(function (memberEl) {
+      memberEl.classList.remove("member--focus", "member--leaving", "member--rejoin");
+      memberEl.removeAttribute("hidden");
+      memberEl.removeAttribute("inert");
+    });
+  }
+}
+
+function applyAboutTeamFocus(focusedMemberEl) {
+  var team = document.querySelector(".gallery--about .team");
+  if (!team) {
+    return;
+  }
+  if (aboutTeamPrefersReducedMotion()) {
+    applyAboutTeamFocusImmediate(focusedMemberEl);
+    return;
+  }
+
+  clearAboutTeamFocusTimers(team);
+
+  if (focusedMemberEl) {
+    team.classList.add("team--focus", "team--focus-reveal");
+    team.querySelectorAll(".member").forEach(function (memberEl) {
+      var isFocused = memberEl === focusedMemberEl;
+      memberEl.classList.remove("member--rejoin");
+      memberEl.classList.toggle("member--focus", isFocused);
+      if (isFocused) {
+        memberEl.classList.remove("member--leaving");
+        memberEl.removeAttribute("hidden");
+        memberEl.removeAttribute("inert");
+      } else {
+        memberEl.removeAttribute("hidden");
+        memberEl.setAttribute("inert", "");
+        memberEl.classList.add("member--leaving");
+      }
+    });
+    team._aboutFocusTimer = window.setTimeout(function () {
+      team.querySelectorAll(".member").forEach(function (memberEl) {
+        if (memberEl !== focusedMemberEl) {
+          memberEl.classList.remove("member--leaving");
+          memberEl.setAttribute("hidden", "");
+        }
+      });
+      team.classList.remove("team--focus-reveal");
+      delete team._aboutFocusTimer;
+    }, ABOUT_TEAM_FOCUS_MS);
+  } else {
+    team.classList.remove("team--focus-reveal");
+    team.querySelectorAll(".member").forEach(function (memberEl) {
+      memberEl.classList.remove("member--focus", "member--leaving");
+      memberEl.removeAttribute("hidden");
+      memberEl.removeAttribute("inert");
+      if (!memberEl.querySelector(".member__bioToggle[aria-expanded='true']")) {
+        memberEl.classList.add("member--rejoin");
+      }
+    });
+    team.classList.remove("team--focus");
+    window.requestAnimationFrame(function () {
+      team.querySelectorAll(".member").forEach(function (memberEl) {
+        memberEl.classList.remove("member--rejoin");
+      });
+    });
+  }
+}
+
+function toggleAboutBio(button) {
+  var bodyId = button.getAttribute("aria-controls");
+  var body = bodyId ? document.getElementById(bodyId) : null;
+  if (!body) {
+    return;
+  }
+
+  var memberEl = button.closest(".member");
+  var team = memberEl ? memberEl.closest(".team") : null;
+  var expanded = button.getAttribute("aria-expanded") === "true";
+  if (expanded) {
+    body.classList.add("member__bioBody--collapsed");
+    body.classList.remove("member__bioBody--expanded");
+    button.setAttribute("aria-expanded", "false");
+    button.textContent = "MEHR LESEN";
+    if (memberEl) {
+      memberEl.classList.remove("member--bio-expanded");
+    }
+    applyAboutTeamFocus(null);
+  } else {
+    if (team) {
+      team.querySelectorAll(".member").forEach(function (other) {
+        if (other !== memberEl) {
+          resetAboutMemberBioUi(other);
+        }
+      });
+    }
+    body.classList.remove("member__bioBody--collapsed");
+    body.classList.add("member__bioBody--expanded");
+    button.setAttribute("aria-expanded", "true");
+    button.textContent = "WENIGER ANZEIGEN";
+    if (memberEl) {
+      memberEl.classList.add("member--bio-expanded");
+    }
+    applyAboutTeamFocus(memberEl);
+  }
+}
+
+function bindAboutBioToggles() {
+  var root = document.querySelector(".gallery--about");
+  if (!root) {
+    return;
+  }
+
+  root.querySelectorAll(".member__bioToggle").forEach(function (button) {
+    if (button.dataset.bound === "1") {
+      return;
+    }
+    button.dataset.bound = "1";
+    button.addEventListener("click", function () {
+      toggleAboutBio(button);
+    });
+  });
+}
+
+function bindAboutTeam() {
+  bindBackToMenu();
+  bindAboutBioToggles();
+}
+
+function aboutMemberIdentityHtml(member) {
+  var displayName = String(member.name || "").trim();
+  var role = String(member.role || "").trim();
+  if (displayName) {
+    var html = "<h3>" + escapeHtml(displayName) + "</h3>";
+    if (role) {
+      html += '<p class="member__role">' + escapeHtml(role) + "</p>";
+    }
+    return html;
+  }
+  if (role) {
+    return "<h3>" + escapeHtml(role) + "</h3>";
+  }
+  return "";
+}
+
+function aboutPhotoTag(file, displayName) {
+  var name = String(file || "").trim();
+  var alt = String(displayName || "").trim();
+  var inner;
+  if (!name) {
+    inner =
+      '<div class="member__photo member__photo--plain" aria-hidden="true"></div>';
+  } else {
+    inner =
+      '<img src="images/team/' +
+      encodeURI(name) +
+      "?v=20261010-team-sarina" +
+      '" loading="lazy" decoding="async" alt="' +
+      escapeHtml(alt) +
+      '">';
+  }
+  return '<div class="member__photoFrame">' + inner + "</div>";
 }
 
 function renderAboutHtml(about) {
   var members = Array.isArray(about.members) ? about.members : [];
   var membersHtml = members
-    .map(function (member) {
+    .map(function (member, memberIndex) {
       return (
-        '<div class="member">' +
-        aboutPhotoTag(member.file) +
-        "<h3>" +
-        escapeHtml(member.role || "") +
-        "</h3>" +
-        "<p>" +
-        aboutDescriptionHtml(member.description) +
-        "</p>" +
+        '<div class="member" data-about-member="' +
+        memberIndex +
+        '">' +
+        aboutPhotoTag(member.file, member.name) +
+        aboutMemberIdentityHtml(member) +
+        aboutMemberBioHtml(member.description, memberIndex) +
         "</div>"
       );
     })
@@ -1172,6 +1482,9 @@ function renderAboutHtml(about) {
     '<div class="team">' +
     membersHtml +
     "</div>" +
+    '<p class="team__motto">' +
+    escapeHtml(ABOUT_TEAM_MOTTO) +
+    "</p>" +
     backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
     "</div>"
   );
@@ -1206,62 +1519,355 @@ function fetchContactData() {
     });
 }
 
-function renderContactHtml(contact) {
+function contactImpressumLegalContentHtml() {
+  var impressumTel = contactTelHref("01774429815");
+  return (
+    "<h2>Impressum</h2>" +
+    "<h3>Angaben gemäß § 5 DDG</h3>" +
+    "<p><strong>NOIR FRAME</strong></p>" +
+    "<p>Inhaber: Marcin Porębski</p>" +
+    "<p>Fotografie · Videografie · Drohnenaufnahmen</p>" +
+    "<p><strong>Anschrift</strong></p>" +
+    "<p>Peter-Rosegger-Straße 29<br>40699 Erkrath<br>Deutschland</p>" +
+    "<p><strong>Kontakt</strong></p>" +
+    '<p>Telefon: <a href="tel:' +
+    escapeHtml(impressumTel) +
+    '">0177 4429815</a><br>E-Mail: <a href="mailto:noirframe.contact@gmail.com">noirframe.contact@gmail.com</a></p>' +
+    "<p><strong>Umsatzsteuer</strong></p>" +
+    "<p>Es gilt die Kleinunternehmerregelung gemäß § 19 UStG.</p>"
+  );
+}
+
+function contactImpressumHtml() {
+  return (
+    '<div class="contactImpressum">' +
+    '<button type="button" class="contactImpressum__toggle" aria-expanded="false" aria-controls="contact-impressum-drawer">Impressum</button>' +
+    '<div id="contact-impressum-drawer" class="contactImpressum__drawer" aria-hidden="true">' +
+    '<div class="contactImpressum__drawerInner">' +
+    '<div class="contactImpressum__content">' +
+    contactImpressumLegalContentHtml() +
+    "</div>" +
+    "</div>" +
+    "</div>" +
+    "</div>"
+  );
+}
+
+function contactCardInnerWidth(card) {
+  var style = getComputedStyle(card);
+  return Math.max(
+    card.clientWidth -
+      parseFloat(style.paddingLeft) -
+      parseFloat(style.paddingRight) -
+      6,
+    100
+  );
+}
+
+function fitContactBrandText() {
+  var brand = document.querySelector(".gallery--contact .contactLayout__brand");
+  var box = document.querySelector(".gallery--contact .contactCard");
+  if (!brand || !box) {
+    return;
+  }
+
+  brand.style.textAlign = "left";
+  brand.style.fontSize = "48px";
+  brand.style.letterSpacing = "0.12em";
+  var maxWidth = contactCardInnerWidth(box);
+  var low = 14;
+  var high = 80;
+  for (var step = 0; step < 16; step++) {
+    var mid = (low + high) / 2;
+    brand.style.fontSize = mid + "px";
+    if (brand.scrollWidth > maxWidth) {
+      high = mid;
+    } else {
+      low = mid;
+    }
+  }
+  brand.style.fontSize = Math.floor(low * 10) / 10 + "px";
+  if (brand.scrollWidth > maxWidth) {
+    brand.style.fontSize = Math.max(14, low - 1) + "px";
+  }
+}
+
+function setContactCardImpressumOpen(open) {
+  var visual = document.querySelector(".gallery--contact .contactCard__visual");
+  var note = document.getElementById("contact-impressum-note");
+  var openBtn = document.querySelector(
+    ".gallery--contact .contactImpressum--cardMode .contactImpressum__toggle"
+  );
+  if (!visual || !note) {
+    return;
+  }
+  if (open) {
+    visual.classList.add("contactCard__visual--impressum");
+    note.hidden = false;
+    note.setAttribute("aria-hidden", "false");
+    if (openBtn) {
+      openBtn.setAttribute("aria-expanded", "true");
+      openBtn.hidden = true;
+    }
+    var back = note.querySelector(".contactCard__impressumBack");
+    if (back) {
+      back.focus();
+    }
+  } else {
+    visual.classList.remove("contactCard__visual--impressum");
+    note.hidden = true;
+    note.setAttribute("aria-hidden", "true");
+    if (openBtn) {
+      openBtn.setAttribute("aria-expanded", "false");
+      openBtn.hidden = false;
+      openBtn.focus();
+    }
+  }
+}
+
+function toggleContactImpressum(button) {
+  var drawerId = button.getAttribute("aria-controls");
+  if (drawerId === "contact-impressum-note") {
+    var noteOpen =
+      document
+        .querySelector(".gallery--contact .contactCard__visual")
+        ?.classList.contains("contactCard__visual--impressum") || false;
+    setContactCardImpressumOpen(!noteOpen);
+    return;
+  }
+
+  var drawer = drawerId ? document.getElementById(drawerId) : null;
+  if (!drawer) {
+    return;
+  }
+
+  var expanded = button.getAttribute("aria-expanded") === "true";
+  if (expanded) {
+    drawer.classList.remove("contactImpressum__drawer--open");
+    drawer.setAttribute("aria-hidden", "true");
+    button.setAttribute("aria-expanded", "false");
+  } else {
+    drawer.classList.add("contactImpressum__drawer--open");
+    drawer.setAttribute("aria-hidden", "false");
+    button.setAttribute("aria-expanded", "true");
+  }
+}
+
+function bindContactImpressumToggle() {
+  var root = document.querySelector(".gallery--contact");
+  if (!root || root.dataset.impressumBound === "1") {
+    return;
+  }
+  root.dataset.impressumBound = "1";
+
+  root.querySelectorAll(".contactImpressum__toggle").forEach(function (button) {
+    button.addEventListener("click", function () {
+      toggleContactImpressum(button);
+    });
+  });
+
+  var backBtn = root.querySelector(".contactCard__impressumBack");
+  if (backBtn) {
+    backBtn.addEventListener("click", function () {
+      setContactCardImpressumOpen(false);
+    });
+  }
+}
+
+var contactBrandFitResizeBound = false;
+
+function contactCardImageFile(contact) {
+  return String(contact.cardImage || "").trim();
+}
+
+function contactCardImageSrc(fileRef) {
+  var ref = String(fileRef || "").trim();
+  if (!ref) {
+    return "";
+  }
+  if (ref.indexOf("images/") === 0) {
+    return ref;
+  }
+  return "images/contact/" + ref;
+}
+
+function contactCardImageHtml(fileRef) {
+  var src = contactCardImageSrc(fileRef);
+  return (
+    '<div class="contactCard__visual">' +
+    '<img class="contactCard__image" src="' +
+    encodeURI(src) +
+    "?v=20261010-contact-dir" +
+    '" alt="NOIЯFRAME Kontakt" decoding="async">' +
+    "</div>"
+  );
+}
+
+function contactCardImpressumNavLinkHtml() {
+  return (
+    '<p class="contactCard__impressumNav">' +
+    '<button type="button" class="contactCard__impressumLink" id="contactImpressumNavLink">Impressum</button>' +
+    "</p>"
+  );
+}
+
+function contactImpressumCloseIconSvgHtml() {
+  return (
+    '<svg class="contactImpressumPage__closeIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">' +
+    '<path d="M6 6l12 12M18 6 6 18"></path>' +
+    "</svg>"
+  );
+}
+
+function contactImpressumCloseButtonHtml(id) {
+  return (
+    '<button type="button" class="contactImpressumPage__close" id="' +
+    id +
+    '" aria-label="Schließen">' +
+    contactImpressumCloseIconSvgHtml() +
+    "</button>"
+  );
+}
+
+function renderContactImpressumHtml() {
+  return (
+    '<div class="gallery gallery--contact gallery--contactImpressum fade">' +
+      '<div class="contactLayout">' +
+      '<div class="contactLayout__frame">' +
+      '<article class="contactImpressumPage">' +
+      contactImpressumCloseButtonHtml("contactImpressumBackToContact") +
+      '<div class="contactImpressum__content contactImpressum__content--page">' +
+      contactImpressumLegalContentHtml() +
+      "</div>" +
+      backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
+      "</article>" +
+      "</div>" +
+      "</div>" +
+    "</div>"
+  );
+}
+
+function bindContactImpressumScreen() {
+  bindBackToMenu();
+  var backContact = document.getElementById("contactImpressumBackToContact");
+  if (backContact) {
+    backContact.addEventListener("click", function () {
+      showContact();
+    });
+  }
+}
+
+function showContactImpressum() {
+  cancelPendingGalleryLoads();
+  beginSubpageNavigation();
+  transitionBody(renderContactImpressumHtml(), bindContactImpressumScreen);
+}
+
+function contactQuickActionsHtml() {
+  return (
+    '<div class="contactQuickActions" role="group" aria-label="Kontakt">' +
+    '<a class="contactQuickActions__link" href="tel:01774429815">' +
+    '<span class="contactQuickActions__label">Telefon: 0177 4429815</span>' +
+    '<svg class="contactQuickActions__svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>' +
+    "</svg></a>" +
+    '<a class="contactQuickActions__link" href="mailto:noirframe.contact@gmail.com">' +
+    '<span class="contactQuickActions__label">E-Mail: noirframe.contact@gmail.com</span>' +
+    '<span class="contactQuickActions__at" aria-hidden="true">@</span></a>' +
+    "</div>"
+  );
+}
+
+function contactTextBlockHtml(contact) {
   var ownerTel = contactTelHref(contact.ownerPhone);
-  var officeTel = contactTelHref(contact.officePhone);
+  return (
+    '<div class="contactLayout__panel">' +
+    '<p class="contactLayout__brand ui-frozen notranslate" translate="no">' +
+    escapeHtml(FU.CONTACT.BRAND) +
+    "</p>" +
+    '<div class="contact-box">' +
+    '<div class="contact-group">' +
+    '<p class="contact-row">' +
+    '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
+    '<span class="contact-row__body">' + escapeHtml(contact.ownerName || "") + "</span>" +
+    "</p>" +
+    '<p class="contact-row">' +
+    '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-camera"></i></span>' +
+    '<span class="contact-row__body contact-box__role">' + escapeHtml(contact.ownerRole || "") + "</span>" +
+    "</p>" +
+    '<p class="contact-row">' +
+    '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-phone"></i></span>' +
+    '<a class="contact-row__body" href="tel:' + escapeHtml(ownerTel) + '">' + escapeHtml(contact.ownerPhone || "") + "</a>" +
+    "</p>" +
+    '<p class="contact-row">' +
+    '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-envelope"></i></span>' +
+    '<a class="contact-row__body" href="mailto:' + escapeHtml(contact.ownerEmail || "") + '">' + escapeHtml(contact.ownerEmail || "") + "</a>" +
+    "</p>" +
+    "</div>" +
+    "</div>" +
+    "</div>" +
+    '<div class="contactLayout__languages">' +
+    '<p class="contactLayout__languagesLead ui-frozen notranslate" translate="no">' +
+    escapeHtml(FU.CONTACT.LANGUAGES_LEAD) +
+    "</p>" +
+    '<p class="contactLayout__languagesList">' + escapeHtml(contact.languages || "") + "</p>" +
+    "</div>" +
+    contactImpressumHtml()
+  );
+}
+
+function bindContactScreen() {
+  bindBackToMenu();
+  var impressumNav = document.getElementById("contactImpressumNavLink");
+  if (impressumNav) {
+    impressumNav.addEventListener("click", function () {
+      showContactImpressum();
+    });
+  }
+  if (document.querySelector(".contactImpressum__toggle")) {
+    bindContactImpressumToggle();
+  }
+  if (document.querySelector(".gallery--contact .contactLayout__brand")) {
+    fitContactBrandText();
+    if (!contactBrandFitResizeBound) {
+      contactBrandFitResizeBound = true;
+      window.addEventListener("resize", function () {
+        if (document.querySelector(".gallery--contact .contactLayout__brand")) {
+          fitContactBrandText();
+        }
+      });
+    }
+  }
+}
+
+function renderContactHtml(contact) {
+  var cardImage = contactCardImageFile(contact);
+  if (cardImage) {
+    return (
+      '<div class="gallery gallery--contact gallery--contactImage fade">' +
+        '<div class="contactLayout">' +
+        '<div class="contactLayout__frame">' +
+        '<div class="contactLayout__main">' +
+        '<div class="contactCard contactCard--image contactCard--stack">' +
+        contactCardImageHtml(cardImage) +
+        contactQuickActionsHtml() +
+        contactCardImpressumNavLinkHtml() +
+        backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
+        "</div>" +
+        "</div>" +
+        "</div>" +
+        "</div>" +
+      "</div>"
+    );
+  }
 
   return (
     '<div class="gallery gallery--contact fade">' +
       '<div class="contactLayout">' +
       '<div class="contactLayout__frame">' +
       '<div class="contactLayout__main">' +
-      '<div class="contactLayout__panel">' +
-      '<p class="contactLayout__brand ui-frozen notranslate" translate="no">' +
-      escapeHtml(FU.CONTACT.BRAND) +
-      "</p>" +
-      '<div class="contact-box">' +
-      '<div class="contact-group">' +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
-      '<span class="contact-row__body">' + escapeHtml(contact.ownerName || "") + "</span>" +
-      "</p>" +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-camera"></i></span>' +
-      '<span class="contact-row__body contact-box__role">' + escapeHtml(contact.ownerRole || "") + "</span>" +
-      "</p>" +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-phone"></i></span>' +
-      '<a class="contact-row__body" href="tel:' + escapeHtml(ownerTel) + '">' + escapeHtml(contact.ownerPhone || "") + "</a>" +
-      "</p>" +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-envelope"></i></span>' +
-      '<a class="contact-row__body" href="mailto:' + escapeHtml(contact.ownerEmail || "") + '">' + escapeHtml(contact.ownerEmail || "") + "</a>" +
-      "</p>" +
-      "</div>" +
-      '<hr class="contactLayout__divider" aria-hidden="true">' +
-      '<div class="contact-group">' +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
-      '<span class="contact-row__body ui-frozen notranslate" translate="no">' +
-      escapeHtml(FU.CONTACT.OFFICE_LABEL) +
-      "</span>" +
-      "</p>" +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-user"></i></span>' +
-      '<span class="contact-row__body">' + escapeHtml(contact.officeContact || "") + "</span>" +
-      "</p>" +
-      '<p class="contact-row">' +
-      '<span class="contact-row__icon" aria-hidden="true"><i class="ph-light ph-phone"></i></span>' +
-      '<a class="contact-row__body" href="tel:' + escapeHtml(officeTel) + '">' + escapeHtml(contact.officePhone || "") + "</a>" +
-      "</p>" +
-      "</div>" +
-      "</div>" +
-      '<div class="contactLayout__languages">' +
-      '<p class="contactLayout__languagesLead ui-frozen notranslate" translate="no">' +
-      escapeHtml(FU.CONTACT.LANGUAGES_LEAD) +
-      "</p>" +
-      '<p class="contactLayout__languagesList">' + escapeHtml(contact.languages || "") + "</p>" +
-      "</div>" +
+      '<div class="contactCard">' +
+      contactTextBlockHtml(contact) +
       "</div>" +
       "</div>" +
       "</div>" +
@@ -1277,7 +1883,7 @@ function showContact() {
   beginSubpageNavigation();
   fetchContactData()
     .then(function (contact) {
-      transitionBody(renderContactHtml(contact), bindBackToMenu);
+      transitionBody(renderContactHtml(contact), bindContactScreen);
     })
     .catch(function () {
       transitionBody(
@@ -1286,15 +1892,13 @@ function showContact() {
           ownerName: "Marcin Porębski",
           ownerRole: "Fotograf & Inhaber",
           ownerPhone: "01774429815",
-          ownerEmail: "info.noirframe@gmail.com",
-          officeLabel: FU.CONTACT.OFFICE_LABEL,
-          officeContact: "Hr. Rinaldo",
-          officePhone: "01739147605",
+          ownerEmail: "noirframe.contact@gmail.com",
           languagesLead: FU.CONTACT.LANGUAGES_LEAD,
-          languages: "Russisch · Polnisch · Deutsch · Italienisch",
+          languages: "Russisch · Polnisch · Deutsch",
+          cardImage: "kontakt02.jpg",
           backgroundDesktop: "images/layouts/layout_PC.jpg",
         }),
-        bindBackToMenu
+        bindContactScreen
       );
     });
 }
@@ -1872,4 +2476,18 @@ document.addEventListener("click", function (event) {
 
 if (DARK_SIDE_ENABLED) {
   ensureDarkSideOverlay();
+}
+
+if (window.location.hash === "#menu") {
+  heroTransitionStarted = true;
+  showMenu(true);
+  if (window.history && window.history.replaceState) {
+    window.history.replaceState(
+      null,
+      "",
+      window.location.pathname + window.location.search
+    );
+  }
+} else {
+  setTimeout(openMenuFromHero, HERO_HOLD_MS);
 }
