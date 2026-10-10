@@ -28,7 +28,7 @@
     }),
     PORTFOLIO: Object.freeze({
       BRIGHT_SIDE: "THE BRIGHT SIDE OF LIGHT",
-      DARK_SIDE: "THE DARK SIDE OF THE LIGHT",
+      DARK_SIDE: "THE DARK SIDE OF LIGHT",
       HERO_PLACEHOLDER: "HERO IMAGE — TO BE SELECTED",
       DSOTL_UNAVAILABLE: "This gallery is being prepared.",
       GALLERY_UNAVAILABLE: "Gallery unavailable.",
