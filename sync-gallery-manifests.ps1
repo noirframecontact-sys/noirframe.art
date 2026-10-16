@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 
 $imagesRoot = Join-Path $PSScriptRoot "images"
-$galleryFolders = @("weddings", "portrait", "realestate")
+$galleryFolders = @("weddings", "portrait", "realestate", "dsotl")
 $imageExtensions = @(".jpg", ".jpeg", ".webp", ".avif")
 
 foreach ($folder in $galleryFolders) {
