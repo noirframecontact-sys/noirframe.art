@@ -43,12 +43,12 @@ const DARK_ROTATE_ICON =
  */
 const PORTFOLIO_HERO_SRC = Object.freeze({
   bright: "images/weddings/foto01.jpg",
-  dark: "images/dsotl/foto01.jpg",
+  dark: "images/portfolio/hero-dark.jpg",
 });
 
 const galleryManifestCache = {};
 /** Bump when wedding/gallery JPGs or gallery.json change (cache-bust same filenames). */
-const GALLERY_ASSET_VERSION = "20261016-dsotl-gallery";
+const GALLERY_ASSET_VERSION = "20261017-foto06-hero";
 let galleryLoadId = 0;
 let angeboteCache = null;
 let aktuellCache = null;
