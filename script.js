@@ -2025,6 +2025,8 @@ function normalizeBlogData(data) {
   };
 }
 
+/* Blog caption Markdown renderer — synchronizuj z nf-studio-tools/src/nfst/blog-caption-site.ts (NF-BLOG-RENDERER-001) */
+
 function blogCaptionBody(caption) {
   if (!caption || !caption.trim()) {
     return "";
@@ -2036,17 +2038,115 @@ function blogCaptionBody(caption) {
     .trim();
 }
 
+function blogCaptionStripUnsafeHtml(raw) {
+  var out = raw.replace(/<script[\s\S]*?<\/script>/gi, "");
+  out = out.replace(/<style[\s\S]*?<\/style>/gi, "");
+  out = out.replace(/<\/?([a-z0-9]+)\b[^>]*>/gi, function (match, tag) {
+    var t = String(tag).toLowerCase();
+    if (t === "u") {
+      return match.toLowerCase().indexOf("</") === 0 ? "</u>" : "<u>";
+    }
+    return "";
+  });
+  return out;
+}
+
+function blogCaptionInlineMarkdown(text) {
+  var raw = blogCaptionStripUnsafeHtml(String(text).trim());
+  var underlines = [];
+  raw = raw.replace(/<u>([\s\S]*?)<\/u>/gi, function (_m, inner) {
+    underlines.push(String(inner));
+    return "%%U" + (underlines.length - 1) + "%%";
+  });
+  var safe = escapeHtml(raw);
+  underlines.forEach(function (inner, index) {
+    safe = safe.replace("%%U" + index + "%%", "<u>" + escapeHtml(inner) + "</u>");
+  });
+  safe = safe.replace(/\*\*\*([^*]+)\*\*\*/g, "<strong><em>$1</em></strong>");
+  safe = safe.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  safe = safe.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+  safe = safe.replace(
+    /\[([^\]]+)\]\(([^)]+)\)/g,
+    function (_match, label, url) {
+      var href = String(url).trim();
+      if (!/^https?:\/\//i.test(href)) {
+        return escapeHtml(label);
+      }
+      return (
+        '<a href="' +
+        escapeHtml(href) +
+        '" target="_blank" rel="noopener noreferrer">' +
+        escapeHtml(label) +
+        "</a>"
+      );
+    }
+  );
+  return safe;
+}
+
+function blogCaptionBlockMarkdown(block) {
+  var trimmed = block.trim();
+  if (!trimmed) {
+    return "";
+  }
+  if (/^###\s+/.test(trimmed)) {
+    return "<h3>" + blogCaptionInlineMarkdown(trimmed.replace(/^###\s+/, "")) + "</h3>";
+  }
+  if (/^##\s+/.test(trimmed)) {
+    return "<h2>" + blogCaptionInlineMarkdown(trimmed.replace(/^##\s+/, "")) + "</h2>";
+  }
+  var lines = trimmed.split(/\n/);
+  if (lines.length > 1 && lines.every(function (line) { return /^\s*-\s+/.test(line); })) {
+    return (
+      "<ul>" +
+      lines
+        .map(function (line) {
+          return "<li>" + blogCaptionInlineMarkdown(line.replace(/^\s*-\s+/, "")) + "</li>";
+        })
+        .join("") +
+      "</ul>"
+    );
+  }
+  if (lines.length > 1 && lines.every(function (line) { return /^\s*\d+\.\s+/.test(line); })) {
+    return (
+      "<ol>" +
+      lines
+        .map(function (line) {
+          return "<li>" + blogCaptionInlineMarkdown(line.replace(/^\s*\d+\.\s+/, "")) + "</li>";
+        })
+        .join("") +
+      "</ol>"
+    );
+  }
+  if (/^:::large\s+/.test(trimmed)) {
+    return (
+      '<p><span class="blog-text-large">' +
+      blogCaptionInlineMarkdown(trimmed.replace(/^:::large\s+/, "").replace(/\s+:::$/, "")) +
+      "</span></p>"
+    );
+  }
+  if (/^:::small\s+/.test(trimmed)) {
+    return (
+      '<p><span class="blog-text-small">' +
+      blogCaptionInlineMarkdown(trimmed.replace(/^:::small\s+/, "").replace(/\s+:::$/, "")) +
+      "</span></p>"
+    );
+  }
+  return "<p>" + blogCaptionInlineMarkdown(trimmed) + "</p>";
+}
+
 function blogCaptionHtml(caption) {
   const body = blogCaptionBody(caption);
-  const paragraphs = body ? body.split(/\n\s*\n/) : [];
-  paragraphs.push(BLOG_SIGNATURE);
+  const blocks = body ? body.split(/\n\s*\n/) : [];
+  blocks.push(BLOG_SIGNATURE);
 
-  return paragraphs
-    .map(function (paragraph, index) {
-      const isSignature =
-        index === paragraphs.length - 1 && paragraph.trim() === BLOG_SIGNATURE;
-      const className = isSignature ? ' class="blogItem__signature"' : "";
-      return "<p" + className + ">" + escapeHtml(paragraph.trim()) + "</p>";
+  return blocks
+    .map(function (block, index) {
+      const isSignature = index === blocks.length - 1 && block.trim() === BLOG_SIGNATURE;
+      if (isSignature) {
+        return '<p class="blogItem__signature">' + escapeHtml(BLOG_SIGNATURE) + "</p>";
+      }
+      return blogCaptionBlockMarkdown(block);
     })
     .join("");
 }
