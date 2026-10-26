@@ -23,7 +23,8 @@
     "images/motion/",
     "images/team/",
     "images/blog/",
-    "images/aktuell/"
+    "images/aktuell/",
+    "images/after-frame/"
   ],
   "notes": {
     "layouts": "Shared 2-tier backgrounds: layout_PC (desktop/landscape), layout_02 (portrait). NFST must never publish images/layouts/.",

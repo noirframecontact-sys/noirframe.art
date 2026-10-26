@@ -22,6 +22,7 @@
       ANGEBOTE: "ANGEBOTE",
       BLOG: "BLOG",
       VIDEO: "VIDEO",
+      AFTER_FRAME: "AFTER FRAME",
     }),
     BUTTON: Object.freeze({
       BACK_TO_MENU: "BACK TO MENU",
@@ -29,8 +30,11 @@
     PORTFOLIO: Object.freeze({
       BRIGHT_SIDE: "THE BRIGHT SIDE OF LIGHT",
       DARK_SIDE: "THE DARK SIDE OF LIGHT",
+      AFTER_FRAME: "AFTER FRAME",
+      SARINAS_ART: "SARINA'S ART",
       HERO_PLACEHOLDER: "HERO IMAGE — TO BE SELECTED",
       DSOTL_UNAVAILABLE: "This gallery is being prepared.",
+      SARINAS_ART_UNAVAILABLE: "This gallery is being prepared.",
       GALLERY_UNAVAILABLE: "Gallery unavailable.",
     }),
     BRAND: Object.freeze({
