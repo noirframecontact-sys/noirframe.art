@@ -449,9 +449,11 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 .portfolioPicker__label {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: clamp(18px, 3vw, 24px) clamp(12px, 3vw, 20px) clamp(22px, 3.5vw, 28px);
+  padding: clamp(20px, 3.2vw, 26px) clamp(12px, 3vw, 20px);
   font-size: clamp(11px, 2.4vw, 13px);
   font-weight: 400;
   letter-spacing: 0.28em;
@@ -486,14 +488,14 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
     flex-wrap: nowrap;
     justify-content: center;
     align-items: stretch;
-    width: min(720px, 92vw);
-    gap: clamp(14px, 2vw, 22px);
+    width: min(672px, 92vw);
+    gap: 10px;
   }
 
   .portfolioPicker__tile {
     flex: 1 1 0;
     min-width: 0;
-    max-width: 340px;
+    max-width: 168px;
   }
 
   .portfolioPicker__media {
@@ -502,8 +504,9 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   }
 
   .portfolioPicker__label {
-    padding: clamp(12px, 1.8vw, 16px) clamp(10px, 2vw, 14px)
-      clamp(14px, 2.2vw, 18px);
+    flex: 1 1 auto;
+    min-height: calc(2 * 1.65em + 2 * clamp(10px, 1.5vw, 14px));
+    padding: clamp(10px, 1.5vw, 14px) clamp(10px, 2vw, 14px);
     font-size: clamp(10px, 1vw, 12px);
     letter-spacing: 0.22em;
   }
@@ -1984,18 +1987,32 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   margin-top: 20px;
 }
 
+.gallery--after-frame .afterFrameItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+}
+
 .gallery--video .motionVideo,
 .gallery--video h1,
-.gallery--video p {
+.gallery--video p,
+.gallery--after-frame .motionVideo,
+.gallery--after-frame h1,
+.gallery--after-frame p {
   transition: none;
 }
 
-.gallery--video .backToMenuButton {
+.gallery--video .backToMenuButton,
+.gallery--after-frame .backToMenuButton {
   transition: border-color 0.01ms;
 }
 
 .gallery--video .backToMenuButton:hover,
-.gallery--video .backToMenuButton:active {
+.gallery--video .backToMenuButton:active,
+.gallery--after-frame .backToMenuButton:hover,
+.gallery--after-frame .backToMenuButton:active {
   border-color: var(--nf-border);
   transform: none;
 }

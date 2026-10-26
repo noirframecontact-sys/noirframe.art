@@ -44,6 +44,7 @@ const DARK_ROTATE_ICON =
 const PORTFOLIO_HERO_SRC = Object.freeze({
   bright: "images/weddings/foto01.jpg",
   dark: "images/portfolio/hero-dark.jpg",
+  afterFrame: "images/portfolio/hero-after-frame.jpg",
 });
 
 const galleryManifestCache = {};
@@ -55,6 +56,7 @@ let aktuellCache = null;
 let blogCache = null;
 let contactCache = null;
 let motionCache = null;
+let afterFrameCache = null;
 
 const MOTION_FALLBACK = {
   items: [
@@ -1037,6 +1039,9 @@ function galleryUnavailableMessage(folder) {
   if (folder === "dsotl") {
     return FU.PORTFOLIO.DSOTL_UNAVAILABLE;
   }
+  if (folder === "sarinas-art") {
+    return FU.PORTFOLIO.SARINAS_ART_UNAVAILABLE;
+  }
   return FU.PORTFOLIO.GALLERY_UNAVAILABLE;
 }
 
@@ -1066,7 +1071,8 @@ function portfolioHeroMediaHtml(imageKey) {
 }
 
 function portfolioTileHtml(galleryFolder, imageKey, label) {
-  var darkClass = imageKey === "dark" ? " portfolioPicker__tile--dark" : "";
+  var darkClass =
+    imageKey === "dark" || imageKey === "sarina" ? " portfolioPicker__tile--dark" : "";
   var brightClass = imageKey === "bright" ? " portfolioPicker__tile--bright" : "";
   return (
     '<button type="button" class="portfolioPicker__tile ui-frozen notranslate' +
@@ -1093,6 +1099,8 @@ function portfolioPickerHtml() {
     '">' +
     portfolioTileHtml("weddings", "bright", FU.PORTFOLIO.BRIGHT_SIDE) +
     portfolioTileHtml("dsotl", "dark", FU.PORTFOLIO.DARK_SIDE) +
+    portfolioTileHtml("after-frame", "afterFrame", FU.PORTFOLIO.AFTER_FRAME) +
+    portfolioTileHtml("sarinas-art", "sarina", FU.PORTFOLIO.SARINAS_ART) +
     "</div>" +
     backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
     "</div>"
@@ -1102,7 +1110,12 @@ function portfolioPickerHtml() {
 function bindPortfolioPickerScreen() {
   document.querySelectorAll("[data-portfolio-gallery]").forEach(function (button) {
     button.addEventListener("click", function () {
-      openGallery(button.getAttribute("data-portfolio-gallery"));
+      const folder = button.getAttribute("data-portfolio-gallery");
+      if (folder === "after-frame") {
+        showAfterFrame();
+        return;
+      }
+      openGallery(folder);
     });
   });
 }
@@ -1970,6 +1983,109 @@ function motionScreenHtml(data) {
     backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
     "</div>"
   );
+}
+
+function fetchAfterFrameManifest() {
+  if (afterFrameCache) {
+    return Promise.resolve(afterFrameCache);
+  }
+
+  return fetch("images/after-frame/after-frame.json", { cache: "no-store" })
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error("After Frame manifest not found");
+      }
+      return response.json();
+    })
+    .then(function (data) {
+      afterFrameCache = normalizeAfterFrameData(data);
+      return afterFrameCache;
+    });
+}
+
+function normalizeAfterFrameData(data) {
+  const items = Array.isArray(data.items) ? data.items : [];
+  const normalizedItems = items
+    .map(function (item) {
+      if (!item || !item.playback || item.playback.kind !== "file") {
+        return null;
+      }
+      const file = item.playback.file ? String(item.playback.file).trim() : "";
+      if (!file) {
+        return null;
+      }
+      return {
+        file: file,
+        title: item.title ? String(item.title) : "",
+        description: item.description ? String(item.description) : "",
+        poster: item.poster ? String(item.poster).trim() : "",
+      };
+    })
+    .filter(Boolean);
+
+  return {
+    items: normalizedItems,
+    footer: data.footer ? String(data.footer) : "",
+  };
+}
+
+function afterFrameItemHtml(item) {
+  const src = "images/after-frame/" + escapeHtml(item.file);
+  const posterAttr = item.poster
+    ? ' poster="images/after-frame/' + escapeHtml(item.poster) + '"'
+    : "";
+  const titleHtml = item.title ? "<p>" + escapeHtml(item.title) + "</p>" : "";
+  const descriptionHtml = item.description
+    ? "<p>" + escapeHtml(item.description) + "</p>"
+    : "";
+
+  return (
+    '<article class="afterFrameItem">' +
+    titleHtml +
+    '<video class="motionVideo" controls preload="metadata" playsinline' +
+    posterAttr +
+    ">" +
+    '<source src="' +
+    src +
+    '" type="video/mp4">' +
+    "</video>" +
+    descriptionHtml +
+    "</article>"
+  );
+}
+
+function afterFrameScreenHtml(data) {
+  const itemsHtml = data.items.length
+    ? data.items.map(afterFrameItemHtml).join("")
+    : "<p>" + escapeHtml(FU.PORTFOLIO.GALLERY_UNAVAILABLE) + "</p>";
+  const footerHtml = data.footer ? "<p>" + escapeHtml(data.footer) + "</p>" : "";
+
+  return (
+    '<div class="gallery gallery--video gallery--after-frame fade">' +
+    frozenOpenTag("h1") +
+    FU.SECTION.AFTER_FRAME +
+    "</h1>" +
+    itemsHtml +
+    footerHtml +
+    backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
+    "</div>"
+  );
+}
+
+function showAfterFrame() {
+  cancelPendingGalleryLoads();
+  beginSubpageNavigation();
+
+  fetchAfterFrameManifest()
+    .then(function (data) {
+      transitionBody(afterFrameScreenHtml(data), bindBackToMenu);
+    })
+    .catch(function () {
+      transitionBody(
+        afterFrameScreenHtml({ items: [], footer: "" }),
+        bindBackToMenu
+      );
+    });
 }
 
 function showFilms() {
