@@ -1,11 +1,7 @@
 {
-  "title": "AKTUELL BEI UNS",
   "intro": "Aktuelle Aktionen, Mini-Sessions und saisonale Angebote von Noir Frame.",
   "items": [
     {
-      "title": "MINI OUTDOOR SHOOTING",
-      "subtitle": "Kinder & Familie",
-      "price": "99 €",
       "features": [
         "30 Minuten",
         "10 professionell bearbeitete Fotos",
@@ -13,9 +9,13 @@
       ],
       "hint": "Nur wenige Termine verfügbar.",
       "image": "images/aktuell/NF_ANGEBOT.jpg",
-      "imageAlt": "Mini Outdoor Shooting — Kinder & Familie",
+      "imageAlt": "Weihnachts Fotoshooting  2026 Erkrath — Kinder & Familie",
+      "price": "99 €",
+      "qrAlt": "Termin buchen — QR-Code scannen",
       "qrCode": "images/aktuell/noirframe_mini_outdoor_qr.png",
-      "qrAlt": "Termin buchen — QR-Code scannen"
+      "subtitle": "Kinder & Familie",
+      "title": "Weihnachts Fotoshooting  2026 Erkrath"
     }
-  ]
+  ],
+  "title": "AKTUELL BEI UNS"
 }
