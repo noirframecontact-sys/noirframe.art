@@ -1,0 +1,28 @@
+{
+  "id": "weihnachten-2026",
+  "schemaVersion": 1,
+  "serviceType": "kampania",
+  "status": "inquiry-only",
+  "package": {
+    "packageId": "weihnachten-2026",
+    "displayName": "Weihnachts Fotoshooting 2026 Erkrath",
+    "locked": true
+  },
+  "addons": [],
+  "event": {
+    "date": "2026-11-15",
+    "dateLocked": true,
+    "windowStart": "10:00",
+    "windowEnd": "18:00",
+    "sessionMinutes": 30,
+    "placeHint": "Erkrath"
+  },
+  "copy": {
+    "title": "Weihnachts Fotoshooting 2026 Erkrath",
+    "intro": "Kinder & Familie · 30 Minuten · 10 bearbeitete Fotos",
+    "priceNote": "99 €",
+    "windowHint": "15.11.2026 · 10:00–18:00 · Erkrath",
+    "success": "Die Online-Anfragefunktion wird derzeit vorbereitet. Ihre Angaben werden noch nicht übermittelt."
+  },
+  "notizenPrefix": "[Weihnachten 2026] Kinder & Familie · 99 € · 30 Min · 10 Fotos · 15.11.2026 10:00–18:00"
+}

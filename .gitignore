@@ -3,3 +3,7 @@
 
 # WWW-002 capture tooling
 scripts/node_modules/
+
+# Private Click & Collect / lab — never deploy with GitHub Pages
+/cnc/
+/cnc-sim/

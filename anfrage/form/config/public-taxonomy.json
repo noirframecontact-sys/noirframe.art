@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "hochzeit",
+      "label": "Hochzeit",
+      "mode": "catalog",
+      "catalogKategorieIds": ["hochzeit"]
+    },
+    {
+      "id": "standesamt",
+      "label": "Standesamt",
+      "mode": "catalog",
+      "catalogKategorieIds": ["standesamt"]
+    },
+    {
+      "id": "geburtstag",
+      "label": "Geburtstag",
+      "mode": "catalog",
+      "catalogKategorieIds": ["geburtstag"]
+    },
+    {
+      "id": "familie",
+      "label": "Familie & Porträt",
+      "mode": "catalog",
+      "catalogKategorieIds": ["familie"]
+    },
+    {
+      "id": "business",
+      "label": "Business",
+      "mode": "catalog",
+      "catalogKategorieIds": ["business"]
+    },
+    {
+      "id": "sonstige",
+      "label": "Sonstige",
+      "mode": "individual",
+      "packageForbidden": true
+    },
+    {
+      "id": "henna",
+      "label": "Henna Abend",
+      "mode": "catalog",
+      "catalogKategorieIds": ["henna"]
+    },
+    {
+      "id": "engagement",
+      "label": "Verlobung / Engagement",
+      "mode": "catalog",
+      "catalogKategorieIds": ["engagement"]
+    },
+    {
+      "id": "neugeborene",
+      "label": "Neugeborene / Taufe",
+      "mode": "catalog",
+      "catalogKategorieIds": ["neugeborene"]
+    },
+    {
+      "id": "kirchenzeremonie",
+      "label": "Kirchenzeremonie",
+      "mode": "catalog",
+      "catalogKategorieIds": ["kirchenzeremonie"]
+    }
+  ]
+}

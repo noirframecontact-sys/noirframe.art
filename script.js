@@ -531,9 +531,12 @@ function angeboteScreenHtml(data) {
     escapeHtml(data.note) +
     "</p>" +
     "</div>" +
+    '<div class="angeboteCtaStack">' +
+    '<a class="angeboteCta" id="angebotePaketButton" href="/anfrage/">Paket erstellen</a>' +
     '<button type="button" class="angeboteCta" id="angeboteCtaButton">' +
     escapeHtml(data.ctaLabel) +
     "</button>" +
+    "</div>" +
     backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
     "</div>"
   );

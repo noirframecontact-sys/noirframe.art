@@ -1,0 +1,347 @@
+{
+  "catalogVersion": "cat.cd1061c8db04",
+  "snapshotId": "cd1061c8db042be6d1239eed89c42cf5274d56d83a5f238468578f68e41e85a9",
+  "publishedAt": "2026-10-30T18:10:35.005Z",
+  "kategorien": [
+    {
+      "id": "business",
+      "name": "Business Fotografie",
+      "pakete": [
+        {
+          "id": "business-standard",
+          "name": "Business Standard",
+          "preisAnzeige": "450 €",
+          "kurzbeschreibung": "2–4 Std. · Business-Fotografie · Nutzungsrechte · Online-Galerie · Live Preview"
+        }
+      ],
+      "dodatki": []
+    },
+    {
+      "id": "hochzeit",
+      "name": "Hochzeit",
+      "pakete": [
+        {
+          "id": "hochzeit-mini",
+          "name": "Hochzeit Mini",
+          "preisAnzeige": "999 €",
+          "kurzbeschreibung": "bis 6 Std., 350+ Fotos, Online-Galerie"
+        },
+        {
+          "id": "hochzeit-standard",
+          "name": "Hochzeit Standard",
+          "preisAnzeige": "1.499 €",
+          "kurzbeschreibung": "bis 10 Std., 600+ Fotos, Highlight-Reel, Drohne (wenn möglich)"
+        },
+        {
+          "id": "hochzeit-premium",
+          "name": "Hochzeit Premium",
+          "preisAnzeige": "1.999 €",
+          "kurzbeschreibung": "Ganztag, Premium-Bearbeitung, 800+ Fotos, Highlight-Reel, Drohne 4K"
+        }
+      ],
+      "dodatki": [
+        {
+          "id": "zusaetzliche-stunde",
+          "name": "Zusätzliche Stunde Hauptfotograf",
+          "preisAnzeige": "79 €/h"
+        },
+        {
+          "id": "zusaetzliche-fotografenzeit",
+          "name": "Zusätzliche Fotografenzeit (+/− h)",
+          "preisAnzeige": "49 €/h"
+        },
+        {
+          "id": "zweiter-fotograf",
+          "name": "Zweiter Fotograf / Second Shooter",
+          "preisAnzeige": "60 €/h"
+        }
+      ]
+    },
+    {
+      "id": "standesamt",
+      "name": "Standesamt",
+      "pakete": [
+        {
+          "id": "standesamt-classic",
+          "name": "Standesamt Classic",
+          "preisAnzeige": "499 €",
+          "kurzbeschreibung": "2–3 Std., Trauung, Gruppenfotos, Brautpaarshooting, 80+ Fotos, Online-Galerie"
+        },
+        {
+          "id": "standesamt-classic-video",
+          "name": "Standesamt Classic + Video 4K Zeremonie",
+          "preisAnzeige": "649 €",
+          "kurzbeschreibung": "2–3 Std., Trauung, Gruppenfotos, Brautpaarshooting, 80+ Fotos, 4K Zeremonie mit Originalton, Online-Galerie"
+        }
+      ],
+      "dodatki": [
+        {
+          "id": "zusaetzliche-stunde",
+          "name": "Zusätzliche Stunde Hauptfotograf",
+          "preisAnzeige": "79 €/h"
+        },
+        {
+          "id": "zusaetzliche-fotografenzeit",
+          "name": "Zusätzliche Fotografenzeit (+/− h)",
+          "preisAnzeige": "49 €/h"
+        },
+        {
+          "id": "zweiter-fotograf",
+          "name": "Zweiter Fotograf / Second Shooter",
+          "preisAnzeige": "60 €/h"
+        }
+      ]
+    },
+    {
+      "id": "henna",
+      "name": "Henna Abend",
+      "pakete": [
+        {
+          "id": "henna-standard",
+          "name": "Standard",
+          "preisAnzeige": "799 €",
+          "kurzbeschreibung": "bis 5 Std., ca. 350 Fotos, Online-Galerie"
+        },
+        {
+          "id": "henna-premium",
+          "name": "Premium",
+          "preisAnzeige": "1.099 €",
+          "kurzbeschreibung": "bis 8 Std., 500+ Fotos, Highlight-Reel, Drohne (wenn erlaubt)"
+        }
+      ],
+      "dodatki": [
+        {
+          "id": "zusaetzliche-stunde",
+          "name": "Zusätzliche Stunde Hauptfotograf",
+          "preisAnzeige": "79 €/h"
+        },
+        {
+          "id": "zusaetzliche-fotografenzeit",
+          "name": "Zusätzliche Fotografenzeit (+/− h)",
+          "preisAnzeige": "49 €/h"
+        },
+        {
+          "id": "zweiter-fotograf",
+          "name": "Zweiter Fotograf / Second Shooter",
+          "preisAnzeige": "60 €/h"
+        }
+      ]
+    },
+    {
+      "id": "engagement",
+      "name": "Verlobung / Engagement",
+      "pakete": [
+        {
+          "id": "engagement-standard",
+          "name": "Standard",
+          "preisAnzeige": "299 €",
+          "kurzbeschreibung": "ca. 1,5 Std., Outdoor/Location, 60 Fotos"
+        },
+        {
+          "id": "engagement-premium",
+          "name": "Premium",
+          "preisAnzeige": "449 €",
+          "kurzbeschreibung": "bis 3 Std., mehrere Locations, 120 Fotos, Highlight-Reel"
+        }
+      ],
+      "dodatki": [
+        {
+          "id": "zusaetzliche-stunde",
+          "name": "Zusätzliche Stunde Hauptfotograf",
+          "preisAnzeige": "79 €/h"
+        },
+        {
+          "id": "zusaetzliche-fotografenzeit",
+          "name": "Zusätzliche Fotografenzeit (+/− h)",
+          "preisAnzeige": "49 €/h"
+        },
+        {
+          "id": "zweiter-fotograf",
+          "name": "Zweiter Fotograf / Second Shooter",
+          "preisAnzeige": "60 €/h"
+        }
+      ]
+    },
+    {
+      "id": "geburtstag",
+      "name": "Geburtstag",
+      "pakete": [
+        {
+          "id": "geburtstag-mini-plus",
+          "name": "GEBURTSTAG MINI+",
+          "preisAnzeige": "179 €",
+          "kurzbeschreibung": "1,5 Std. · bis 50 Fotos · Drohnenaufnahmen (wenn möglich) · 4K-Highlight bis 90 Sek. · Online-Galerie"
+        },
+        {
+          "id": "geburtstag-standard",
+          "name": "Standard",
+          "preisAnzeige": "249 €",
+          "kurzbeschreibung": "bis 2 Std., ca. 80 Fotos, Online-Galerie, Lieferung 14 Tage"
+        },
+        {
+          "id": "geburtstag-premium",
+          "name": "Premium",
+          "preisAnzeige": "399 €",
+          "kurzbeschreibung": "bis 4 Std. · ca. 180 Fotos · Highlight-Reel · Lieferung 14 Tage"
+        }
+      ],
+      "dodatki": [
+        {
+          "id": "zusaetzliche-stunde",
+          "name": "Zusätzliche Stunde Hauptfotograf",
+          "preisAnzeige": "79 €/h"
+        },
+        {
+          "id": "zusaetzliche-fotografenzeit",
+          "name": "Zusätzliche Fotografenzeit (+/− h)",
+          "preisAnzeige": "49 €/h"
+        },
+        {
+          "id": "zweiter-fotograf",
+          "name": "Zweiter Fotograf / Second Shooter",
+          "preisAnzeige": "60 €/h"
+        }
+      ]
+    },
+    {
+      "id": "familie",
+      "name": "Familienfotos",
+      "pakete": [
+        {
+          "id": "familie-basic",
+          "name": "Basic",
+          "preisAnzeige": "129 €",
+          "kurzbeschreibung": "ca. 1 Std., 30 Fotos, Online-Galerie"
+        },
+        {
+          "id": "familie-standard",
+          "name": "Standard",
+          "preisAnzeige": "199 €",
+          "kurzbeschreibung": "ca. 1,5 Std., 30 Fotos, Drohne-Video, Social Reel, Online-Galerie"
+        }
+      ],
+      "dodatki": [
+        {
+          "id": "zusaetzliche-stunde",
+          "name": "Zusätzliche Stunde Hauptfotograf",
+          "preisAnzeige": "79 €/h"
+        },
+        {
+          "id": "zusaetzliche-fotografenzeit",
+          "name": "Zusätzliche Fotografenzeit (+/− h)",
+          "preisAnzeige": "49 €/h"
+        },
+        {
+          "id": "zweiter-fotograf",
+          "name": "Zweiter Fotograf / Second Shooter",
+          "preisAnzeige": "60 €/h"
+        }
+      ]
+    },
+    {
+      "id": "neugeborene",
+      "name": "Neugeborene / Taufe",
+      "pakete": [
+        {
+          "id": "neugeborene-mini",
+          "name": "Neugeborene / Taufe – Mini",
+          "preisAnzeige": "149 €",
+          "kurzbeschreibung": "1,5 Std. Grundzeit · Neugeborene: bis 50 bearbeitete Fotos, Online-Galerie, volle Auflösung · Taufe: ca. 30 Min. Kirchenreportage + Familiensession"
+        }
+      ],
+      "dodatki": [
+        {
+          "id": "zusaetzliche-fotografenzeit",
+          "name": "Zusätzliche Fotografenzeit (+/− h)",
+          "preisAnzeige": "49 €/h"
+        },
+        {
+          "id": "neugeborene-video-upgrade",
+          "name": "Video-Upgrade / Reels 4K",
+          "preisAnzeige": "49 €"
+        }
+      ]
+    },
+    {
+      "id": "kirchenzeremonie",
+      "name": "Kirchenzeremonie",
+      "pakete": [
+        {
+          "id": "kirchenzeremonie-audio",
+          "name": "Kirchenzeremonie + Audio",
+          "preisAnzeige": "399 €",
+          "kurzbeschreibung": "Bis zu 2 Std. · Videobegleitung · Originalton · Schnitt · Farbkorrektur · digitale Lieferung"
+        }
+      ],
+      "dodatki": [
+        {
+          "id": "highlightfilm-3-5-min",
+          "name": "Highlightfilm 3–5 Minuten",
+          "preisAnzeige": "49 €"
+        },
+        {
+          "id": "drohnenaufnahmen-optional",
+          "name": "Drohnenaufnahmen (wenn erlaubt)",
+          "preisAnzeige": "49 €"
+        },
+        {
+          "id": "zusaetzliche-stunde",
+          "name": "Zusätzliche Stunde Hauptfotograf",
+          "preisAnzeige": "79 €/h"
+        },
+        {
+          "id": "zusaetzliche-fotografenzeit",
+          "name": "Zusätzliche Fotografenzeit (+/− h)",
+          "preisAnzeige": "49 €/h"
+        },
+        {
+          "id": "zweiter-fotograf",
+          "name": "Zweiter Fotograf / Second Shooter",
+          "preisAnzeige": "60 €/h"
+        }
+      ]
+    },
+    {
+      "id": "zusatzleistungen",
+      "name": "Zusatzleistungen",
+      "pakete": [],
+      "dodatki": [
+        {
+          "id": "drohne-4k",
+          "name": "Drohne 4K",
+          "preisAnzeige": "49 €"
+        },
+        {
+          "id": "highlight-video-4k",
+          "name": "Highlight Video 4K",
+          "preisAnzeige": "49 €"
+        },
+        {
+          "id": "social-media-reel",
+          "name": "Social Media Reel",
+          "preisAnzeige": "49 €"
+        },
+        {
+          "id": "express-delivery",
+          "name": "Express Delivery",
+          "preisAnzeige": "99 €"
+        },
+        {
+          "id": "zusaetzliche-stunde",
+          "name": "Zusätzliche Stunde Hauptfotograf",
+          "preisAnzeige": "79 €/h"
+        },
+        {
+          "id": "spezialeffekte",
+          "name": "Spezialeffekte",
+          "preisAnzeige": "79 €"
+        },
+        {
+          "id": "zweiter-fotograf",
+          "name": "Zweiter Fotograf / Second Shooter",
+          "preisAnzeige": "60 €/h"
+        }
+      ]
+    }
+  ]
+}

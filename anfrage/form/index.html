@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOIR FRAME – Buchungsanfrage</title>
+  <link rel="stylesheet" href="form.css?v=20261030-etap-f">
+</head>
+<body>
+  <main class="page" id="form-view">
+    <p class="brand">NOIR FRAME</p>
+    <h1>Buchungsanfrage</h1>
+    <p class="lede">Wählen Sie eine Leistung. Das ist eine Anfrage, keine bestätigte Buchung.</p>
+    <p class="legal-nav">
+      <a href="/anfrage/">Zurück</a>
+      ·
+      <a class="privacy-link" href="/datenschutz.html">Datenschutzerklärung</a>
+    </p>
+
+    <form id="public-form" novalidate>
+      <div class="hp" aria-hidden="true">
+        <label>Website<input id="website" type="text" name="website" tabindex="-1" autocomplete="off"></label>
+      </div>
+
+      <div id="editor">
+      <div class="field">
+        <label for="category">Leistung</label>
+        <select id="category" name="category" required>
+          <option value="">Leistung wählen …</option>
+        </select>
+      </div>
+
+      <p id="campaign-offer" class="offer roll-in is-hidden"></p>
+
+      <div id="package-wrap" class="field roll-in is-hidden">
+        <span id="package-label" class="field-label">Paket</span>
+        <div id="package-choices" class="package-choices" role="radiogroup" aria-labelledby="package-label"></div>
+        <label class="visually-hidden" for="package">Paket</label>
+        <select id="package" name="package" class="package-select visually-hidden" tabindex="-1" aria-hidden="true">
+          <option value="">Paket wählen …</option>
+        </select>
+      </div>
+      <div id="package-details" class="package-details roll-in is-hidden"></div>
+      <div id="discount-wrap" class="discount roll-in is-hidden">
+        <label for="rabattcode">Rabattcode (optional)</label>
+        <input id="rabattcode" name="rabattcode" type="text" autocomplete="off" spellcheck="false" inputmode="text">
+        <div id="discount-preview" class="discount__preview is-hidden"></div>
+      </div>
+
+      <fieldset id="questionnaire" class="questionnaire roll-in is-hidden" disabled>
+      <div id="addons-wrap" class="roll-in is-hidden">
+        <p class="field-label">Zusatzleistungen</p>
+        <div id="addons" class="addons"></div>
+        <p id="addon-time-note" class="hint addon-time-note is-hidden">Die Einsatzdauer eines zweiten Fotografen wird nach tatsächlichem Zeitaufwand berechnet. Die Verfügbarkeit muss vorab bestätigt werden.</p>
+      </div>
+      <div id="price-summary" class="price-summary roll-in is-hidden"></div>
+
+      <div id="beschreibung-wrap" class="field roll-in is-hidden">
+        <label for="beschreibung">Worum geht es?</label>
+        <textarea id="beschreibung" name="beschreibung" rows="4"></textarea>
+      </div>
+
+      <div class="field field--row">
+        <div class="field">
+          <label for="vorname">Vorname</label>
+          <input id="vorname" name="vorname" type="text" autocomplete="given-name">
+        </div>
+        <div class="field">
+          <label for="nachname">Nachname</label>
+          <input id="nachname" name="nachname" type="text" autocomplete="family-name">
+        </div>
+      </div>
+
+      <div class="field field--row">
+        <div class="field">
+          <label for="telefon">Telefon</label>
+          <input id="telefon" name="telefon" type="tel" autocomplete="tel">
+        </div>
+        <div class="field">
+          <label for="email">E-Mail</label>
+          <input id="email" name="email" type="email" autocomplete="email">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="kundenadresse">Kundenadresse</label>
+        <input id="kundenadresse" name="kundenadresse" type="text" autocomplete="street-address" enterkeyhint="next">
+        <p class="hint">Straße, Hausnummer, Postleitzahl und Ort.</p>
+      </div>
+
+      <div class="field">
+        <label for="miejsce">Event-Adresse</label>
+        <input id="miejsce" name="miejsce" type="text" autocomplete="off" enterkeyhint="next">
+        <p class="hint">Straße, Hausnummer, Postleitzahl und Ort.</p>
+      </div>
+
+      <div class="field field--row">
+        <div class="field">
+          <span id="datum-label" class="field-label">Wunschdatum</span>
+          <div class="date-dmy" role="group" aria-labelledby="datum-label">
+            <label class="date-dmy__part" for="datum-tag">
+              <span class="visually-hidden">Tag</span>
+              <select id="datum-tag" name="datum-tag" aria-label="Tag">
+                <option value="">Tag</option>
+              </select>
+            </label>
+            <label class="date-dmy__part" for="datum-monat">
+              <span class="visually-hidden">Monat</span>
+              <select id="datum-monat" name="datum-monat" aria-label="Monat">
+                <option value="">Monat</option>
+              </select>
+            </label>
+            <label class="date-dmy__part" for="datum-jahr">
+              <span class="visually-hidden">Jahr</span>
+              <select id="datum-jahr" name="datum-jahr" aria-label="Jahr">
+                <option value="">Jahr</option>
+              </select>
+            </label>
+          </div>
+          <input id="datum" name="datum" type="hidden" value="">
+        </div>
+        <div class="field">
+          <span id="uhrzeit-label" class="field-label">Gewünschter Beginn</span>
+          <div class="time-hm" role="group" aria-labelledby="uhrzeit-label">
+            <label class="time-hm__part" for="uhrzeit-stunde">
+              <span class="visually-hidden">Stunde</span>
+              <select id="uhrzeit-stunde" name="uhrzeit-stunde" aria-label="Stunde">
+                <option value="">Std</option>
+              </select>
+            </label>
+            <span class="time-hm__sep" aria-hidden="true">:</span>
+            <label class="time-hm__part" for="uhrzeit-minute">
+              <span class="visually-hidden">Minute</span>
+              <select id="uhrzeit-minute" name="uhrzeit-minute" aria-label="Minute">
+                <option value="">Min</option>
+              </select>
+            </label>
+          </div>
+          <input id="uhrzeit" name="uhrzeit" type="hidden" value="">
+          <p id="uhrzeit-hint" class="hint"></p>
+        </div>
+      </div>
+
+      <div id="standard-window-wrap" class="is-hidden">
+        <div class="field">
+          <label for="dauer">Geplante Dauer</label>
+          <select id="dauer" name="dauer">
+            <option value="">noch offen</option>
+          </select>
+          <p class="hint">Volle Stunden, 1–24. Orientierung für das Angebot, keine Reservierung.</p>
+        </div>
+        <p id="window-end" class="hint" hidden></p>
+      </div>
+
+      <div id="availability-wrap" class="availability roll-in is-hidden">
+        <p id="availability-status" class="availability__status"></p>
+        <div id="availability-hours" class="availability__hours" hidden></div>
+      </div>
+
+      <div class="field">
+        <label for="notizen">Notizen</label>
+        <textarea id="notizen" name="notizen" rows="3" placeholder="Erzähl uns von deinem Plan …"></textarea>
+      </div>
+      </fieldset>
+      </div>
+
+      <section id="privacy-note" class="privacy" aria-labelledby="privacy-title">
+        <h2 id="privacy-title" class="privacy__title">Datenschutz</h2>
+        <p>Deine Angaben verwenden wir, um deine Anfrage zu bearbeiten, dich zu kontaktieren und ein passendes Angebot zu erstellen. Die Verarbeitung erfolgt gemäß unserer Datenschutzerklärung. Deine Anfrage ist noch keine Buchung. Die Online-Anfragefunktion wird derzeit vorbereitet. Ihre Angaben werden noch nicht übermittelt.</p>
+      </section>
+
+      <section id="booking-flow" class="booking-flow" aria-label="So läuft die Buchung ab"></section>
+
+      <div class="form-actions">
+        <button id="review-btn" type="button" class="form-action is-hidden" disabled>Angaben prüfen</button>
+        <section id="review" class="review is-hidden" hidden>
+          <div id="review-body"></div>
+          <button id="review-back" type="button" class="form-action">Angaben ändern</button>
+          <button id="submit" type="submit" class="form-action">Anfrage senden</button>
+        </section>
+      </div>
+      <div id="success" class="success" hidden role="status" aria-live="polite"></div>
+      <p id="errors" class="errors" hidden></p>
+    </form>
+  </main>
+  <script type="module" src="form.js?v=20261030-etap-f"></script>
+</body>
+</html>

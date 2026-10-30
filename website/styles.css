@@ -1783,8 +1783,16 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   color: var(--nf-text-muted);
 }
 
-.angeboteCta {
+.angeboteCtaStack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   margin-top: 28px;
+}
+
+.angeboteCta {
+  margin-top: 0;
   background: var(--nf-btn-bg);
   color: var(--nf-btn-color);
   border: 1px solid var(--nf-border);
@@ -1794,7 +1802,14 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   font-size: 12px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
+  text-decoration: none;
+  box-sizing: border-box;
+  text-align: center;
   transition: border-color var(--nf-transition);
+}
+
+a.angeboteCta {
+  display: inline-block;
 }
 
 .angeboteCta:hover,

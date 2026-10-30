@@ -1,0 +1,66 @@
+/* Inter latin 400 — SIL OFL 1.1, see form/fonts/OFL-Inter.txt */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("form/fonts/inter-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("form/fonts/inter-latin-400-italic.woff2") format("woff2");
+}
+
+.cncIntro {
+  box-sizing: border-box;
+  width: min(40rem, 100%);
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: clamp(20px, 5vw, 36px);
+  text-align: center;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+.cncIntro__brand {
+  margin: 0 0 28px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--nf-text-muted);
+}
+
+.cncIntro h1 {
+  font-weight: 400;
+}
+
+.cncIntro__lede,
+.cncIntro__note {
+  margin: 0 auto 16px;
+  max-width: 34rem;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--nf-text);
+}
+
+.cncIntro__note {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--nf-text-muted);
+}
+
+.cncIntro__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.cncIntro__actions .backToMenuButton {
+  text-decoration: none;
+}
