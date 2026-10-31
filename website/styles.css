@@ -162,6 +162,24 @@ button {
   background-position: 0 0;
 }
 
+/* Tall scrolling surfaces: shared background proportions */
+.gallery--photos,
+.gallery--blog,
+.gallery.legalPage {
+  background-size: 100% 100dvh;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-attachment: fixed;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .gallery--photos,
+  .gallery--blog,
+  .gallery.legalPage {
+    background-attachment: scroll;
+  }
+}
+
 .menuWrapper {
   position: fixed;
   inset: 0;
