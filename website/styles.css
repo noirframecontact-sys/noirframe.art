@@ -2888,10 +2888,49 @@ a.angeboteCta {
 }
 
 @media (max-width: 900px) {
+  .siteNav__bar {
+    justify-content: stretch;
+    padding-left: 0;
+    padding-right: 0;
+    background-color: #2c2419;
+    background-image: none;
+    border-bottom: 1px solid #1c1814;
+  }
+
   .siteNav__toggle {
-    display: inline-flex;
-    position: absolute;
-    left: max(16px, env(safe-area-inset-left));
+    display: flex;
+    position: relative;
+    left: auto;
+    width: 100%;
+    justify-content: center;
+    gap: 0;
+    min-height: var(--nf-nav-height);
+    padding: 0 max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left));
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #f4ead7;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+  }
+
+  .siteNav__toggle:hover,
+  .siteNav__toggle:active {
+    transform: none;
+    border-color: transparent;
+    font-size: 12px;
+  }
+
+  .siteNav__toggle:focus {
+    outline: none;
+  }
+
+  .siteNav__toggle:focus-visible {
+    box-shadow: inset 0 0 0 2px rgba(244, 234, 215, 0.35);
+  }
+
+  .siteNav__toggle i {
+    display: none;
   }
 
   .siteNav__panel {
