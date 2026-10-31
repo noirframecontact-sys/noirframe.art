@@ -411,7 +411,7 @@ function bindSiteNav() {
         return;
       }
       if (action === "angebote") {
-        showAngebote();
+        window.location.assign("/anfrage/");
         return;
       }
       if (action === "aktuell") {

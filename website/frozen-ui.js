@@ -9,7 +9,7 @@
     NAV: Object.freeze({
       MENU_TOGGLE: "Menü",
       PORTFOLIO: "Portfolio / Galerie",
-      ANGEBOTE: "Angebote",
+      ANGEBOTE: "PAKET ERSTELLEN",
       AKTUELL: "Aktuell bei uns",
       BLOG: "Blog",
       ABOUT_US: "About Us",
