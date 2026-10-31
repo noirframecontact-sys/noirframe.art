@@ -2,14 +2,27 @@
   --nf-bg: #d9cdbf;
   --nf-surface: #f4ead7;
   --nf-text: #2c2419;
-  --nf-muted: #7a6a52;
+  --nf-muted: #5c4e3a;
   --nf-accent: #b08d57;
-  --nf-border: rgba(176, 141, 87, 0.42);
+  --nf-border: #6b5a3e;
   --nf-danger: #8f4d45;
   --nf-font: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
   --nf-roll: 1.15s cubic-bezier(0.4, 0, 0.2, 1);
   --nf-layout-desktop: url("images/layouts/layout_PC.jpg");
   --nf-layout-portrait: url("images/layouts/layout_02.jpg");
+  --nf-action-bg: #2c2419;
+  --nf-action-color: #f4ead7;
+  --nf-action-hover-bg: #3f3428;
+  --nf-action-active-bg: #1c1814;
+  --nf-action-border: #2c2419;
+  --nf-action-focus: #ab9053;
+  --nf-action-glow: 0 0 16px rgba(44, 36, 25, 0.18);
+  --nf-action-secondary-bg: #f3ece4;
+  --nf-action-secondary-color: #2c2419;
+  --nf-action-secondary-border: #5c4e3a;
+  --nf-action-secondary-hover-bg: #e8dfd2;
+  --nf-action-disabled-bg: #8a8074;
+  --nf-action-disabled-color: #f4ead7;
 }
 
 /* Inter latin 400 — SIL OFL 1.1, see fonts/OFL-Inter.txt */
@@ -106,7 +119,9 @@ h1 {
 }
 
 .legal-nav a {
-  color: inherit;
+  color: var(--nf-text);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
 }
 
 .legal-nav .privacy-link,
@@ -154,7 +169,11 @@ h1 {
 
   .package-choice,
   .package-details__headline,
-  .addon {
+  .addon,
+  input,
+  select,
+  .form-action,
+  button[type="submit"] {
     min-height: 2.75rem;
   }
 
@@ -239,7 +258,7 @@ label,
   font-size: 0.78rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--nf-muted);
+  color: var(--nf-text);
 }
 
 input,
@@ -266,10 +285,20 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-  outline: 1px solid var(--nf-accent);
+  outline: 2px solid var(--nf-action-focus);
+  outline-offset: 1px;
 }
 
-textarea::placeholder {
+input:disabled,
+select:disabled,
+textarea:disabled {
+  background: #e6dcc8;
+  color: #5c4e3a;
+  cursor: not-allowed;
+}
+
+textarea::placeholder,
+input::placeholder {
   color: var(--nf-muted);
   font-style: italic;
   opacity: 1;
@@ -316,8 +345,9 @@ textarea::placeholder {
 }
 
 .package-choice.is-selected {
-  border-color: var(--nf-accent);
-  box-shadow: inset 0 0 0 1px var(--nf-accent);
+  border-color: var(--nf-action-border);
+  box-shadow: inset 0 0 0 1px var(--nf-action-border);
+  background: #efe4d0;
 }
 
 .package-choice input {
@@ -587,17 +617,24 @@ textarea::placeholder {
   min-width: 2.75rem;
   min-height: 2.75rem;
   padding: 0;
-  border: 1px solid var(--nf-border);
-  background: var(--nf-surface);
-  color: var(--nf-text);
+  border: 1px solid var(--nf-action-secondary-border);
+  background: var(--nf-action-secondary-bg);
+  color: var(--nf-action-secondary-color);
   font: inherit;
   font-size: 1.15rem;
   line-height: 1;
   cursor: pointer;
 }
 
+.addon-hours__btn:hover,
+.addon-hours__btn:focus-visible {
+  border-color: var(--nf-action-border);
+}
+
 .addon-hours__btn:disabled {
-  opacity: 0.4;
+  background: var(--nf-action-disabled-bg);
+  border-color: var(--nf-action-disabled-bg);
+  color: var(--nf-action-disabled-color);
   cursor: not-allowed;
 }
 
@@ -777,19 +814,60 @@ button[type="submit"] {
   width: 100%;
   margin-top: 0;
   padding: 0.9rem 1rem;
-  border: 1px solid var(--nf-accent);
-  background: transparent;
-  color: var(--nf-accent);
+  border: 1px solid var(--nf-action-border);
+  background: var(--nf-action-bg);
+  color: var(--nf-action-color);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   font: inherit;
   cursor: pointer;
+  box-shadow: var(--nf-action-glow);
+}
+
+.form-action:hover,
+button[type="submit"]:hover {
+  background: var(--nf-action-hover-bg);
+  border-color: var(--nf-action-border);
+  color: var(--nf-action-color);
+}
+
+.form-action:active,
+button[type="submit"]:active {
+  background: var(--nf-action-active-bg);
+}
+
+.form-action:focus-visible,
+button[type="submit"]:focus-visible {
+  outline: 2px solid var(--nf-action-focus);
+  outline-offset: 3px;
 }
 
 .form-action:disabled,
 button[type="submit"]:disabled {
-  opacity: 0.45;
+  background: var(--nf-action-disabled-bg);
+  border-color: var(--nf-action-disabled-bg);
+  color: var(--nf-action-disabled-color);
   cursor: not-allowed;
+}
+
+#review-back,
+.form-action--secondary {
+  background: var(--nf-action-secondary-bg);
+  border-color: var(--nf-action-secondary-border);
+  color: var(--nf-action-secondary-color);
+  box-shadow: none;
+}
+
+#review-back:hover,
+.form-action--secondary:hover {
+  background: var(--nf-action-secondary-hover-bg);
+  border-color: var(--nf-action-border);
+  color: var(--nf-action-secondary-color);
+}
+
+#review-back:active,
+.form-action--secondary:active {
+  background: var(--nf-action-secondary-hover-bg);
 }
 
 .review {
@@ -926,16 +1004,22 @@ button[type="submit"]:disabled {
 
 .availability__hour {
   padding: 0.45rem 0.7rem;
-  border: 1px solid var(--nf-border);
-  background: transparent;
-  color: var(--nf-text);
+  border: 1px solid var(--nf-action-secondary-border);
+  background: var(--nf-action-secondary-bg);
+  color: var(--nf-action-secondary-color);
   font: inherit;
   cursor: pointer;
 }
 
+.availability__hour:hover,
+.availability__hour:focus-visible {
+  border-color: var(--nf-action-border);
+}
+
 .availability__hour.is-selected {
-  border-color: var(--nf-accent);
-  color: var(--nf-accent);
+  background: var(--nf-action-bg);
+  border-color: var(--nf-action-border);
+  color: var(--nf-action-color);
 }
 
 .is-hidden {

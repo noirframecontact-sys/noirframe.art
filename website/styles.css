@@ -27,6 +27,17 @@
   --nf-logo-mark: #b0a088;
   --nf-btn-bg: transparent;
   --nf-btn-color: var(--nf-text);
+  --nf-action-bg: #2c2419;
+  --nf-action-color: #f4ead7;
+  --nf-action-hover-bg: #3f3428;
+  --nf-action-active-bg: #1c1814;
+  --nf-action-border: #2c2419;
+  --nf-action-focus: #ab9053;
+  --nf-action-glow: 0 0 16px rgba(44, 36, 25, 0.18);
+  --nf-action-secondary-bg: #f3ece4;
+  --nf-action-secondary-color: #2c2419;
+  --nf-action-secondary-border: #5c4e3a;
+  --nf-action-secondary-hover-bg: #e8dfd2;
   --nf-font: "Inter", sans-serif;
   --nf-font-display: "Inter", sans-serif;
   --nf-transition: 0.28s ease;
@@ -162,6 +173,24 @@ button {
   background-position: 0 0;
 }
 
+/* Tall scrolling surfaces: shared background proportions */
+.gallery--photos,
+.gallery--blog,
+.gallery.legalPage {
+  background-size: 100% 100dvh;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-attachment: fixed;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .gallery--photos,
+  .gallery--blog,
+  .gallery.legalPage {
+    background-attachment: scroll;
+  }
+}
+
 .menuWrapper {
   position: fixed;
   inset: 0;
@@ -223,6 +252,126 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 .menuIntro .nfLogo {
   margin-bottom: 0;
+}
+
+.cncHomeBanner {
+  flex: 0 0 auto;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: auto;
+  margin-top: auto;
+  margin-left: calc(-1 * clamp(16px, 3vw, 20px));
+  margin-right: calc(-1 * clamp(16px, 3vw, 20px));
+  margin-bottom: calc(-1 * clamp(12px, 2.5dvh, 36px));
+  padding: 16px 20px calc(env(safe-area-inset-bottom, 0px) + 14px);
+  box-sizing: border-box;
+  text-align: center;
+  text-decoration: none;
+  color: #f4ead7;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  background: #2c2419;
+  border: 0;
+  border-top: 1px solid #1c1814;
+  transition: background-color var(--nf-transition);
+}
+
+.cncHomeBanner__note {
+  margin: 0;
+  max-width: 36rem;
+  color: #e8dfd2;
+  font-family: var(--nf-font);
+  font-size: clamp(11px, 1.6dvh, 13px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.55;
+  pointer-events: none;
+}
+
+.cncHomeBanner__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.1rem;
+  width: min(22rem, 92%);
+  padding: 14px 28px;
+  border: 1px solid #8a6e32;
+  background: #c9a45a;
+  color: #2c2419;
+  font-family: var(--nf-font);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  pointer-events: none;
+  box-shadow: 0 0 18px rgba(201, 164, 90, 0.42), 0 4px 14px rgba(44, 36, 25, 0.18);
+  transition: background-color var(--nf-transition), box-shadow var(--nf-transition);
+}
+
+.cncHomeBanner__credit {
+  margin: 2px 0 0;
+  max-width: 36rem;
+  color: rgba(244, 234, 215, 0.62);
+  font-family: var(--nf-font);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+  pointer-events: none;
+}
+
+.cncHomeBanner:hover,
+.cncHomeBanner:active {
+  background: #3f3428;
+}
+
+.cncHomeBanner:hover .cncHomeBanner__cta,
+.cncHomeBanner:active .cncHomeBanner__cta {
+  background: #d4b46a;
+  color: #2c2419;
+  box-shadow: 0 0 22px rgba(201, 164, 90, 0.55), 0 4px 14px rgba(44, 36, 25, 0.2);
+}
+
+.cncHomeBanner:focus {
+  outline: none;
+}
+
+.cncHomeBanner:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--nf-action-focus);
+}
+
+@media (max-width: 600px) {
+  .cncHomeBanner {
+    gap: 10px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .cncHomeBanner__cta {
+    width: 100%;
+    letter-spacing: 0.16em;
+    font-size: 12px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .cncHomeBanner__note,
+  .cncHomeBanner__credit {
+    display: none;
+  }
+
+  .cncHomeBanner {
+    margin-top: 8px;
+    padding-top: 10px;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+  }
 }
 
 .menuHeroMachine {
@@ -331,16 +480,16 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 .backToMenuButton {
-  background: var(--nf-btn-bg);
-  color: var(--nf-btn-color);
-  border: 1px solid var(--nf-border);
+  background: var(--nf-action-secondary-bg);
+  color: var(--nf-action-secondary-color);
+  border: 1px solid var(--nf-action-secondary-border);
   padding: 14px 36px;
   cursor: pointer;
   font-family: var(--nf-font);
   font-size: 12px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  transition: border-color var(--nf-transition);
+  transition: background-color var(--nf-transition), border-color var(--nf-transition), color var(--nf-transition);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -349,7 +498,19 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 .backToMenuButton:hover,
 .backToMenuButton:active {
-  border-color: var(--nf-border-hover);
+  background: var(--nf-action-secondary-hover-bg);
+  border-color: var(--nf-action-border);
+  color: var(--nf-action-secondary-color);
+}
+
+.backToMenuButton:focus-visible {
+  outline: 2px solid var(--nf-action-focus);
+  outline-offset: 3px;
+}
+
+.backToMenuButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .backToMenuButton i {
@@ -978,8 +1139,12 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 }
 
 .contactCard__impressumNav {
-  margin: 0;
+  margin: 8px 0 0;
   text-align: center;
+}
+
+.contactCard__impressumSep {
+  color: var(--nf-text-muted);
 }
 
 .contactCard__impressumLink {
@@ -1786,16 +1951,26 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 .angeboteCtaStack {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 12px;
-  margin-top: 28px;
+  width: min(28rem, calc(100% - 2rem));
+  margin: 28px auto 0;
 }
 
-.angeboteCta {
+.angeboteCtaStack .angeboteCta,
+.angeboteCtaStack .backToMenuButton {
+  width: 100%;
+  min-height: 3rem;
   margin-top: 0;
-  background: var(--nf-btn-bg);
-  color: var(--nf-btn-color);
-  border: 1px solid var(--nf-border);
+  justify-content: center;
+}
+
+.angeboteCta,
+.cncIntro__actions .backToMenuButton:first-of-type {
+  margin-top: 0;
+  background: var(--nf-action-bg);
+  color: var(--nf-action-color);
+  border: 1px solid var(--nf-action-border);
   padding: 14px 36px;
   cursor: pointer;
   font-family: var(--nf-font);
@@ -1805,7 +1980,8 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   text-decoration: none;
   box-sizing: border-box;
   text-align: center;
-  transition: border-color var(--nf-transition);
+  box-shadow: var(--nf-action-glow);
+  transition: background-color var(--nf-transition), border-color var(--nf-transition), color var(--nf-transition), box-shadow var(--nf-transition);
 }
 
 a.angeboteCta {
@@ -1813,8 +1989,18 @@ a.angeboteCta {
 }
 
 .angeboteCta:hover,
-.angeboteCta:active {
-  border-color: var(--nf-border-hover);
+.angeboteCta:active,
+.cncIntro__actions .backToMenuButton:first-of-type:hover,
+.cncIntro__actions .backToMenuButton:first-of-type:active {
+  background: var(--nf-action-hover-bg);
+  border-color: var(--nf-action-border);
+  color: var(--nf-action-color);
+}
+
+.angeboteCta:focus-visible,
+.cncIntro__actions .backToMenuButton:first-of-type:focus-visible {
+  outline: 2px solid var(--nf-action-focus);
+  outline-offset: 3px;
 }
 
 .gallery--angebote .angebotCard,
@@ -1828,12 +2014,18 @@ a.angeboteCta {
 .gallery--angebote .backToMenuButton:hover {
   transform: none;
   box-shadow: 0 6px 16px var(--nf-shadow);
-  border-color: var(--nf-border);
+}
+
+.gallery--angebote .angeboteCta:hover,
+.gallery--angebote .angeboteCta:active {
+  background: var(--nf-action-hover-bg);
+  border-color: var(--nf-action-border);
 }
 
 .gallery--angebote .backToMenuButton:hover,
 .gallery--angebote .backToMenuButton:active {
-  border-color: var(--nf-border-hover);
+  background: var(--nf-action-secondary-hover-bg);
+  border-color: var(--nf-action-border);
 }
 
 /* === aktuell bei uns === */
@@ -1964,7 +2156,8 @@ a.angeboteCta {
 .gallery--aktuell .backToMenuButton:hover,
 .gallery--aktuell .backToMenuButton:active {
   transform: none;
-  border-color: var(--nf-border-hover);
+  background: var(--nf-action-secondary-hover-bg);
+  border-color: var(--nf-action-border);
 }
 
 @media (min-width: 901px) {
@@ -2028,7 +2221,8 @@ a.angeboteCta {
 .gallery--video .backToMenuButton:active,
 .gallery--after-frame .backToMenuButton:hover,
 .gallery--after-frame .backToMenuButton:active {
-  border-color: var(--nf-border);
+  background: var(--nf-action-secondary-hover-bg);
+  border-color: var(--nf-action-border);
   transform: none;
 }
 
@@ -2304,7 +2498,8 @@ a.angeboteCta {
 
 .gallery--blog .backToMenuButton:hover,
 .gallery--blog .backToMenuButton:active {
-  border-color: var(--nf-border);
+  background: var(--nf-action-secondary-hover-bg);
+  border-color: var(--nf-action-border);
   transform: none;
 }
 

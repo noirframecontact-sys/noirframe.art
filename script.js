@@ -139,6 +139,112 @@ const MENU_HERO_IMAGES = [
 const MENU_HERO_LOOP_SECONDS = 56;
 
 let heroTransitionStarted = false;
+let heroHoldTimer = null;
+const NF_NAV = "nf-nav";
+
+function isNfNavState(state) {
+  return Boolean(state && state.nf === NF_NAV && state.screen);
+}
+
+function navStateUrl() {
+  return window.location.pathname + window.location.search;
+}
+
+function flattenNavHash() {
+  if (!window.location.hash) {
+    return;
+  }
+  if (!window.history || typeof history.replaceState !== "function") {
+    return;
+  }
+  history.replaceState(history.state, "", navStateUrl());
+}
+
+function markMenuSeen() {
+  try {
+    sessionStorage.setItem("nf-menu-seen", "1");
+  } catch (error) {
+    /* ignore quota / private-mode */
+  }
+}
+
+function hasMenuSeen() {
+  try {
+    return sessionStorage.getItem("nf-menu-seen") === "1";
+  } catch (error) {
+    return false;
+  }
+}
+
+function replaceNavState(screen) {
+  if (!window.history || typeof history.replaceState !== "function") {
+    return;
+  }
+  history.replaceState({ nf: NF_NAV, screen: screen }, "", navStateUrl());
+}
+
+function rememberViewHistory() {
+  if (!window.history || typeof history.pushState !== "function") {
+    return;
+  }
+  flattenNavHash();
+  if (isNfNavState(history.state) && history.state.screen === "view") {
+    replaceNavState("view");
+    return;
+  }
+  history.pushState({ nf: NF_NAV, screen: "view" }, "", navStateUrl());
+}
+
+function cancelHeroHold() {
+  if (heroHoldTimer !== null) {
+    clearTimeout(heroHoldTimer);
+    heroHoldTimer = null;
+  }
+}
+
+function applyMenuFromHistory() {
+  cancelHeroHold();
+  heroTransitionStarted = true;
+  markMenuSeen();
+  if (document.querySelector(".container") || !document.querySelector(".menuWrapper")) {
+    showMenu(true);
+  }
+  replaceNavState("menu");
+}
+
+function onNavPopState(event) {
+  if (window.location.hash === "#menu") {
+    applyMenuFromHistory();
+    return;
+  }
+
+  const state = event.state;
+  if (isNfNavState(state) && (state.screen === "menu" || state.screen === "hero")) {
+    applyMenuFromHistory();
+    return;
+  }
+
+  if (isNfNavState(state) && state.screen === "view") {
+    return;
+  }
+
+  if (document.querySelector(".container") || document.querySelector(".gallery")) {
+    applyMenuFromHistory();
+  }
+}
+
+function onNavPageShow(event) {
+  const state = history.state;
+  const restoreMenu =
+    window.location.hash === "#menu" ||
+    hasMenuSeen() ||
+    (isNfNavState(state) &&
+      (state.screen === "menu" || state.screen === "view" || state.screen === "hero"));
+
+  if ((event.persisted || restoreMenu) && document.querySelector(".container")) {
+    applyMenuFromHistory();
+  }
+}
 let darkSideOverlay = null;
 let darkSideVideo = null;
 let darkSideActive = false;
@@ -163,16 +269,21 @@ function openMenuFromHero() {
     return;
   }
   heroTransitionStarted = true;
+  heroHoldTimer = null;
+  markMenuSeen();
+  replaceNavState("menu");
 
   const container = document.querySelector(".container");
   if (container) {
     container.classList.remove("show");
     setTimeout(function () {
       showMenu(true);
+      replaceNavState("menu");
     }, FADE_MS);
     return;
   }
   showMenu();
+  replaceNavState("menu");
 }
 
 function transitionBody(html, onReady, skipFadeOut) {
@@ -369,11 +480,15 @@ function closeSiteNavPanels() {
 }
 
 function beginSubpageNavigation() {
+  cancelHeroHold();
+  heroTransitionStarted = true;
   closeSiteNavPanels();
 
   if (siteNav) {
     siteNav.classList.add("siteNav--hidden");
   }
+
+  rememberViewHistory();
 }
 
 function updateSiteNavVisibility() {
@@ -400,6 +515,12 @@ function bindSiteNav() {
   siteNav.querySelectorAll("[data-nav-action]").forEach(function (button) {
     button.addEventListener("click", function () {
       const action = button.getAttribute("data-nav-action");
+
+      if (action === "angebote") {
+        window.location.assign("/anfrage/");
+        return;
+      }
+
       beginSubpageNavigation();
 
       if (action === "portfolio") {
@@ -408,10 +529,6 @@ function bindSiteNav() {
       }
       if (action === "gallery") {
         openGallery(button.getAttribute("data-gallery-folder"));
-        return;
-      }
-      if (action === "angebote") {
-        window.location.assign("/anfrage/");
         return;
       }
       if (action === "aktuell") {
@@ -1006,9 +1123,30 @@ function showMenu(skipFadeOut) {
           FU.BRAND.LOGO_WORDMARK +
           "</span></div>") +
       menuHeroHtml() +
+      cncHomeBannerHtml() +
       "</div>",
     setupMenuScreen,
     skipFadeOut === true
+  );
+}
+
+function cncHomeBannerHtml() {
+  return (
+    '<a class="cncHomeBanner" href="/anfrage/" aria-label="Paket erstellen">' +
+    '<span class="cncHomeBanner__note">' +
+    escapeHtml(
+      "Der Konfigurator erlaubt jetzt die Zusammenstellung eines Pakets. Das Senden von Anfragen ist noch nicht aktiv."
+    ) +
+    "</span>" +
+    '<span class="cncHomeBanner__cta">PAKET ZUSAMMENSTELLEN</span>' +
+    '<span class="cncHomeBanner__credit">' +
+    escapeHtml("NOIR FRAME / CREATE & COLLECT") +
+    "<br>" +
+    escapeHtml("Stage G · 31.10.2026") +
+    "<br>" +
+    escapeHtml("Marcin Porębski · Cursor") +
+    "</span>" +
+    "</a>"
   );
 }
 
@@ -1029,7 +1167,7 @@ function bindBackToMenu() {
 
 function galleryEmptyScreenHtml(message) {
   return (
-    '<div class="gallery fade">' +
+    '<div class="gallery gallery--photos fade">' +
     '<p class="galleryEmptyMessage ui-frozen notranslate" translate="no">' +
     escapeHtml(message) +
     "</p>" +
@@ -1150,7 +1288,7 @@ function openGallery(folder) {
       });
 
       transitionBody(
-        '<div class="gallery fade">' +
+        '<div class="gallery gallery--photos fade">' +
           imagesHtml +
           backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
           "</div>",
@@ -1550,7 +1688,8 @@ function contactImpressumLegalContentHtml() {
     escapeHtml(impressumTel) +
     '">0177 4429815</a><br>E-Mail: <a href="mailto:noirframe.contact@gmail.com">noirframe.contact@gmail.com</a></p>' +
     "<p><strong>Umsatzsteuer</strong></p>" +
-    "<p>Es gilt die Kleinunternehmerregelung gemäß § 19 UStG.</p>"
+    "<p>Es gilt die Kleinunternehmerregelung gemäß § 19 UStG.</p>" +
+    '<p><a href="/datenschutz.html">Datenschutzerklärung</a></p>'
   );
 }
 
@@ -1558,6 +1697,9 @@ function contactImpressumHtml() {
   return (
     '<div class="contactImpressum">' +
     '<button type="button" class="contactImpressum__toggle" aria-expanded="false" aria-controls="contact-impressum-drawer">Impressum</button>' +
+    '<p class="contactCard__impressumNav">' +
+    '<a class="contactCard__impressumLink" href="/datenschutz.html">Datenschutzerklärung</a>' +
+    "</p>" +
     '<div id="contact-impressum-drawer" class="contactImpressum__drawer" aria-hidden="true">' +
     '<div class="contactImpressum__drawerInner">' +
     '<div class="contactImpressum__content">' +
@@ -1723,6 +1865,8 @@ function contactCardImpressumNavLinkHtml() {
   return (
     '<p class="contactCard__impressumNav">' +
     '<button type="button" class="contactCard__impressumLink" id="contactImpressumNavLink">Impressum</button>' +
+    '<span class="contactCard__impressumSep" aria-hidden="true"> · </span>' +
+    '<a class="contactCard__impressumLink" href="/datenschutz.html">Datenschutzerklärung</a>' +
     "</p>"
   );
 }
@@ -2690,23 +2834,38 @@ document.addEventListener("click", function (event) {
   }
 
   event.preventDefault();
+  cancelHeroHold();
+  if (isNfNavState(history.state) && history.state.screen === "view") {
+    history.back();
+    return;
+  }
+  heroTransitionStarted = true;
   showMenu();
+  replaceNavState("menu");
 });
 
 if (DARK_SIDE_ENABLED) {
   ensureDarkSideOverlay();
 }
 
-if (window.location.hash === "#menu") {
-  heroTransitionStarted = true;
-  showMenu(true);
-  if (window.history && window.history.replaceState) {
-    window.history.replaceState(
-      null,
-      "",
-      window.location.pathname + window.location.search
-    );
+window.addEventListener("popstate", onNavPopState);
+window.addEventListener("pageshow", onNavPageShow);
+window.addEventListener("hashchange", function () {
+  if (window.location.hash === "#menu") {
+    applyMenuFromHistory();
   }
+});
+
+if (
+  window.location.hash === "#menu" ||
+  hasMenuSeen() ||
+  (isNfNavState(history.state) &&
+    (history.state.screen === "menu" ||
+      history.state.screen === "view" ||
+      history.state.screen === "hero"))
+) {
+  applyMenuFromHistory();
 } else {
-  setTimeout(openMenuFromHero, HERO_HOLD_MS);
+  replaceNavState("hero");
+  heroHoldTimer = setTimeout(openMenuFromHero, HERO_HOLD_MS);
 }
