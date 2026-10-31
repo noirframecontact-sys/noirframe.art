@@ -1,6 +1,7 @@
 import { canSubmitPublicForm, questionnaireActivation } from "./activation.js";
 import {
   ADDON_TIME_NOTE,
+  BUSINESS_NEW_CUSTOMER_CODE,
   BUSINESS_STANDARD_PACKAGE_ID,
   HOURLY_ADDON_MAX_HOURS,
   PRICE_SUMMARY_LABELS,
@@ -53,6 +54,12 @@ const els = {
   discountWrap: document.getElementById("discount-wrap"),
   rabattcode: document.getElementById("rabattcode"),
   discountPreview: document.getElementById("discount-preview"),
+  businessSpecial: document.getElementById("business-special"),
+  businessSpecialCode: document.getElementById("business-special-code"),
+  businessSpecialCopy: document.getElementById("business-special-copy"),
+  businessSpecialRegular: document.getElementById("business-special-regular"),
+  businessSpecialAfter: document.getElementById("business-special-after"),
+  businessSpecialStatus: document.getElementById("business-special-status"),
   addonsWrap: document.getElementById("addons-wrap"),
   addons: document.getElementById("addons"),
   addonTimeNote: document.getElementById("addon-time-note"),
@@ -814,7 +821,69 @@ function syncNotizenDiscount(erkannt) {
   applyNotizenPlaceholder(els.notizen);
 }
 
+function isBusinessContext(packageId) {
+  return els.category && els.category.value === "business" || packageId === BUSINESS_STANDARD_PACKAGE_ID;
+}
+
+function setBusinessSpecialVisible(visible) {
+  if (!els.businessSpecial) return;
+  els.businessSpecial.hidden = !visible;
+  els.businessSpecial.classList.toggle("is-hidden", !visible);
+  document.body.classList.toggle("has-business-special", visible);
+}
+
+function renderBusinessSpecial(packageId) {
+  if (!els.businessSpecial) return;
+  const legalOpen = Boolean(els.legalView && !els.legalView.hidden);
+  const visible = !legalOpen && isBusinessContext(packageId);
+  setBusinessSpecialVisible(visible);
+  if (!visible) return;
+
+  const preview = evaluateBusinessDiscount(packageId, els.rabattcode ? els.rabattcode.value : "");
+  if (els.businessSpecialCode) {
+    els.businessSpecialCode.textContent = BUSINESS_NEW_CUSTOMER_CODE;
+  }
+  if (els.businessSpecialRegular) {
+    els.businessSpecialRegular.textContent = `Regulär ${preview.regulaererPreis}`;
+  }
+  if (els.businessSpecialAfter) {
+    els.businessSpecialAfter.textContent = preview.erkannt
+      ? `Nach Rabatt ${preview.preisNachRabatt}`
+      : `Nach Code ${preview.preisNachRabatt}`;
+    els.businessSpecialAfter.classList.toggle("is-applied", Boolean(preview.erkannt));
+  }
+  if (els.businessSpecialStatus) {
+    const invalid = preview.packageId === BUSINESS_STANDARD_PACKAGE_ID && preview.codeEntered && !preview.erkannt;
+    els.businessSpecialStatus.hidden = !invalid && !preview.erkannt;
+    if (invalid) {
+      els.businessSpecialStatus.textContent = "Code nicht erkannt. Bitte NF-BUSINESS-15 eingeben.";
+    } else if (preview.erkannt) {
+      els.businessSpecialStatus.textContent = "Code erkannt. 15% Rabatt vorgesehen.";
+    } else {
+      els.businessSpecialStatus.textContent = "";
+    }
+  }
+}
+
+function copyBusinessSpecialCode() {
+  const code = BUSINESS_NEW_CUSTOMER_CODE;
+  const done = () => {
+    if (!els.businessSpecialCopy) return;
+    const previous = els.businessSpecialCopy.textContent;
+    els.businessSpecialCopy.textContent = "Kopiert";
+    window.setTimeout(() => {
+      if (els.businessSpecialCopy) els.businessSpecialCopy.textContent = previous || "Kopieren";
+    }, 1400);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(code).then(done).catch(done);
+    return;
+  }
+  done();
+}
+
 function renderDiscount(packageId) {
+  renderBusinessSpecial(packageId);
   if (!els.discountWrap) return;
   const eligible = packageId === BUSINESS_STANDARD_PACKAGE_ID;
   show(els.discountWrap, eligible);
@@ -891,6 +960,14 @@ function onCategoryChange() {
   syncQuestionnaire();
 }
 
+function revealDiscountFieldIfCovered() {
+  if (!els.rabattcode || !els.discountWrap || !els.businessSpecial || els.businessSpecial.hidden) return;
+  const field = els.rabattcode.getBoundingClientRect();
+  const banner = els.businessSpecial.getBoundingClientRect();
+  if (!field.height || field.bottom <= banner.top - 8) return;
+  els.discountWrap.scrollIntoView({ block: "center", inline: "nearest" });
+}
+
 function onPackageChange() {
   resetFlowChrome();
   const category = categoryById(els.category.value);
@@ -899,6 +976,7 @@ function onPackageChange() {
   renderPackageDetails(chosen || null);
   renderDiscount(chosen ? chosen.id : "");
   syncQuestionnaire();
+  revealDiscountFieldIfCovered();
 }
 
 function readValues() {
@@ -1097,6 +1175,7 @@ function showFormView() {
     els.formView.hidden = false;
     els.formView.classList.remove("is-hidden");
   }
+  renderBusinessSpecial(els.packageSelect ? els.packageSelect.value : "");
   requestAnimationFrame(() => window.scrollTo(0, formScrollY));
 }
 
@@ -1109,6 +1188,7 @@ function showLegalView() {
     els.legalView.hidden = false;
     els.legalView.classList.remove("is-hidden");
   }
+  setBusinessSpecialVisible(false);
   window.scrollTo(0, 0);
   if (els.legalBack) els.legalBack.focus();
 }
@@ -1225,6 +1305,9 @@ async function boot() {
     }
     if (els.rabattcode) {
       els.rabattcode.addEventListener("input", () => renderDiscount(els.packageSelect.value));
+    }
+    if (els.businessSpecialCopy) {
+      els.businessSpecialCopy.addEventListener("click", copyBusinessSpecialCode);
     }
     els.form.addEventListener("submit", onSubmit);
     if (els.reviewBtn) els.reviewBtn.addEventListener("click", goToReview);

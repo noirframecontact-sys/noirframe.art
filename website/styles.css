@@ -173,22 +173,33 @@ button {
   background-position: 0 0;
 }
 
-/* Tall scrolling surfaces: shared background proportions */
+/* Tall scrolling surfaces: wallpaper locked to the browser window.
+   iOS Safari does not keep background-attachment:fixed still, and the
+   touch override to attachment:scroll moved the art with the document.
+   A position:fixed layer fills the viewport; page content scrolls over it. */
 .gallery--photos,
 .gallery--blog,
 .gallery.legalPage {
-  background-size: 100% 100dvh;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-attachment: fixed;
+  background-image: none;
+  background-color: transparent;
 }
 
-@media (hover: none) and (pointer: coarse) {
-  .gallery--photos,
-  .gallery--blog,
-  .gallery.legalPage {
-    background-attachment: scroll;
-  }
+.gallery--photos::before,
+.gallery--blog::before,
+.gallery.legalPage::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--nf-menu-bg);
+  background-image: var(--nf-layout-desktop);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: 0 0;
 }
 
 .menuWrapper {
@@ -1866,11 +1877,22 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 /* Mobile portrait: layout_02; desktop, tablet, mobile landscape: layout_PC */
 @media (orientation: portrait) {
   .menuWrapper,
-  .gallery:not(.gallery--contact):not(.gallery--blog) {
+  .gallery:not(.gallery--contact):not(.gallery--blog):not(.gallery--photos) {
     background-image: var(--nf-layout-portrait);
   }
 
+  .gallery--blog,
+  .gallery.legalPage {
+    background-image: none;
+  }
+
   .gallery--contact {
+    background-image: var(--nf-layout-portrait);
+  }
+
+  .gallery--photos::before,
+  .gallery--blog::before,
+  .gallery.legalPage::before {
     background-image: var(--nf-layout-portrait);
   }
 
@@ -2236,48 +2258,7 @@ a.angeboteCta {
 .gallery--blog {
   --blog-column-width: min(900px, 92vw);
   --blog-topic-gap: clamp(16px, 4vw, 10mm);
-  --blog-paper-base: #e3dfd4;
   gap: 28px;
-  background-color: var(--blog-paper-base);
-  background-image:
-    radial-gradient(
-      ellipse 100% 70% at 50% 0%,
-      rgba(255, 253, 248, 0.55),
-      transparent 58%
-    ),
-    radial-gradient(
-      ellipse 80% 50% at 50% 100%,
-      rgba(58, 54, 48, 0.07),
-      transparent 55%
-    ),
-    repeating-linear-gradient(
-      0deg,
-      rgba(62, 58, 52, 0.025) 0,
-      rgba(62, 58, 52, 0.025) 1px,
-      transparent 1px,
-      transparent 4px
-    ),
-    repeating-linear-gradient(
-      93deg,
-      rgba(255, 255, 255, 0.04) 0,
-      rgba(255, 255, 255, 0.04) 1px,
-      transparent 1px,
-      transparent 9px
-    ),
-    linear-gradient(
-      180deg,
-      #ebe6dc 0%,
-      #e3dfd4 42%,
-      #ddd8cd 100%
-    );
-  background-size:
-    100% 100%,
-    100% 100%,
-    100% 4px,
-    100% 100%,
-    100% 100%;
-  background-repeat: no-repeat, no-repeat, repeat, repeat, no-repeat;
-  background-position: 0 0;
 }
 
 /* Nagłówek sekcji — pełna szerokość viewportu, wiersze bez nakładania */
@@ -3030,6 +3011,53 @@ a.angeboteCta {
 }
 
 @media (min-width: 901px) {
+  :root,
+  [data-theme="wedding"] {
+    --nf-nav-height: 64px;
+  }
+
+  .siteNav__bar {
+    min-height: var(--nf-nav-height);
+    background-color: #2c2419;
+    background-image: none;
+    border-bottom: 1px solid #1c1814;
+  }
+
+  .siteNav__panel.siteNav__fadeSurface::before {
+    content: none;
+    display: none;
+  }
+
+  .siteNav__panel,
+  .siteNav__panelInner {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .siteNav__trigger,
+  .siteNav__link {
+    color: #f4ead7;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    padding: 12px 16px;
+  }
+
+  .siteNav__trigger:hover,
+  .siteNav__trigger:active,
+  .siteNav__link:not(:disabled):hover,
+  .siteNav__link:not(:disabled):active {
+    color: #f4ead7;
+    font-size: 12px;
+  }
+
+  .siteNav__group.is-open > .siteNav__trigger {
+    color: #c9a45a;
+  }
+
+  .siteNav__caret {
+    color: inherit;
+  }
+
   .siteNav__group::before {
     display: none;
   }

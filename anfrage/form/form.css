@@ -61,10 +61,12 @@ html {
 }
 
 /*
- * Same tall-surface wallpaper as NOIR FRAME galleries, blog, and
- * Datenschutzerklärung: layout art at viewport size, not stretched to
- * document height. Desktop/landscape: layout_PC. Portrait: layout_02.
- * Touch devices drop background-attachment: fixed (iOS stretch/jank).
+ * Shared C&C wallpaper for every form view (editor, review, legal).
+ * Desktop: body paint + background-attachment:fixed.
+ * iOS Safari ignores attachment:fixed and treated the previous
+ * touch fallback (attachment:scroll + size 100dvh) as a first-screen
+ * strip, then exposed --nf-bg beige. Mobile uses a viewport-fixed
+ * html::before so the art stays locked while .page content scrolls.
  */
 body {
   min-height: 100dvh;
@@ -76,14 +78,40 @@ body {
   background-attachment: fixed;
 }
 
-@media (hover: none) and (pointer: coarse) {
+@media (orientation: portrait) {
   body {
+    background-image: var(--nf-layout-portrait);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  html::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    z-index: 0;
+    pointer-events: none;
+    background-color: var(--nf-bg);
+    background-image: var(--nf-layout-desktop);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+  }
+
+  body {
+    position: relative;
+    z-index: 1;
+    background-image: none;
+    background-color: transparent;
     background-attachment: scroll;
   }
 }
 
-@media (orientation: portrait) {
-  body {
+@media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+  html::before {
     background-image: var(--nf-layout-portrait);
   }
 }
@@ -430,6 +458,7 @@ input::placeholder {
 
 .discount {
   margin: 0 0 1.35rem;
+  scroll-margin-bottom: calc(12rem + env(safe-area-inset-bottom, 0px));
 }
 
 .discount__preview {
@@ -1036,4 +1065,129 @@ button[type="submit"]:disabled {
 #legal-back {
   display: inline-block;
   margin: 0 0 1.25rem;
+}
+
+.businessSpecial {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  background: #2c2419;
+  color: #f4ead7;
+  border-top: 1px solid #1c1814;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
+}
+
+.businessSpecial__inner {
+  width: min(40rem, 100%);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.businessSpecial__kicker,
+.businessSpecial__offer,
+.businessSpecial__hint,
+.businessSpecial__prices,
+.businessSpecial__status {
+  margin: 0;
+}
+
+.businessSpecial__kicker {
+  font-size: 0.68rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(244, 234, 215, 0.72);
+}
+
+.businessSpecial__offer {
+  margin-top: 4px;
+  font-size: 1rem;
+  letter-spacing: 0.18em;
+  font-weight: 500;
+}
+
+.businessSpecial__codeRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0 6px;
+}
+
+.businessSpecial__code {
+  font-family: var(--nf-font);
+  font-size: clamp(1.05rem, 3.6vw, 1.25rem);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: #f4ead7;
+  user-select: all;
+  overflow-wrap: anywhere;
+}
+
+.businessSpecial__copy {
+  min-height: 2rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #8a6e32;
+  background: #c9a45a;
+  color: #2c2419;
+  font: inherit;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.businessSpecial__copy:hover,
+.businessSpecial__copy:focus-visible {
+  background: #d4b46a;
+}
+
+.businessSpecial__hint {
+  color: rgba(244, 234, 215, 0.78);
+  font-size: 0.78rem;
+}
+
+.businessSpecial__prices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1rem;
+  margin-top: 8px;
+  font-size: 0.82rem;
+}
+
+.businessSpecial__regular {
+  color: rgba(244, 234, 215, 0.78);
+}
+
+.businessSpecial__after {
+  color: rgba(244, 234, 215, 0.62);
+}
+
+.businessSpecial__after.is-applied {
+  color: #c9a45a;
+}
+
+.businessSpecial__status {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: #e8dfd2;
+}
+
+body.has-business-special .page {
+  padding-bottom: calc(11.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-width: 640px) {
+  .businessSpecial {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .businessSpecial__code {
+    letter-spacing: 0.1em;
+  }
 }

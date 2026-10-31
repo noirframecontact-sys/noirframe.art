@@ -2,9 +2,9 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>NOIR FRAME – Buchungsanfrage</title>
-  <link rel="stylesheet" href="form.css?v=20261031-stage-g-mobile">
+  <link rel="stylesheet" href="form.css?v=20261101-stage-g-biz">
 </head>
 <body>
   <main class="page" id="form-view">
@@ -183,6 +183,22 @@
       <p id="errors" class="errors" hidden></p>
     </form>
   </main>
-  <script type="module" src="form.js?v=20261030-etap-f"></script>
+  <aside id="business-special" class="businessSpecial is-hidden" hidden aria-label="Business Special">
+    <div class="businessSpecial__inner">
+      <p class="businessSpecial__kicker">BUSINESS SPECIAL</p>
+      <p class="businessSpecial__offer">15% RABATT</p>
+      <div class="businessSpecial__codeRow">
+        <code class="businessSpecial__code" id="business-special-code">NF-BUSINESS-15</code>
+        <button type="button" class="businessSpecial__copy" id="business-special-copy" aria-label="Code kopieren">Kopieren</button>
+      </div>
+      <p class="businessSpecial__hint">Code im Feld Rabattcode eingeben</p>
+      <p class="businessSpecial__prices">
+        <span class="businessSpecial__regular" id="business-special-regular">Regulär 450,00 €</span>
+        <span class="businessSpecial__after" id="business-special-after">Nach Code 382,50 €</span>
+      </p>
+      <p class="businessSpecial__status" id="business-special-status" hidden></p>
+    </div>
+  </aside>
+  <script type="module" src="form.js?v=20261101-stage-g-biz"></script>
 </body>
 </html>

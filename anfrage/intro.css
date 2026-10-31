@@ -82,3 +82,46 @@
     white-space: nowrap;
   }
 }
+
+/* Mobile C&C intro: same viewport-locked wallpaper as the form.
+   iOS Safari does not keep background-attachment:fixed on .gallery. */
+@media (hover: none) and (pointer: coarse) {
+  html::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    z-index: 0;
+    pointer-events: none;
+    background-color: var(--nf-menu-bg, #d9cdbf);
+    background-image: var(--nf-layout-desktop);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+  }
+
+  body {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+  }
+
+  .gallery,
+  .gallery--photos {
+    background-image: none;
+    background-color: transparent;
+  }
+
+  .gallery--photos::before {
+    content: none;
+    display: none;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+  html::before {
+    background-image: var(--nf-layout-portrait);
+  }
+}
