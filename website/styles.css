@@ -52,6 +52,9 @@
   --nf-nav-height: 56px;
   --nf-layout-desktop: url("../images/layouts/layout_PC.jpg");
   --nf-layout-portrait: url("../images/layouts/layout_02.jpg");
+  --nf-chrome-bg: rgba(44, 36, 25, 0.5);
+  --nf-chrome-hover-bg: rgba(63, 52, 40, 0.5);
+  --nf-chrome-border: rgba(28, 24, 20, 0.4);
 }
 
 [data-theme="hard"] {
@@ -288,9 +291,9 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  background: #2c2419;
+  background: var(--nf-chrome-bg);
   border: 0;
-  border-top: 1px solid #1c1814;
+  border-top: 1px solid var(--nf-chrome-border);
   transition: background-color var(--nf-transition);
 }
 
@@ -340,7 +343,7 @@ body:not(:has(.container)) .gallery:not(.gallery--contact) {
 
 .cncHomeBanner:hover,
 .cncHomeBanner:active {
-  background: #3f3428;
+  background: var(--nf-chrome-hover-bg);
 }
 
 .cncHomeBanner:hover .cncHomeBanner__cta,
@@ -2259,6 +2262,23 @@ a.angeboteCta {
   --blog-column-width: min(900px, 92vw);
   --blog-topic-gap: clamp(16px, 4vw, 10mm);
   gap: 28px;
+  height: auto;
+  min-height: 100svh;
+  max-height: none;
+  overflow: visible;
+  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+}
+
+/* iOS Safari: keep Blog scrollport on the document, not a frozen 100% html box.
+   When the browser chrome hides, 100vh/100% does not follow the visual viewport
+   and the last article lines sit under a light band at the new bottom edge. */
+html:has(.gallery--blog),
+body:has(.gallery--blog) {
+  height: auto;
+  max-height: none;
+  min-height: 100svh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* Nagłówek sekcji — pełna szerokość viewportu, wiersze bez nakładania */
@@ -2892,9 +2912,9 @@ a.angeboteCta {
     justify-content: stretch;
     padding-left: 0;
     padding-right: 0;
-    background-color: #2c2419;
+    background-color: var(--nf-chrome-bg);
     background-image: none;
-    border-bottom: 1px solid #1c1814;
+    border-bottom: 1px solid var(--nf-chrome-border);
   }
 
   .siteNav__toggle {
@@ -3057,9 +3077,9 @@ a.angeboteCta {
 
   .siteNav__bar {
     min-height: var(--nf-nav-height);
-    background-color: #2c2419;
+    background-color: var(--nf-chrome-bg);
     background-image: none;
-    border-bottom: 1px solid #1c1814;
+    border-bottom: 1px solid var(--nf-chrome-border);
   }
 
   .siteNav__panel.siteNav__fadeSurface::before {
