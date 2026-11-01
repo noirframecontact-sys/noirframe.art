@@ -3079,6 +3079,8 @@ a.angeboteCta {
     font-size: 11px;
     letter-spacing: 0.16em;
     padding: 12px 16px;
+    transform: none;
+    transition: none;
   }
 
   .siteNav__trigger:hover,
@@ -3086,7 +3088,8 @@ a.angeboteCta {
   .siteNav__link:not(:disabled):hover,
   .siteNav__link:not(:disabled):active {
     color: #f4ead7;
-    font-size: 12px;
+    font-size: 11px;
+    transform: none;
   }
 
   .siteNav__group.is-open > .siteNav__trigger {
@@ -3131,7 +3134,7 @@ a.angeboteCta {
   .siteNav__trigger:active,
   .siteNav__link:not(:disabled):hover,
   .siteNav__link:not(:disabled):active {
-    font-size: var(--nf-nav-font);
+    transform: none;
   }
 }
 
