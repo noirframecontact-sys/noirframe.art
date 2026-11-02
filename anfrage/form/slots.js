@@ -37,11 +37,18 @@ export const AVAILABILITY_COPY = {
   stale:
     "Die Termindaten sind nicht aktuell. Stunden können nicht angeboten werden.",
   blockedDay:
-    "Dieser Tag ist im Kalender als belegt gemeldet. Eine Uhrzeit wird nicht angeboten.",
+    "Dieser Tag ist im Kalender als belegt gemeldet. Eine Anfrage wird nicht gesendet.",
   noneOpen:
     "In diesem Zeitfenster gibt es laut aktuellem Kalenderstand keine anfragbare Wunschzeit.",
   ready:
     "Mögliche Wunschzeiten — unverbindlich, keine Reservierung. Das Formular bucht nicht.",
+  dayLoading: "Kalender wird geprüft …",
+  dayFree:
+    "Dieser Tag ist laut Kalender frei. Ihre Anfrage ist unverbindlich — keine Buchung.",
+  dayBusy:
+    "Dieser Tag ist im Kalender belegt. Eine Anfrage wird nicht gesendet.",
+  dayUnknown:
+    "Der Kalenderstand konnte nicht geprüft werden. Die Anfrage kann trotzdem gesendet werden.",
 };
 
 const INTERVAL_KEYS = ["date", "allDay", "start", "end", "kind"];

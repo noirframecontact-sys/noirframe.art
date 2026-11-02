@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>NOIR FRAME – Buchungsanfrage</title>
-  <link rel="stylesheet" href="form.css?v=20261102-anfrage-open">
+  <link rel="stylesheet" href="form.css?v=20261102-calendar-gate">
 </head>
 <body>
   <main class="page" id="form-view">
@@ -142,6 +142,11 @@
         </div>
       </div>
 
+      <div id="availability-wrap" class="availability roll-in is-hidden">
+        <p id="availability-status" class="availability__status" role="status" aria-live="polite"></p>
+        <div id="availability-hours" class="availability__hours" hidden></div>
+      </div>
+
       <div id="standard-window-wrap" class="is-hidden">
         <div class="field">
           <label for="dauer">Geplante Dauer</label>
@@ -153,11 +158,6 @@
         <p id="window-end" class="hint" hidden></p>
       </div>
 
-      <div id="availability-wrap" class="availability roll-in is-hidden">
-        <p id="availability-status" class="availability__status"></p>
-        <div id="availability-hours" class="availability__hours" hidden></div>
-      </div>
-
       <div class="field">
         <label for="notizen">Notizen</label>
         <textarea id="notizen" name="notizen" rows="3" placeholder="Erzähl uns von deinem Plan …"></textarea>
@@ -167,7 +167,7 @@
 
       <section id="privacy-note" class="privacy" aria-labelledby="privacy-title">
         <h2 id="privacy-title" class="privacy__title">Datenschutz</h2>
-        <p>Deine Angaben verwenden wir, um deine Anfrage zu bearbeiten, dich zu kontaktieren und ein passendes Angebot zu erstellen. Die Verarbeitung erfolgt gemäß unserer Datenschutzerklärung. Deine Anfrage ist noch keine Buchung. Die Online-Anfragefunktion wird derzeit vorbereitet. Ihre Angaben werden noch nicht übermittelt.</p>
+        <p>Deine Angaben verwenden wir, um deine Anfrage zu bearbeiten, dich zu kontaktieren und ein passendes Angebot zu erstellen. Die Verarbeitung erfolgt gemäß unserer Datenschutzerklärung. Deine Anfrage ist noch keine Buchung.</p>
       </section>
 
       <section id="booking-flow" class="booking-flow" aria-label="So läuft die Buchung ab"></section>
@@ -204,7 +204,7 @@
       <p class="businessSpecial__status" id="business-special-status" hidden></p>
     </div>
   </aside>
-  <script src="anfrage-send.js?v=20261102-anfrage-open"></script>
-  <script type="module" src="form.js?v=20261102-anfrage-open"></script>
+  <script src="anfrage-send.js?v=20261102-calendar-gate"></script>
+  <script type="module" src="form.js?v=20261102-calendar-gate"></script>
 </body>
 </html>

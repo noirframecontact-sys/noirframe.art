@@ -1025,6 +1025,15 @@ button[type="submit"]:disabled {
   line-height: 1.45;
 }
 
+.availability__status.is-free {
+  color: #2f6b3a;
+}
+
+.availability__status.is-busy {
+  color: var(--nf-danger);
+  font-weight: 600;
+}
+
 .availability__hours {
   display: flex;
   flex-wrap: wrap;

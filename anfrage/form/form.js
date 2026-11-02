@@ -28,7 +28,7 @@ import {
   SEND_LABEL,
   SEND_BUSY_LABEL,
   validatePublicForm,
-} from "./envelope.js?v=20261102-anfrage-open";
+} from "./envelope.js?v=20261102-calendar-gate";
 import {
   CAMPAIGN_TIME_COPY,
   MONTH_NAMES_DE,
@@ -47,7 +47,7 @@ import {
   splitIsoDate,
   yearChoices,
 } from "./schedule.js";
-import { AVAILABILITY_COPY, evaluateCampaignHours } from "./slots.js";
+import { AVAILABILITY_COPY, evaluateCampaignHours } from "./slots.js?v=20261102-calendar-gate";
 
 const els = {
   form: document.getElementById("public-form"),
@@ -120,7 +120,11 @@ const state = {
   sendLocked: false,
   step: "edit",
   lastKartkaId: null,
+  calendarBusy: false,
+  calendarStatus: "",
 };
+
+let calendarCheckToken = 0;
 
 function categoryById(id) {
   return (state.taxonomy?.categories || []).find((item) => item.id === id) || null;
@@ -165,6 +169,7 @@ function setErrors(list) {
     kundenadresse: "Kundenadresse braucht Straße, Hausnummer, Postleitzahl und Ort.",
     miejsce: "Event-Adresse braucht Straße, Hausnummer, Postleitzahl und Ort.",
     honeypot: "Senden nicht möglich.",
+    datum_busy: AVAILABILITY_COPY.dayBusy,
   };
   els.errors.hidden = false;
   els.errors.textContent = list.map((code) => labels[code] || code).join(" ");
@@ -516,23 +521,80 @@ function renderAddons(category) {
   renderPriceSummary();
 }
 
-function renderAvailability(campaign) {
-  if (!els.availabilityWrap) return;
-  if (!campaign) {
+function requestedDatumIso(campaign) {
+  if (campaign && campaign.event && campaign.event.dateLocked) {
+    return String(campaign.event.date || "").trim();
+  }
+  return String((els.datum && els.datum.value) || "").trim();
+}
+
+function applyDayStatusCopy(status) {
+  if (!els.availabilityStatus) return;
+  els.availabilityStatus.classList.toggle("is-busy", status === "busy");
+  els.availabilityStatus.classList.toggle("is-free", status === "free");
+  if (status === "busy") {
+    els.availabilityStatus.textContent = AVAILABILITY_COPY.dayBusy;
+  } else if (status === "free") {
+    els.availabilityStatus.textContent = AVAILABILITY_COPY.dayFree;
+  } else if (status === "loading") {
+    els.availabilityStatus.textContent = AVAILABILITY_COPY.dayLoading;
+  } else {
+    els.availabilityStatus.textContent = AVAILABILITY_COPY.dayUnknown;
+  }
+}
+
+async function refreshDayStatus(iso) {
+  const token = ++calendarCheckToken;
+  if (!els.availabilityWrap || !els.availabilityStatus) return;
+  if (!iso) {
+    state.calendarBusy = false;
+    state.calendarStatus = "";
     show(els.availabilityWrap, false);
-    if (els.availabilityHours) {
-      els.availabilityHours.hidden = true;
-      els.availabilityHours.innerHTML = "";
-    }
+    els.availabilityStatus.textContent = "";
+    els.availabilityStatus.classList.remove("is-busy", "is-free");
+    syncStepChrome();
     return;
   }
 
   show(els.availabilityWrap, true);
+  state.calendarStatus = "loading";
+  applyDayStatusCopy("loading");
+
+  const transport = window.przyczlapkaAnfrage;
+  if (!transport || typeof transport.checkDate !== "function") {
+    if (token !== calendarCheckToken) return;
+    state.calendarBusy = false;
+    state.calendarStatus = "unknown";
+    applyDayStatusCopy("unknown");
+    return;
+  }
+
+  let result;
+  try {
+    result = await transport.checkDate(iso);
+  } catch {
+    result = { ok: false, status: "unknown" };
+  }
+  if (token !== calendarCheckToken) return;
+  const status = result && result.status === "busy" ? "busy" : result && result.status === "free" ? "free" : "unknown";
+  state.calendarStatus = status;
+  state.calendarBusy = status === "busy";
+  applyDayStatusCopy(status);
+  syncStepChrome();
+}
+
+function renderCampaignHours(campaign) {
+  if (!els.availabilityHours) return;
+  if (!campaign || state.calendarBusy) {
+    els.availabilityHours.hidden = true;
+    els.availabilityHours.innerHTML = "";
+    return;
+  }
+
   const snapshot = state.snapshotMissing ? null : state.snapshot;
   const result = evaluateCampaignHours(snapshot, campaign);
-  els.availabilityStatus.textContent = result.message || AVAILABILITY_COPY.invalid;
-  els.availabilityHours.innerHTML = "";
   const canOffer = result.status === "ready" && result.hours.length > 0;
+  els.availabilityHours.innerHTML = "";
   els.availabilityHours.hidden = !canOffer;
   if (!canOffer) return;
 
@@ -549,6 +611,19 @@ function renderAvailability(campaign) {
     });
     els.availabilityHours.appendChild(button);
   }
+}
+
+function renderAvailability(campaign) {
+  const gate = currentGate();
+  if (!gate.active) {
+    refreshDayStatus("");
+    renderCampaignHours(null);
+    return;
+  }
+  const iso = requestedDatumIso(campaign);
+  refreshDayStatus(iso).then(() => {
+    renderCampaignHours(campaign);
+  });
 }
 
 function setTimeLabels(copy) {
@@ -587,6 +662,7 @@ function syncDatumIso() {
     els.datumJahr && els.datumJahr.value,
   );
   els.datum.value = iso || "";
+  renderAvailability(selectedCampaign());
   return els.datum.value;
 }
 
@@ -749,7 +825,7 @@ function syncStepChrome() {
   if (els.reviewBtn) {
     els.reviewBtn.textContent = REVIEW_LABEL;
     show(els.reviewBtn, editing && Boolean(gate.active) && !state.sendLocked);
-    els.reviewBtn.disabled = !canReview;
+    els.reviewBtn.disabled = !canReview || state.calendarBusy;
   }
   if (els.reviewBack) {
     els.reviewBack.textContent = REVIEW_BACK_LABEL;
@@ -1066,6 +1142,7 @@ function validateReadyToReview() {
   }
   const values = readValues();
   const errors = validatePublicForm(values, category, { campaign });
+  if (state.calendarBusy) errors.push("datum_busy");
   if (errors.length) {
     setErrors(errors);
     return null;
@@ -1128,6 +1205,27 @@ async function sendInquiry() {
   state.submitting = true;
   syncStepChrome();
 
+  const iso = requestedDatumIso(ready.campaign) || String(ready.values.datum || "").trim();
+  const transport = window.przyczlapkaAnfrage;
+  if (iso && transport && typeof transport.checkDate === "function") {
+    let calendar;
+    try {
+      calendar = await transport.checkDate(iso);
+    } catch {
+      calendar = { ok: false, status: "unknown" };
+    }
+    if (calendar && calendar.status === "busy") {
+      state.calendarBusy = true;
+      state.calendarStatus = "busy";
+      applyDayStatusCopy("busy");
+      showTransportError(AVAILABILITY_COPY.dayBusy);
+      state.submitting = false;
+      goToEdit();
+      renderAvailability(ready.campaign);
+      return;
+    }
+  }
+
   if (DRY_RUN) {
     els.success.hidden = false;
     els.success.innerHTML = dryRunCardHtml();
@@ -1148,7 +1246,6 @@ async function sendInquiry() {
     kartkaId,
   });
 
-  const transport = window.przyczlapkaAnfrage;
   if (!transport || typeof transport.sendAnfrage !== "function") {
     showTransportError("Transport nicht geladen.");
     state.submitting = false;
@@ -1172,6 +1269,16 @@ async function sendInquiry() {
   }
 
   if (!result || !result.ok) {
+    if (result && result.busy) {
+      state.calendarBusy = true;
+      state.calendarStatus = "busy";
+      applyDayStatusCopy("busy");
+      showTransportError(AVAILABILITY_COPY.dayBusy);
+      state.submitting = false;
+      goToEdit();
+      renderAvailability(ready.campaign);
+      return;
+    }
     showTransportError();
     state.submitting = false;
     syncStepChrome();
