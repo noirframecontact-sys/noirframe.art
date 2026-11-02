@@ -11,11 +11,11 @@ export const DEFAULT_UHRZEIT = "12:00";
 export const PUBLIC_FORM_TITLE = "NOIR FRAME – Buchungsanfrage";
 export const PUBLIC_BRAND = "NOIR FRAME";
 
-export const SUCCESS_HEADING = "Ihre Anfrage wartet auf Bestätigung";
+export const SUCCESS_HEADING = "Ihre Anfrage ist eingegangen";
 export const SUCCESS_BODY =
-  "Testversion für den Kunden. Ihre Anfrage ist eingegangen. Die gewünschte Uhrzeit ist noch nicht vorgemerkt. Wir prüfen den Kalender und melden uns.";
+  "Die gewünschte Uhrzeit ist noch nicht vorgemerkt. Wir prüfen den Kalender und melden uns.";
 export const CLIENT_TEST_NOTICE =
-  "Testversion für den Kunden. Das ist eine Anfrage, keine bestätigte Buchung.";
+  "Das ist eine Anfrage, keine bestätigte Buchung.";
 export const UNCHECKED_TIME_NOTICE =
   "Eine konkrete Uhrzeit wurde nicht geprüft und nicht vorgemerkt.";
 export const DRY_RUN_HEADING = "Testmodus – Ihre Anfrage wurde nicht versendet.";
