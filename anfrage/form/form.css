@@ -152,9 +152,7 @@ h1 {
   text-underline-offset: 0.18em;
 }
 
-.legal-nav .privacy-link,
-.legal > p > .privacy-link,
-#legal-back {
+.legal-nav .privacy-link {
   display: inline-flex;
   align-items: center;
   min-height: 2.75rem;
@@ -1063,8 +1061,24 @@ button[type="submit"]:disabled {
 }
 
 #legal-back {
-  display: inline-block;
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline;
+  min-height: 0;
   margin: 0 0 1.25rem;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#legal-back:focus,
+#legal-back:focus-visible {
+  outline: none;
+  border: 0;
+  box-shadow: none;
 }
 
 #legal-body {

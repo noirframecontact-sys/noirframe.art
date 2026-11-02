@@ -1190,7 +1190,6 @@ function showLegalView() {
   }
   setBusinessSpecialVisible(false);
   window.scrollTo(0, 0);
-  if (els.legalBack) els.legalBack.focus();
 }
 
 async function loadLegalBody() {
