@@ -28,7 +28,7 @@ import {
   SEND_LABEL,
   SEND_BUSY_LABEL,
   validatePublicForm,
-} from "./envelope.js?v=20261102-e803535";
+} from "./envelope.js?v=20261102-nfprod";
 import {
   CAMPAIGN_TIME_COPY,
   MONTH_NAMES_DE,

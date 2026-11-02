@@ -1135,16 +1135,12 @@ function cncHomeBannerHtml() {
     '<a class="cncHomeBanner" href="/anfrage/" aria-label="Paket erstellen">' +
     '<span class="cncHomeBanner__note">' +
     escapeHtml(
-      "Der Konfigurator erlaubt jetzt die Zusammenstellung eines Pakets. Das Senden von Anfragen ist noch nicht aktiv."
+      "Stellen Sie Ihr Paket selbst zusammen. Create & Collect ist Ihre direkte Anfrage an NOIR FRAME."
     ) +
     "</span>" +
     '<span class="cncHomeBanner__cta">PAKET ZUSAMMENSTELLEN</span>' +
     '<span class="cncHomeBanner__credit">' +
     escapeHtml("NOIR FRAME / CREATE & COLLECT") +
-    "<br>" +
-    escapeHtml("Stage G · 31.10.2026") +
-    "<br>" +
-    escapeHtml("Marcin Porębski · Cursor") +
     "</span>" +
     "</a>"
   );

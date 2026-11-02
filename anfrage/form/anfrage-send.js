@@ -1,7 +1,6 @@
 /**
  * Public Anfrage transport. POST /anfragen to Przyczłapka.
- * Test version for the client: envelopes go to KV pending.
- * eNFOP Eingang pull stays a separate step (bridge still closed).
+ * Envelopes go to KV pending. eNFOP Eingang pull is a separate step.
  */
 (function (global) {
   function anfragenEndpoint() {

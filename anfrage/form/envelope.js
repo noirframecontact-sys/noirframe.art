@@ -8,7 +8,7 @@ import { preferredWindowNotes } from "./schedule.js";
 
 export const DEFAULT_UHRZEIT = "12:00";
 
-export const PUBLIC_FORM_TITLE = "NOIR FRAME – Buchungsanfrage";
+export const PUBLIC_FORM_TITLE = "NOIR FRAME – Anfrage";
 export const PUBLIC_BRAND = "NOIR FRAME";
 
 export const SUCCESS_HEADING = "Ihre Anfrage ist eingegangen";
@@ -22,7 +22,7 @@ export const DRY_RUN_HEADING = "Testmodus – Ihre Anfrage wurde nicht versendet
 export const DRY_RUN_BODY =
   "Diese lokale Testumgebung sendet nichts an NOIR FRAME und nichts an eNFOP. Ein erneuter Test erfordert ein Neu laden der Seite.";
 export const DEMO_UNAVAILABLE_HEADING =
-  "Die Online-Anfragefunktion wird derzeit vorbereitet. Ihre Angaben werden noch nicht übermittelt.";
+  "Ihre Anfrage ist eingegangen. Die gewünschte Uhrzeit ist noch nicht vorgemerkt.";
 export const REVIEW_HEADING = "Bitte Angaben prüfen";
 export const REVIEW_NOTE =
   "Das ist eine Anfrage, keine bestätigte Buchung und kein Vertrag.";
@@ -30,7 +30,7 @@ export const REVIEW_LABEL = "Angaben prüfen";
 export const REVIEW_BACK_LABEL = "Angaben ändern";
 export const SEND_LABEL = "Anfrage senden";
 export const SEND_BUSY_LABEL = "Wird gesendet …";
-export const BOOKING_STEPS_TITLE = "So läuft die Buchung ab";
+export const BOOKING_STEPS_TITLE = "So läuft die Anfrage ab";
 export const BOOKING_STEPS = [
   "Sie senden eine Anfrage. Damit ist noch nichts gebucht.",
   "NOIR FRAME prüft den Wunschtermin und die Angaben.",
