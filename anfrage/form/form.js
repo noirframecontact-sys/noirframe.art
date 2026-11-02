@@ -16,14 +16,19 @@ import {
   resolveAnfrageTyp,
   retainedAddonIds,
   selectedPackageView,
-  demoUnavailableCardHtml,
+  buildPublicEnvelope,
+  newKartkaId,
+  successCardHtml,
+  dryRunCardHtml,
   reviewSummaryHtml,
+  isConfirmedAcceptance,
+  isDryRunOutcome,
   REVIEW_LABEL,
   REVIEW_BACK_LABEL,
   SEND_LABEL,
   SEND_BUSY_LABEL,
   validatePublicForm,
-} from "./envelope.js?v=20261030-etap-f";
+} from "./envelope.js?v=20261102-anfrage-open";
 import {
   CAMPAIGN_TIME_COPY,
   MONTH_NAMES_DE,
@@ -103,7 +108,7 @@ const els = {
   legalBody: document.getElementById("legal-body"),
 };
 
-const DRY_RUN = true;
+const DRY_RUN = false;
 
 const state = {
   taxonomy: null,
@@ -1123,16 +1128,75 @@ async function sendInquiry() {
   state.submitting = true;
   syncStepChrome();
 
-  /* Public visual demo: dryRun: true. No POST, fetch, or envelope transport. */
-  if (!DRY_RUN) {
-    showTransportError("Senden ist nicht aktiv.");
+  if (DRY_RUN) {
+    els.success.hidden = false;
+    els.success.innerHTML = dryRunCardHtml();
+    setErrors([]);
+    lockAfterTerminal();
+    if (els.success) els.success.scrollIntoView({ block: "center" });
+    return;
+  }
+
+  const kartkaId = state.lastKartkaId || newKartkaId();
+  state.lastKartkaId = kartkaId;
+
+  const envelope = buildPublicEnvelope({
+    category: ready.category,
+    catalog: state.catalog,
+    campaign: ready.campaign,
+    values: ready.values,
+    kartkaId,
+  });
+
+  const transport = window.przyczlapkaAnfrage;
+  if (!transport || typeof transport.sendAnfrage !== "function") {
+    showTransportError("Transport nicht geladen.");
     state.submitting = false;
     syncStepChrome();
     return;
   }
 
+  let result;
+  try {
+    result = await transport.sendAnfrage(envelope, { dryRun: false });
+  } catch {
+    showTransportError("Senden fehlgeschlagen. Ihre Angaben bleiben erhalten.");
+    state.submitting = false;
+    syncStepChrome();
+    return;
+  }
+
+  if (els.dump) {
+    els.dump.textContent = "";
+    els.dump.classList.remove("is-visible");
+  }
+
+  if (!result || !result.ok) {
+    showTransportError();
+    state.submitting = false;
+    syncStepChrome();
+    return;
+  }
+
+  if (isDryRunOutcome(result)) {
+    els.success.hidden = false;
+    els.success.innerHTML = dryRunCardHtml();
+    setErrors([]);
+    lockAfterTerminal();
+    if (els.success) els.success.scrollIntoView({ block: "center" });
+    return;
+  }
+
+  if (!isConfirmedAcceptance(result)) {
+    showTransportError();
+    state.submitting = false;
+    syncStepChrome();
+    return;
+  }
+
+  const timeEmpty = !String(ready.values.uhrzeit || "").trim();
   els.success.hidden = false;
-  els.success.innerHTML = demoUnavailableCardHtml();
+  els.success.innerHTML = successCardHtml({ timeEmpty });
   setErrors([]);
   lockAfterTerminal();
   if (els.success) els.success.scrollIntoView({ block: "center" });

@@ -137,9 +137,16 @@ h1 {
 }
 
 .lede {
-  margin: 0 0 1.75rem;
+  margin: 0 0 0.7rem;
   color: var(--nf-muted);
   font-size: 0.95rem;
+}
+
+.test-notice {
+  margin: 0 0 1.75rem;
+  color: var(--nf-text);
+  font-size: 0.92rem;
+  line-height: 1.5;
 }
 
 .legal-nav {
