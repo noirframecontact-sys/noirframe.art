@@ -28,7 +28,7 @@ import {
   SEND_LABEL,
   SEND_BUSY_LABEL,
   validatePublicForm,
-} from "./envelope.js?v=20261102-live-copy";
+} from "./envelope.js?v=20261102-e803535";
 import {
   CAMPAIGN_TIME_COPY,
   MONTH_NAMES_DE,
@@ -47,7 +47,7 @@ import {
   splitIsoDate,
   yearChoices,
 } from "./schedule.js";
-import { AVAILABILITY_COPY, evaluateCampaignHours } from "./slots.js?v=20261102-live-copy";
+import { AVAILABILITY_COPY, evaluateCampaignHours } from "./slots.js?v=20261102-e803535";
 
 const els = {
   form: document.getElementById("public-form"),
