@@ -1067,6 +1067,88 @@ button[type="submit"]:disabled {
   margin: 0 0 1.25rem;
 }
 
+#legal-body {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+#legal-body h1 {
+  margin: 0 0 0.7rem;
+  font-size: 1.35rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#legal-body h2 {
+  margin: 1.6rem 0 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nf-muted);
+}
+
+#legal-body h3 {
+  margin: 1.2rem 0 0.45rem;
+  font-size: 0.92rem;
+  font-weight: 400;
+}
+
+#legal-body p,
+#legal-body li {
+  margin: 0 0 0.85rem;
+  line-height: 1.65;
+}
+
+#legal-body ul,
+#legal-body ol {
+  margin: 0 0 0.85rem;
+  padding-left: 1.2rem;
+}
+
+#legal-body .legalToc {
+  margin: 0 0 1.6rem;
+  padding: 0 0 0.7rem;
+  border-bottom: 1px solid var(--nf-border);
+}
+
+#legal-body .legalToc__label {
+  margin: 0 0 0.55rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nf-muted);
+}
+
+#legal-body .legalToc__list {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+#legal-body .legalToc__item {
+  margin: 0 0 0.4rem;
+  font-size: 0.88rem;
+}
+
+#legal-body .legalToc__sub {
+  margin-left: 0.6em;
+  font-size: 0.82rem;
+}
+
+#legal-body .legalToc a {
+  color: var(--nf-text);
+  text-decoration: none;
+}
+
+#legal-body .legalToc a:hover,
+#legal-body .legalToc a:focus-visible {
+  color: var(--nf-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
 .businessSpecial {
   position: fixed;
   left: 0;

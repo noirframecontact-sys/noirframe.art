@@ -1194,16 +1194,22 @@ function showLegalView() {
 }
 
 async function loadLegalBody() {
-  if (!els.legalBody || legalLoaded) return;
-    const response = await fetch("/datenschutz.html", { cache: "no-store" });
-    if (!response.ok) throw new Error(`HTTP ${response.status} datenschutz.html`);
+  if (legalLoaded) return;
+  if (!els.legalBody) throw new Error("legal-body");
+  const response = await fetch("/datenschutz.html", { cache: "no-store" });
+  if (!response.ok) throw new Error(`HTTP ${response.status} datenschutz.html`);
   const html = await response.text();
   const parsed = new DOMParser().parseFromString(html, "text/html");
-  const main = parsed.querySelector("main");
-  if (!main) throw new Error("datenschutz-main");
-  els.legalBody.replaceChildren(...main.childNodes);
-  for (const link of els.legalBody.querySelectorAll("a.js-back-to-form")) {
-    const wrap = link.closest("p") || link;
+  const source =
+    parsed.querySelector(".contactImpressum__content") ||
+    parsed.querySelector("main") ||
+    parsed.querySelector("article");
+  if (!source) throw new Error("datenschutz-main");
+  els.legalBody.replaceChildren(...source.childNodes);
+  for (const el of els.legalBody.querySelectorAll(
+    ".legalHome, .contactImpressumPage__close, a.js-back-to-form"
+  )) {
+    const wrap = el.closest("p") || el;
     wrap.remove();
   }
   legalLoaded = true;

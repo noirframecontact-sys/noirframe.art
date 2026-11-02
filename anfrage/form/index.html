@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>NOIR FRAME – Buchungsanfrage</title>
-  <link rel="stylesheet" href="form.css?v=20261101-stage-h-chrome">
+  <link rel="stylesheet" href="form.css?v=20261101-stage-h-dse">
 </head>
 <body>
   <main class="page" id="form-view">
@@ -183,6 +183,10 @@
       <p id="errors" class="errors" hidden></p>
     </form>
   </main>
+  <div id="legal-view" class="page legal is-hidden" hidden>
+    <p><a class="privacy-link" id="legal-back" href="/anfrage/form/">Zurück zur Anfrage</a></p>
+    <div id="legal-body"></div>
+  </div>
   <aside id="business-special" class="businessSpecial is-hidden" hidden aria-label="Business Special">
     <div class="businessSpecial__inner">
       <p class="businessSpecial__kicker">BUSINESS SPECIAL</p>
@@ -199,6 +203,6 @@
       <p class="businessSpecial__status" id="business-special-status" hidden></p>
     </div>
   </aside>
-  <script type="module" src="form.js?v=20261101-stage-g-biz"></script>
+  <script type="module" src="form.js?v=20261101-stage-h-dse"></script>
 </body>
 </html>
