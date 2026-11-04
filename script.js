@@ -44,6 +44,7 @@ const DARK_ROTATE_ICON =
 const PORTFOLIO_HERO_SRC = Object.freeze({
   bright: "images/weddings/foto01.jpg",
   dark: "images/portfolio/hero-dark.jpg",
+  sarina: "images/sarinas-art/Hero01.jpg",
   afterFrame: "images/portfolio/hero-after-frame.jpg",
 });
 
