@@ -1,0 +1,393 @@
+/* Portfolio contents page only.
+   Other screens keep website/styles.css. The homepage keeps newspaper.css. */
+
+.gallery.gallery--portfolio {
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0;
+  width: 100%;
+  min-height: 100dvh;
+  padding:
+    calc(var(--nf-nav-height) + 18px)
+    clamp(18px, 3vw, 40px)
+    36px;
+  overflow-x: hidden;
+  background-color: #d9cdbf;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.folio {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  color: #1a120c;
+}
+
+.folioMast__kicker,
+.folioMast__line,
+.folioDept__index,
+.folioDept__fig {
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.folioMast__kicker {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  padding: 0 0 7px;
+  border-bottom: 1px solid #1a120c;
+  font-size: 13px;
+}
+
+.folioMast__kicker span:nth-child(2) {
+  text-align: center;
+}
+
+.folioMast__kicker span:last-child {
+  text-align: right;
+}
+
+.folioMast__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 8px;
+  padding-bottom: 6px;
+  border-bottom: 3px solid #1a120c;
+}
+
+.folioMast__brand {
+  margin: 0;
+  font-family: "Oswald", "Arial Narrow", Impact, sans-serif;
+  font-size: clamp(42px, 5vw, 68px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.84;
+  text-transform: uppercase;
+}
+
+.folioMast__r {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+
+.gallery.gallery--portfolio .folioMast__title {
+  margin: 0;
+  font-family: "Libre Baskerville", Palatino, serif;
+  font-size: clamp(22px, 2vw, 30px);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: none;
+}
+
+.folioMast__line {
+  margin: 0;
+  padding: 7px 0;
+  border-bottom: 1px solid #1a120c;
+  font-size: 12px;
+}
+
+.folioSpread {
+  display: grid;
+  grid-template-columns: minmax(0, min(58%, calc(62dvh * 4 / 3))) minmax(260px, 1fr);
+  column-gap: 34px;
+  margin-top: 16px;
+  align-items: start;
+}
+
+.folioRail {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.folioDept {
+  appearance: none;
+  display: grid;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.folioDept--lead {
+  grid-column: 1;
+  align-content: start;
+  min-height: 0;
+}
+
+.folioDept__index {
+  font-size: 13px;
+}
+
+.folioDept--lead .folioDept__index {
+  font-family: "Oswald", "Arial Narrow", sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.folioDept__media {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+.folioDept__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  filter: none;
+}
+
+@media (min-width: 1200px) and (hover: hover) and (pointer: fine) {
+  .folioDept__media img {
+    filter: grayscale(1);
+    transition: filter 1s ease-in-out;
+  }
+
+  .folioDept:hover .folioDept__media img {
+    filter: grayscale(0);
+  }
+}
+
+.folioDept--lead .folioDept__media {
+  aspect-ratio: 4 / 3;
+  margin-top: 8px;
+}
+
+.folioDept--img-bright .folioDept__media img {
+  object-position: center 42%;
+}
+
+.folioDept--img-dark .folioDept__media img {
+  object-position: center 42%;
+}
+
+.folioDept--img-afterFrame .folioDept__media img {
+  object-position: center 58%;
+}
+
+.folioDept--img-sarina .folioDept__media img {
+  object-position: 32% 42%;
+}
+
+.folioDept__text {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
+}
+
+.folioDept__name {
+  font-family: "Oswald", "Arial Narrow", Impact, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.045em;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.folioDept--lead .folioDept__text {
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid #1a120c;
+}
+
+.folioDept--lead .folioDept__name {
+  font-size: clamp(26px, 2.4vw, 36px);
+}
+
+.folioDept__fig {
+  flex: 0 0 auto;
+  font-size: 12px;
+  opacity: 0.72;
+}
+
+.folioDept--side {
+  grid-template-columns: 34px minmax(0, 1fr) 42%;
+  grid-template-areas: "index text media";
+  align-items: center;
+  column-gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid #1a120c;
+}
+
+.folioDept--side:last-child {
+  border-bottom: 1px solid #1a120c;
+}
+
+.folioDept--side .folioDept__index {
+  grid-area: index;
+}
+
+.folioDept--side .folioDept__text {
+  grid-area: text;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.folioDept--side .folioDept__name {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  font-size: clamp(16px, 1.35vw, 20px);
+}
+
+.folioDept--side .folioDept__name::after {
+  content: "";
+  flex: 1 1 auto;
+  border-bottom: 1px dotted rgba(26, 18, 12, 0.55);
+  transform: translateY(-2px);
+}
+
+.folioDept--flip .folioDept__name::after {
+  content: none;
+}
+
+.folioDept--flip .folioDept__name::before {
+  content: "";
+  flex: 1 1 auto;
+  border-bottom: 1px dotted rgba(26, 18, 12, 0.55);
+  transform: translateY(-2px);
+}
+
+.folioDept--side .folioDept__media {
+  grid-area: media;
+  width: min(100%, 210px);
+  aspect-ratio: 4 / 3;
+  justify-self: end;
+}
+
+.folioDept--flip .folioDept__media {
+  justify-self: start;
+}
+
+.folioDept--flip {
+  grid-template-columns: 38% minmax(0, 1fr) 34px;
+  grid-template-areas: "media text index";
+}
+
+.folioDept--flip .folioDept__text {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.folioDept--quiet .folioDept__media {
+  width: 78%;
+  justify-self: end;
+}
+
+.folioDept:hover .folioDept__name,
+.folioDept:focus-visible .folioDept__name {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.folioDept:focus-visible {
+  outline: 1px solid #1a120c;
+  outline-offset: 4px;
+}
+
+.gallery.gallery--portfolio .backToMenuButton {
+  align-self: center;
+  margin: auto auto 4px;
+}
+
+.gallery.gallery--portfolio .backToMenuButton i {
+  font-size: 1.05em;
+}
+
+.gallery.gallery--portfolio .backToMenuButton:hover,
+.gallery.gallery--portfolio .backToMenuButton:active,
+.gallery.gallery--portfolio .backToMenuButton:focus-visible {
+  background: transparent;
+  border-color: #1a120c;
+  color: #1a120c;
+}
+
+@media (max-width: 860px) {
+  .folioMast__kicker span:nth-child(2) {
+    display: none;
+  }
+
+  .folioMast__row {
+    align-items: flex-end;
+  }
+
+  .folioSpread {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .folioDept--lead {
+    grid-column: auto;
+    grid-row: auto;
+    padding-bottom: 14px;
+  }
+
+  .folioDept--side,
+  .folioDept--flip,
+  .folioDept--quiet {
+    grid-template-columns: 28px minmax(0, 1fr) 148px;
+    grid-template-areas: "index text media";
+    align-items: center;
+    padding: 12px 0;
+  }
+
+  .folioDept--side .folioDept__media,
+  .folioDept--flip .folioDept__media,
+  .folioDept--quiet .folioDept__media {
+    width: 148px;
+    height: 111px;
+    max-width: 148px;
+    aspect-ratio: 4 / 3;
+    justify-self: end;
+    align-self: center;
+  }
+
+  .folioDept--flip .folioDept__text,
+  .folioDept--quiet .folioDept__text {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .folioDept--flip .folioDept__name::before {
+    content: none;
+  }
+
+  .folioDept--flip .folioDept__name::after {
+    content: "";
+    flex: 1 1 auto;
+    border-bottom: 1px dotted rgba(26, 18, 12, 0.55);
+    transform: translateY(-2px);
+  }
+}

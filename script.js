@@ -16,18 +16,13 @@ const DARK_NAV_REVEAL_LEAD_MS = 420;
 const DARK_CLOCK_SCENE_MS = 10000;
 /** Re-enable after clock scene is finished — video detached for now */
 const DARK_SIDE_VIDEO_ENABLED = false;
-/** Native Fullscreen API on moon click (desktop/Android; iOS falls back to fixed overlay) */
+/** Native Fullscreen API when Dark Side starts (desktop/Android; iOS falls back to fixed overlay) */
 const DARK_SIDE_FULLSCREEN_ENABLED = true;
 const DARK_VIDEO_REVEAL_MS = 1000;
 const DARK_VIDEO_FADE_MS = 2000;
 const DARK_AUDIO_DELAY_MS = 2500;
 const DARK_AUDIO_FADE_MS = 1500;
 const DARK_VIDEO_SRC = "Dark_Side/NF_DARK.mp4?v=20260803-2137";
-
-const DARK_MOON_ICON =
-  '<svg class="darkSideIcon" viewBox="0 0 256 256" aria-hidden="true" focusable="false">' +
-  '<path fill="currentColor" d="M128 40a88 88 0 1 0 88 88A72 72 0 1 1 128 40z"></path>' +
-  "</svg>";
 
 const DARK_ROTATE_ICON =
   '<svg class="darkSideIcon darkSideIcon--rotate" viewBox="0 0 256 256" aria-hidden="true" focusable="false">' +
@@ -214,22 +209,32 @@ function applyMenuFromHistory() {
 }
 
 function onNavPopState(event) {
+  recoverCrossfadeScroll();
   if (window.location.hash === "#menu") {
+    crossfadeRestoreScroll = true;
     applyMenuFromHistory();
     return;
   }
 
   const state = event.state;
   if (isNfNavState(state) && (state.screen === "menu" || state.screen === "hero")) {
+    crossfadeRestoreScroll = true;
     applyMenuFromHistory();
     return;
   }
 
   if (isNfNavState(state) && state.screen === "view") {
+    crossfadeRestoreScroll = true;
+    if (lastViewReplay) {
+      transitionBody(lastViewReplay.html, lastViewReplay.onReady);
+      return;
+    }
+    applyMenuFromHistory();
     return;
   }
 
   if (document.querySelector(".container") || document.querySelector(".gallery")) {
+    crossfadeRestoreScroll = true;
     applyMenuFromHistory();
   }
 }
@@ -287,21 +292,210 @@ function openMenuFromHero() {
   replaceNavState("menu");
 }
 
+const CROSSFADE_MS = 400;
+let crossfadeToken = 0;
+let crossfadeTimer = null;
+let crossfadeRestoreScroll = false;
+let lastViewReplay = null;
+const crossfadeScrollMemory = Object.create(null);
+
+if (window.history && "scrollRestoration" in window.history) {
+  window.history.scrollRestoration = "manual";
+}
+
+function prefersReducedCrossfade() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function crossfadeScreenKey(el) {
+  if (!el) {
+    return "";
+  }
+  if (el.classList.contains("npaper") || el.classList.contains("menuWrapper")) {
+    return "home";
+  }
+  var names = [
+    "portfolio",
+    "blog",
+    "about",
+    "angebote",
+    "aktuell",
+    "contactImpressum",
+    "contact",
+    "photos",
+  ];
+  for (var i = 0; i < names.length; i++) {
+    if (el.classList.contains("gallery--" + names[i])) {
+      return names[i];
+    }
+  }
+  if (el.classList.contains("gallery")) {
+    return "gallery";
+  }
+  return "screen";
+}
+
+function activeCrossfadeScreen() {
+  return document.querySelector("body > :not(.is-leaving)");
+}
+
+let crossfadeScrollTarget = 0;
+
+function applyCrossfadeScrollTarget() {
+  window.scrollTo(0, crossfadeScrollTarget);
+}
+
+function placeCrossfadeScroll(screen) {
+  if (!screen) {
+    crossfadeRestoreScroll = false;
+    return;
+  }
+  var key = crossfadeScreenKey(screen);
+  var y = 0;
+  if (crossfadeRestoreScroll) {
+    y = crossfadeScrollMemory[key] || 0;
+  } else {
+    crossfadeScrollMemory[key] = 0;
+  }
+  crossfadeRestoreScroll = false;
+  crossfadeScrollTarget = y;
+  applyCrossfadeScrollTarget();
+}
+
+let crossfadeScrollZeroAt = 0;
+const crossfadeScrollPrevious = Object.create(null);
+
+function rememberCrossfadeScroll() {
+  var screen = activeCrossfadeScreen();
+  if (
+    !screen ||
+    screen.classList.contains("is-leaving") ||
+    screen.classList.contains("is-entering")
+  ) {
+    return;
+  }
+  var key = crossfadeScreenKey(screen);
+  var y = window.scrollY || document.documentElement.scrollTop || 0;
+  crossfadeScrollPrevious[key] = crossfadeScrollMemory[key] || 0;
+  crossfadeScrollMemory[key] = y;
+  crossfadeScrollZeroAt = y === 0 ? performance.now() : 0;
+}
+
+function recoverCrossfadeScroll() {
+  var screen = activeCrossfadeScreen();
+  if (!screen) {
+    return;
+  }
+  var key = crossfadeScreenKey(screen);
+  var previous = crossfadeScrollPrevious[key] || 0;
+  if (
+    (window.scrollY || 0) === 0 &&
+    previous > 0 &&
+    performance.now() - crossfadeScrollZeroAt < 80
+  ) {
+    crossfadeScrollMemory[key] = previous;
+  }
+}
+
+window.addEventListener("scroll", rememberCrossfadeScroll, { passive: true });
+
+function finishCrossfadeScreen(screen, onReady) {
+  if (screen) {
+    screen.classList.add("fade", "show");
+    screen.classList.remove("is-entering");
+  }
+  document.body.classList.remove("is-crossfade");
+  if (onReady) {
+    onReady();
+  }
+  updateSiteNavVisibility();
+  syncGalleryElevator();
+  placeCrossfadeScroll(screen);
+}
+
 function transitionBody(html, onReady, skipFadeOut) {
   stopMenuHero();
-  const existing = document.body.firstElementChild;
+  const token = ++crossfadeToken;
+  if (crossfadeTimer) {
+    clearTimeout(crossfadeTimer);
+    crossfadeTimer = null;
+  }
+  document.querySelectorAll("body > .npaper-note").forEach(function (node) {
+    node.remove();
+  });
+  document.querySelectorAll("body > .is-leaving").forEach(function (node) {
+    node.remove();
+  });
 
-  if (!skipFadeOut && existing && existing.classList.contains("fade")) {
-    existing.classList.remove("show");
-    setTimeout(function () {
-      document.body.innerHTML = html;
-      revealScreen(onReady);
-    }, FADE_MS);
+  const template = document.createElement("template");
+  template.innerHTML = String(html || "").trim();
+  const incoming = template.content.firstElementChild;
+  const existing = activeCrossfadeScreen();
+  const reduced = prefersReducedCrossfade();
+
+  if (incoming && incoming.classList.contains("gallery")) {
+    lastViewReplay = { html: html, onReady: onReady };
+  }
+
+  if (existing && !crossfadeRestoreScroll) {
+    crossfadeScrollMemory[crossfadeScreenKey(existing)] =
+      window.scrollY || document.documentElement.scrollTop || 0;
+  }
+
+  if (!existing || !incoming || reduced) {
+    document.body.innerHTML = html;
+    finishCrossfadeScreen(document.body.firstElementChild, onReady);
     return;
   }
 
-  document.body.innerHTML = html;
-  revealScreen(onReady);
+  const savedY = crossfadeScrollMemory[crossfadeScreenKey(existing)] || 0;
+
+  existing.classList.add("is-leaving");
+  existing.style.top = -savedY + "px";
+  existing.setAttribute("aria-hidden", "true");
+  if ("inert" in existing) {
+    existing.inert = true;
+  }
+
+  incoming.classList.add("fade", "is-entering");
+  document.body.insertBefore(incoming, document.body.firstChild);
+  document.body.classList.add("is-crossfade");
+  placeCrossfadeScroll(incoming);
+  if (onReady) {
+    onReady();
+  }
+  updateSiteNavVisibility();
+  syncGalleryElevator();
+
+  function startCrossfadeMotion() {
+    if (token !== crossfadeToken) {
+      return;
+    }
+    existing.classList.add("is-gone");
+    incoming.classList.add("show");
+  }
+
+  requestAnimationFrame(function () {
+    requestAnimationFrame(startCrossfadeMotion);
+  });
+  setTimeout(startCrossfadeMotion, 32);
+
+  crossfadeTimer = setTimeout(function () {
+    if (token !== crossfadeToken) {
+      return;
+    }
+    if (existing.parentNode) {
+      existing.remove();
+    }
+    incoming.classList.remove("is-entering");
+    document.body.classList.remove("is-crossfade");
+    incoming.classList.add("fade", "show");
+    crossfadeTimer = null;
+    applyCrossfadeScrollTarget();
+    requestAnimationFrame(applyCrossfadeScrollTarget);
+    updateSiteNavVisibility();
+    syncGalleryElevator();
+  }, CROSSFADE_MS);
 }
 
 function revealScreen(onReady) {
@@ -312,6 +506,7 @@ function revealScreen(onReady) {
       onReady();
     }
     updateSiteNavVisibility();
+    syncGalleryElevator();
   }
 
   if (screen) {
@@ -1101,34 +1296,196 @@ function setupMenuHero() {
   startMenuHeroMotion(menuHeroTrack, false);
 }
 
+function newspaperIcon(kind) {
+  var inner = {
+    hochzeiten:
+      '<circle cx="12" cy="16" r="6" fill="none" stroke="currentColor" stroke-width="1.6"></circle>' +
+      '<circle cx="20" cy="16" r="6" fill="none" stroke="currentColor" stroke-width="1.6"></circle>',
+    portrait:
+      '<circle cx="16" cy="11" r="4.2" fill="none" stroke="currentColor" stroke-width="1.6"></circle>' +
+      '<path d="M8 25c1.2-4 3.8-6 8-6s6.8 2 8 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>',
+    business:
+      '<rect x="7" y="8" width="18" height="16" fill="none" stroke="currentColor" stroke-width="1.6"></rect>' +
+      '<path d="M7 14h18M12 8v16M20 8v16" fill="none" stroke="currentColor" stroke-width="1.3"></path>',
+    events:
+      '<rect x="6" y="8" width="20" height="16" fill="none" stroke="currentColor" stroke-width="1.6"></rect>' +
+      '<path d="M6 13h20M11 6v4M21 6v4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>',
+    drohne:
+      '<circle cx="7" cy="13" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>' +
+      '<circle cx="25" cy="13" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>' +
+      '<path d="M10 13h4l2 4 2-4h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>' +
+      '<circle cx="16" cy="20" r="1.7" fill="currentColor"></circle>',
+  };
+
+  return (
+    '<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">' +
+    (inner[kind] || "") +
+    "</svg>"
+  );
+}
+
+function newspaperServiceButton(kind, label) {
+  return (
+    '<button type="button" class="npaper-service" data-home-service="' +
+    kind +
+    '" aria-expanded="false" aria-controls="npaperNote">' +
+    newspaperIcon(kind) +
+    "<span>" +
+    escapeHtml(label) +
+    "</span></button>"
+  );
+}
+
+function newspaperNavLink(action, label) {
+  return (
+    '<button type="button" class="npaper-nav__link ui-frozen notranslate" data-nav-action="' +
+    action +
+    '" translate="no">' +
+    escapeHtml(label) +
+    "</button>"
+  );
+}
+
+function newspaperArchiveHtml() {
+  var paragraphs = ["Am 17. Dezember 1984 herrschte ein frostiger Winter. Ich kam ohne einen Schrei zur Welt. Vielleicht war mir schon damals die Energie für unwichtige Dinge zu schade.","An meine Kindheit erinnere ich mich kaum. Sie verging wie ein einzelnes Bild in einer analogen Kamera – sie war da, wurde belichtet und verschwand irgendwo im Archiv der Zeit. Geblieben sind nur Bruchstücke von Bildern, einige Gerüche, ein paar Geräusche und das Gefühl, dass ich die Welt schon immer lieber beobachtet habe, als an ihr teilzunehmen.","Die Schulzeit war eine Zeit der Musik. Je härter, desto besser. Gitarren, Bass, Lärm und Rebellion. Allerdings rebellierte ich nicht gegen Lehrer, Eltern oder das System. Meistens rebellierte ich gegen mich selbst. Ich ging immer meinen eigenen Weg. Wenn alle nach rechts abbogen, wollte ich herausfinden, was sich auf der linken Seite befand. Nicht, weil ich es besser wusste. Meine Neugier war einfach stärker als mein Verstand.","Ich habe mich nie für besonders talentiert gehalten. Meine größte Stärke war mein Durchhaltevermögen. Ein hartnäckiges, manchmal törichtes und gelegentlich anstrengendes Durchhaltevermögen. Wenn mich etwas interessierte, gab ich nicht auf. Ich musste es überprüfen, in seine Einzelteile zerlegen und verstehen. Meine Neugier trieb mich weiter als jedes Talent.","Im Laufe der Jahre habe ich vieles ausprobiert. Es gab die Malerei. Zeichnungen und Bleistiftporträts. Es gab die Musik, die lange Zeit das Wichtigste in meinem Leben zu sein schien. Ich spielte Bass und viele andere Instrumente. All das bereitete mir Freude, aber nichts gab mir dieses besondere Gefühl, das entstand, wenn ich eine Kamera in die Hand nahm.","Die Fotografie kam nicht sofort zu mir. Vielmehr übernahm sie langsam die Kontrolle über mich. Zuerst war sie ein Interesse. Dann eine Leidenschaft. Schließlich wurde sie zu einer Sucht. Der gesündesten Sucht, die ich je hatte. Eine Dopaminquelle in den Momenten, in denen alles andere keinen Kick mehr gab.","Ich liebe Experimente. Ich baute mir eine eigene Lochkamera – eine primitive Kamera mit einem winzigen Loch. Damit machte ich ein Panoramafoto von einer traurigen Plattenbausiedlung. Für viele war es nur eine graue Landschaft. Für mich war es der Beweis, dass man mit allem fotografieren kann. Nicht die Kamera macht das Bild. Es entstehen durch den Menschen, das Licht und die Idee.","Und das Licht ist das Wichtigste.","Am besten ist es, wenn es möglichst wenig davon gibt.","Im Schatten verbirgt sich Charakter. Im Halbdunkel entstehen Emotionen. Helligkeit zeigt alles, aber die Dunkelheit lässt Raum für die Fantasie.","Vor zehn Jahren verließ ich meine Heimat. Damals stand die Fotografie noch nicht im Zentrum meiner Welt. Sie war irgendwo daneben. Und sie wartete geduldig.","Alles veränderte sich mit der Geburt meiner Tochter.","Für sie holte ich meine alte Spiegelreflexkamera aus dem Schrank. Ich wollte einige Momente festhalten, die viel zu schnell vergingen. Damals wusste ich noch nicht, dass ich eine Tür öffnete, die ich nie wieder schließen würde. Die Fotografie nahm mich vollständig ein. Sie begann, jeden freien Augenblick zu füllen – jeden Spaziergang, jede Reise und jede Nacht.","Heute stehe ich mit meiner Kamera auf Euren Hochzeiten, bei Events, Konzerten und Familienfeiern. Ich suche nach Emotionen, Gesten und Licht. Ich komme mit Speicherkarten voller Geschichten nach Hause und sitze anschließend stundenlang vor dem Monitor. Oft bis tief in die Nacht. Ich korrigiere, schneide zu und verfeinere jedes Detail.","Denn Fotografie ist für mich keine Arbeit.","Sie ist eine Art, die Welt zu betrachten.","Endlich tue ich etwas, das ich wirklich liebe. Und wenn man beginnt, das zu tun, was man liebt, hört man auf, die Arbeitsstunden zu zählen. Nicht, weil man weniger arbeitet. Im Gegenteil. Man hat einfach nicht mehr das Gefühl, zu arbeiten.","Ich bin Fotograf.","Nicht, weil ich eine Kamera besitze.","Sondern weil ich die Welt nicht mehr anders betrachten kann."];
+
+  return (
+    '<div class="npaper-archive">' +
+    '<div class="npaper-archive__text">' +
+    paragraphs
+      .map(function (paragraph) {
+        return "<p>" + escapeHtml(paragraph) + "</p>";
+      })
+      .join("") +
+    "</div></div>"
+  );
+}
+
+var ISSUE_TIME_ZONE = "Europe/Berlin";
+
+function issueDateline(now) {
+  var parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: ISSUE_TIME_ZONE,
+    day: "2-digit",
+    year: "numeric",
+  }).formatToParts(now || new Date());
+  var day = "";
+  var year = "";
+  for (var i = 0; i < parts.length; i++) {
+    if (parts[i].type === "day") day = parts[i].value;
+    if (parts[i].type === "year") year = parts[i].value;
+  }
+  return "Nr. " + day + " / " + year;
+}
+
+function berlinDateKey(date) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: ISSUE_TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
+function msUntilBerlinDateChanges(now) {
+  var key = berlinDateKey(now);
+  var lo = now.getTime();
+  var hi = lo + 26 * 60 * 60 * 1000;
+  while (hi - lo > 1000) {
+    var mid = Math.floor((lo + hi) / 2);
+    if (berlinDateKey(new Date(mid)) === key) lo = mid;
+    else hi = mid;
+  }
+  return Math.max(1000, hi - now.getTime() + 50);
+}
+
+function paintIssueDatelines(now) {
+  var label = issueDateline(now);
+  var nodes = document.querySelectorAll(
+    ".npaper-kicker > span:first-child, .folioMast__kicker > span:first-child"
+  );
+  for (var i = 0; i < nodes.length; i++) {
+    if (nodes[i].textContent !== label) nodes[i].textContent = label;
+  }
+}
+
+function armIssueDateline() {
+  paintIssueDatelines();
+  window.setTimeout(armIssueDateline, msUntilBerlinDateChanges(new Date()));
+}
+
+function newspaperHomeHtml() {
+  var nav =
+    newspaperNavLink("portfolio", FU.NAV.PORTFOLIO) +
+    '<span class="npaper-nav__rule" aria-hidden="true"></span>' +
+    newspaperNavLink("angebote", FU.NAV.ANGEBOTE) +
+    '<span class="npaper-nav__rule" aria-hidden="true"></span>' +
+    newspaperNavLink("aktuell", FU.NAV.AKTUELL) +
+    (BLOG_ENABLED
+      ? '<span class="npaper-nav__rule" aria-hidden="true"></span>' +
+        newspaperNavLink("blog", FU.NAV.BLOG)
+      : "") +
+    '<span class="npaper-nav__rule" aria-hidden="true"></span>' +
+    newspaperNavLink("about", FU.NAV.ABOUT_US) +
+    '<span class="npaper-nav__rule" aria-hidden="true"></span>' +
+    newspaperNavLink("contact", FU.NAV.KONTAKT);
+
+  return (
+    '<div class="menuWrapper npaper">' +
+    '<div class="npaper-stage">' +
+    '<div class="npaper-sheet">' +
+    '<p class="npaper-kicker">' +
+    "<span>" + issueDateline() + "</span>" +
+    "<span>Fotografie • Menschen • Geschichten</span>" +
+    "<span>Düsseldorf / NRW</span>" +
+    "</p>" +
+    '<h1 class="npaper-mast" aria-label="NOIR FRAME">' +
+    '<span class="npaper-mast__line">' +
+    '<span class="npaper-mast__ghost npaper-mast__ghost--before" aria-hidden="true">Olszty</span>' +
+    'NOI<span class="npaper-r">R</span> F' +
+    (DARK_SIDE_ENABLED
+      ? '<button type="button" class="npaper-l" id="darkSideTrigger" aria-label="Dark Side">R</button>'
+      : '<span class="npaper-l">R</span>') +
+    "AME" +
+    '<span class="npaper-mast__ghost npaper-mast__ghost--after" aria-hidden="true">rkrath</span>' +
+    "</span>" +
+    "</h1>" +
+    '<nav class="npaper-nav" aria-label="' +
+    escapeHtml(FU.NAV.ARIA) +
+    '">' +
+    nav +
+    "</nav>" +
+    '<div class="npaper-story">' +
+    '<h2 class="npaper-headline">Fotografie.<br>Menschen.<br>Geschichten.</h2>' +
+    '<p class="npaper-deck">Wir erzählen Geschichten in Bildern.</p>' +
+    newspaperArchiveHtml() +
+    "</div>" +
+    '<figure class="npaper-photo">' +
+    '<img src="images/newspaper/marcin-analog.jpg" alt="Marcin Porębski mit einer Contaflex" width="1024" height="683" fetchpriority="high" decoding="async">' +
+    "</figure>" +
+    '<div class="npaper-services" role="group" aria-label="Leistungen">' +
+    newspaperServiceButton("hochzeiten", "Hochzeiten") +
+    newspaperServiceButton("portrait", "Portrait") +
+    newspaperServiceButton("business", "Business") +
+    newspaperServiceButton("events", "Events") +
+    newspaperServiceButton("drohne", "Drohne") +
+    "</div>" +
+    '<div class="npaper-note" id="npaperNote" hidden role="note">' +
+    '<p class="npaper-note__kicker"></p>' +
+    '<p class="npaper-note__body"></p>' +
+    "</div>" +
+    '<a class="npaper-cnc" href="/anfrage/">' +
+    '<span class="npaper-cnc__brand">Create &amp; Collect</span>' +
+    '<span class="npaper-cnc__note">Stellen Sie Ihr Paket selbst zusammen.</span>' +
+    '<span class="npaper-cnc__cta">Paket zusammenstellen</span>' +
+    "</a>" +
+    "</div></div></div>"
+  );
+}
+
 function showMenu(skipFadeOut) {
   cancelPendingGalleryLoads();
-  transitionBody(
-    '<div class="menuWrapper fade">' +
-      (DARK_SIDE_ENABLED
-        ? '<div class="menuIntro">' +
-          '<button type="button" class="darkSideMoon ui-frozen notranslate" id="darkSideMoon" aria-label="' +
-          escapeHtml(FU.SYSTEM.DARK_SIDE_ARIA) +
-          '" translate="no">' +
-          DARK_MOON_ICON +
-          "</button>" +
-          '<div class="nfLogo ui-frozen notranslate" translate="no">' +
-          FU.BRAND.LOGO_MARK +
-          "<span>" +
-          FU.BRAND.LOGO_WORDMARK +
-          "</span></div>" +
-          "</div>"
-        : '<div class="nfLogo ui-frozen notranslate" translate="no">' +
-          FU.BRAND.LOGO_MARK +
-          "<span>" +
-          FU.BRAND.LOGO_WORDMARK +
-          "</span></div>") +
-      menuHeroHtml() +
-      cncHomeBannerHtml() +
-      "</div>",
-    setupMenuScreen,
-    skipFadeOut === true
-  );
+  transitionBody(newspaperHomeHtml(), setupMenuScreen, skipFadeOut === true);
 }
 
 function cncHomeBannerHtml() {
@@ -1147,15 +1504,245 @@ function cncHomeBannerHtml() {
   );
 }
 
+var newspaperNoteBinding = null;
+
+var NEWSPAPER_NOTES = {
+  hochzeiten: {
+    title: "HOCHZEITEN",
+    body: "Reportagen, die echte Emotionen festhalten. Vom Getting Ready bis zur Feier – ungestellt, aufmerksam und mit dem Blick für die kleinen Momente.",
+  },
+  portrait: {
+    title: "PORTRAIT",
+    body: "Charakter statt Pose. Individuelle Porträts mit natürlichem Licht, klarer Bildsprache und einer persönlichen Atmosphäre.",
+  },
+  business: {
+    title: "BUSINESS",
+    body: "Authentische Unternehmensfotografie für Websites, Marken und Social Media. Menschen, Arbeitsprozesse und echte Einblicke in den Betrieb.",
+  },
+  events: {
+    title: "EVENTS",
+    body: "Veranstaltungen, Konzerte und besondere Begegnungen. Dokumentarisch erzählt, mit Gespür für Atmosphäre, Dynamik und Details.",
+  },
+  drohne: {
+    title: "DROHNE",
+    body: "Neue Perspektiven und mehr Dynamik aus der Luft. Aufnahmen mit DJI-Drohne, durchgeführt von einem geschulten Operator unter Einhaltung der geltenden Vorschriften.",
+  },
+};
+
+function placeNewspaperNote(note, button) {
+  var margin = 12;
+  var gap = 8;
+
+  note.style.left = "0px";
+  note.style.top = "0px";
+
+  var noteRect = note.getBoundingClientRect();
+  var buttonRect = button.getBoundingClientRect();
+  var left = buttonRect.left + buttonRect.width / 2 - noteRect.width / 2;
+
+  left = Math.max(margin, Math.min(left, window.innerWidth - margin - noteRect.width));
+
+  var top = buttonRect.top - gap - noteRect.height;
+
+  if (top < margin) {
+    top = buttonRect.bottom + gap;
+  }
+
+  if (top + noteRect.height > window.innerHeight - margin) {
+    top = Math.max(margin, window.innerHeight - margin - noteRect.height);
+  }
+
+  note.style.left = Math.round(left) + "px";
+  note.style.top = Math.round(top) + "px";
+}
+
+function bindNewspaperHome() {
+  var root = document.querySelector(".npaper");
+  if (!root) {
+    return;
+  }
+
+  if (newspaperNoteBinding) {
+    newspaperNoteBinding.destroy();
+    newspaperNoteBinding = null;
+  }
+
+  root.querySelectorAll("[data-nav-action]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var action = button.getAttribute("data-nav-action");
+
+      if (action === "angebote") {
+        window.location.assign("/anfrage/");
+        return;
+      }
+
+      beginSubpageNavigation();
+
+      if (action === "portfolio") {
+        showPortfolioPicker();
+      } else if (action === "aktuell") {
+        showAktuell();
+      } else if (action === "blog") {
+        showBlog();
+      } else if (action === "about") {
+        showAbout();
+      } else if (action === "contact") {
+        showContact();
+      }
+    });
+  });
+
+  var note = root.querySelector(".npaper-note");
+  document.body.appendChild(note);
+  var noteKicker = note.querySelector(".npaper-note__kicker");
+  var noteBody = note.querySelector(".npaper-note__body");
+  var buttons = root.querySelectorAll("[data-home-service]");
+  var openButton = null;
+
+  function setExpanded(button, expanded) {
+    if (button) {
+      button.setAttribute("aria-expanded", expanded ? "true" : "false");
+    }
+  }
+
+  function closeNote() {
+    if (!note) {
+      return;
+    }
+
+    note.hidden = true;
+    setExpanded(openButton, false);
+    openButton = null;
+  }
+
+  function openNote(button) {
+    var kind = button.getAttribute("data-home-service");
+    var copy = NEWSPAPER_NOTES[kind];
+
+    if (!copy) {
+      return;
+    }
+
+    if (openButton && openButton !== button) {
+      setExpanded(openButton, false);
+    }
+
+    noteKicker.textContent = copy.title;
+    noteBody.textContent = copy.body;
+    note.hidden = false;
+    openButton = button;
+    setExpanded(button, true);
+    placeNewspaperNote(note, button);
+  }
+
+  function repositionNote() {
+    if (openButton && note && !note.hidden) {
+      placeNewspaperNote(note, openButton);
+    }
+  }
+
+  function onServiceClick(event) {
+    var button = event.currentTarget;
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (openButton === button) {
+      closeNote();
+      return;
+    }
+
+    openNote(button);
+  }
+
+  function onDocumentClick(event) {
+    if (!openButton || !note || note.hidden) {
+      return;
+    }
+
+    if (note.contains(event.target)) {
+      return;
+    }
+
+    closeNote();
+  }
+
+  function onDocumentKey(event) {
+    if (event.key === "Escape" && openButton) {
+      closeNote();
+    }
+  }
+
+  buttons.forEach(function (button) {
+    button.addEventListener("click", onServiceClick);
+  });
+  document.addEventListener("click", onDocumentClick);
+  document.addEventListener("keydown", onDocumentKey);
+  window.addEventListener("resize", repositionNote);
+  window.addEventListener("scroll", repositionNote, true);
+
+  newspaperNoteBinding = {
+    destroy: function () {
+      document.removeEventListener("click", onDocumentClick);
+      document.removeEventListener("keydown", onDocumentKey);
+      window.removeEventListener("resize", repositionNote);
+      window.removeEventListener("scroll", repositionNote, true);
+      buttons.forEach(function (button) {
+        button.removeEventListener("click", onServiceClick);
+      });
+    },
+  };
+}
+
+var portraitDesktopQuery = window.matchMedia(
+  "(min-width: 1200px) and (hover: hover) and (pointer: fine)"
+);
+
+function syncInteractivePortrait() {
+  var figure = document.querySelector(".menuWrapper.npaper .npaper-photo");
+  if (!figure) {
+    return;
+  }
+  var plate = figure.querySelector(".npaper-photo__plate");
+  if (!portraitDesktopQuery.matches) {
+    if (plate) {
+      plate.remove();
+    }
+    return;
+  }
+  if (plate) {
+    return;
+  }
+  var img = document.createElement("img");
+  img.className = "npaper-photo__plate";
+  img.src = "images/newspaper/NF01.jpg?v=20261110-portrait-2";
+  img.alt = "";
+  img.setAttribute("aria-hidden", "true");
+  img.width = 1024;
+  img.height = 683;
+  img.decoding = "async";
+  figure.appendChild(img);
+}
+
+function bindInteractivePortrait() {
+  syncInteractivePortrait();
+  if (bindInteractivePortrait.listening || !portraitDesktopQuery.addEventListener) {
+    return;
+  }
+  bindInteractivePortrait.listening = true;
+  portraitDesktopQuery.addEventListener("change", syncInteractivePortrait);
+}
+
 function setupMenuScreen() {
   if (DARK_SIDE_ENABLED) {
-    const moonButton = document.getElementById("darkSideMoon");
-    if (moonButton) {
-      moonButton.addEventListener("click", enterDarkSide);
+    const darkSideTrigger = document.getElementById("darkSideTrigger");
+    if (darkSideTrigger) {
+      darkSideTrigger.addEventListener("click", enterDarkSide);
     }
   }
 
   setupMenuHero();
+  bindNewspaperHome();
+  bindInteractivePortrait();
 }
 
 function bindBackToMenu() {
@@ -1208,22 +1795,28 @@ function portfolioHeroMediaHtml(imageKey) {
   );
 }
 
-function portfolioTileHtml(galleryFolder, imageKey, label) {
-  var darkClass =
-    imageKey === "dark" || imageKey === "sarina" ? " portfolioPicker__tile--dark" : "";
-  var brightClass = imageKey === "bright" ? " portfolioPicker__tile--bright" : "";
+function portfolioDeptHtml(galleryFolder, imageKey, label, number, variant) {
   return (
-    '<button type="button" class="portfolioPicker__tile ui-frozen notranslate' +
-    darkClass +
-    brightClass +
+    '<button type="button" class="folioDept ui-frozen notranslate folioDept--' +
+    variant +
+    " folioDept--img-" +
+    imageKey +
     '" data-portfolio-gallery="' +
     escapeHtml(galleryFolder) +
     '" translate="no">' +
-    '<span class="portfolioPicker__media">' +
+    '<span class="folioDept__index">0' +
+    number +
+    "</span>" +
+    '<span class="folioDept__media">' +
     portfolioHeroMediaHtml(imageKey) +
     "</span>" +
-    '<span class="portfolioPicker__label">' +
+    '<span class="folioDept__text">' +
+    '<span class="folioDept__name">' +
     escapeHtml(label) +
+    "</span>" +
+    '<span class="folioDept__fig">Abb. 0' +
+    number +
+    "</span>" +
     "</span>" +
     "</button>"
   );
@@ -1232,15 +1825,31 @@ function portfolioTileHtml(galleryFolder, imageKey, label) {
 function portfolioPickerHtml() {
   return (
     '<div class="gallery gallery--portfolio fade">' +
-    '<div class="portfolioPicker" role="group" aria-label="' +
+    '<div class="folio">' +
+    '<header class="folioMast">' +
+    '<p class="folioMast__kicker">' +
+    "<span>" + issueDateline() + "</span>" +
+    "<span>Fotografie · Menschen · Geschichten</span>" +
+    "<span>Düsseldorf / NRW</span>" +
+    "</p>" +
+    '<div class="folioMast__row">' +
+    '<p class="folioMast__brand" aria-label="NOIR FRAME">NOI<span class="folioMast__r">R</span> FRAME</p>' +
+    "<h1 class=\"folioMast__title\">Portfolio</h1>" +
+    "</div>" +
+    '<p class="folioMast__line">Inhalt · Vier Abteilungen</p>' +
+    "</header>" +
+    '<div class="folioSpread" role="group" aria-label="' +
     escapeHtml(FU.NAV.PORTFOLIO) +
     '">' +
-    portfolioTileHtml("weddings", "bright", FU.PORTFOLIO.BRIGHT_SIDE) +
-    portfolioTileHtml("dsotl", "dark", FU.PORTFOLIO.DARK_SIDE) +
-    portfolioTileHtml("after-frame", "afterFrame", FU.PORTFOLIO.AFTER_FRAME) +
-    portfolioTileHtml("sarinas-art", "sarina", FU.PORTFOLIO.SARINAS_ART) +
+    portfolioDeptHtml("weddings", "bright", FU.PORTFOLIO.BRIGHT_SIDE, "1", "lead") +
+    '<div class="folioRail">' +
+    portfolioDeptHtml("dsotl", "dark", FU.PORTFOLIO.DARK_SIDE, "2", "side") +
+    portfolioDeptHtml("after-frame", "afterFrame", FU.PORTFOLIO.AFTER_FRAME, "3", "side folioDept--flip") +
+    portfolioDeptHtml("sarinas-art", "sarina", FU.PORTFOLIO.SARINAS_ART, "4", "side folioDept--quiet") +
+    "</div>" +
     "</div>" +
     backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
+    "</div>" +
     "</div>"
   );
 }
@@ -1327,14 +1936,14 @@ function defaultAboutData() {
         name: "Marcin Porębski",
         role: "Founder & Photographer",
         description:
-          "Ich bin Marcin – Fotograf, Musiker und visueller Geschichtenerzähler. Mich interessieren echte Menschen, ungestellte Momente und das Licht zwischen Hell und Dunkel. Ich suche nicht nach Perfektion, sondern nach Charakter, Atmosphäre und Bildern, die etwas fühlen lassen.",
+          "Fotograf, Musiker und visueller Geschichtenerzähler. Er arbeitet auch mit Spezialeffekten und ist Drohnenoperator. Marcin interessieren echte Menschen, ungestellte Momente und das Licht zwischen Hell und Dunkel.\n\nNicht Perfektion ist sein Maß. Er sucht Charakter, Atmosphäre und Bilder, die etwas fühlen lassen.",
       },
       {
         file: "foto02.jpg",
         name: "Sarina Skrobanek",
         role: "Second Shooter",
         description:
-          "Ich bin Sarina und liebe es, mit meiner Kamera echte Momente und Emotionen einzufangen. Besonders faszinieren mich die kleinen, oft unscheinbaren Augenblicke, die eine Geschichte erzählen und Erinnerungen lebendig machen. Mir ist es wichtig, nicht nur festzuhalten, wie etwas aussieht, sondern vor allem, wie es sich anfühlt. Dabei achte ich besonders auf die Stimmung, die kleinen Details und die natürlichen Momente, die oft ganz nebenbei entstehen. Ich mag Bilder, die nicht perfekt inszeniert sein müssen, sondern authentisch sind und echte Gefühle widerspiegeln. Denn für mich sind es gerade die kleinen Dinge, die einen Moment besonders und einzigartig machen.",
+          "Sarina fotografiert als Second Shooter. Mit der Kamera hält sie echte Momente und Emotionen fest, besonders die kleinen, oft unscheinbaren Augenblicke, die eine Geschichte erzählen und Erinnerungen lebendig machen.\n\nIhr ist wichtig, nicht nur festzuhalten, wie etwas aussieht, sondern wie es sich anfühlt. Stimmung, kleine Details und natürliche Momente, die nebenbei entstehen, wiegen mehr als eine perfekte Inszenierung. Gerade die kleinen Dinge machen einen Moment besonders und einzigartig.",
       },
     ],
   };
@@ -1362,25 +1971,30 @@ function aboutDescriptionHtml(text) {
   return escapeHtml(String(text || "")).replace(/\n/g, "<br>");
 }
 
-function aboutMemberBioHtml(description, memberIndex) {
+function aboutMemberBioHtml(description) {
   var body = String(description || "").trim();
   if (!body) {
     return "";
   }
 
-  var bodyId = "about-bio-body-" + memberIndex;
+  var paragraphs = body.split(/\n\n+/).map(function (part) {
+    var text = String(part || "").trim();
+    if (!text) {
+      return "";
+    }
+    return "<p>" + aboutDescriptionHtml(text) + "</p>";
+  }).join("");
+
   return (
     '<div class="member__bio">' +
-    '<div class="member__bioBody member__bioBody--collapsed" id="' +
-    bodyId +
-    '">' +
+    '<div class="member__bioBody">' +
     '<div class="member__bioContent">' +
-    aboutDescriptionHtml(body) +
+    paragraphs +
     "</div>" +
     "</div>" +
-    '<button type="button" class="member__bioToggle" aria-expanded="false" aria-controls="' +
-    bodyId +
-    '">MEHR LESEN</button>' +
+    '<p class="member__sign">' +
+    escapeHtml(ABOUT_TEAM_MOTTO) +
+    "</p>" +
     "</div>"
   );
 }
@@ -1616,7 +2230,7 @@ function renderAboutHtml(about) {
         '">' +
         aboutPhotoTag(member.file, member.name) +
         aboutMemberIdentityHtml(member) +
-        aboutMemberBioHtml(member.description, memberIndex) +
+        aboutMemberBioHtml(member.description) +
         "</div>"
       );
     })
@@ -1633,9 +2247,6 @@ function renderAboutHtml(about) {
     '<div class="team">' +
     membersHtml +
     "</div>" +
-    '<p class="team__motto">' +
-    escapeHtml(ABOUT_TEAM_MOTTO) +
-    "</p>" +
     backButtonHtml("backToMenuButton", FU.BUTTON.BACK_TO_MENU) +
     "</div>"
   );
@@ -2822,8 +3433,134 @@ function exitDarkSide() {
   }, DARK_FADE_OUT_MS);
 }
 
+var galleryElevatorObserver = null;
+var galleryElevatorObserved = null;
+var galleryElevatorFrame = 0;
+
+function galleryElevatorArrow(direction) {
+  var up = direction === "up";
+  return (
+    '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">' +
+    '<path d="' +
+    (up ? "M8 12.5V3.5M8 3.5L4.2 7.3M8 3.5l3.8 3.8" : "M8 3.5v9M8 12.5l-3.8-3.8M8 12.5l3.8-3.8") +
+    '" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>' +
+    "</svg>"
+  );
+}
+
+function ensureGalleryElevator() {
+  if (document.getElementById("galleryElevator")) {
+    return;
+  }
+
+  var elevator = document.createElement("div");
+  elevator.id = "galleryElevator";
+  elevator.className = "galleryElevator";
+  elevator.hidden = true;
+  elevator.setAttribute("role", "group");
+  elevator.setAttribute("aria-label", "Aufzug");
+  elevator.innerHTML =
+    '<button type="button" class="galleryElevator__btn" data-gallery-elevator="top" aria-label="AUFZUG NACH OBEN">' +
+    galleryElevatorArrow("up") +
+    "<span>Oben</span></button>" +
+    '<button type="button" class="galleryElevator__btn" data-gallery-elevator="bottom" aria-label="AUFZUG NACH UNTEN">' +
+    galleryElevatorArrow("down") +
+    "<span>Unten</span></button>";
+
+  elevator.addEventListener("click", function (event) {
+    var button = event.target.closest("[data-gallery-elevator]");
+    if (!button) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    var scroller = document.scrollingElement || document.documentElement;
+    var toEnd = button.getAttribute("data-gallery-elevator") === "bottom";
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    scroller.scrollTo({
+      top: toEnd ? scroller.scrollHeight : 0,
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+  });
+
+  document.documentElement.appendChild(elevator);
+}
+
+function longGalleryElement() {
+  var gallery = document.querySelector("body > .gallery");
+  if (!gallery || document.querySelector(".menuWrapper")) {
+    return null;
+  }
+
+  if (
+    gallery.classList.contains("gallery--portfolio") ||
+    gallery.classList.contains("gallery--contact") ||
+    gallery.classList.contains("legalPage")
+  ) {
+    return null;
+  }
+
+  if (gallery.classList.contains("gallery--photos") && !gallery.querySelector("img")) {
+    return null;
+  }
+
+  var scroller = document.scrollingElement || document.documentElement;
+  var extra = scroller.scrollHeight - scroller.clientHeight;
+  var threshold = Math.min(window.innerHeight * 0.45, 320);
+
+  if (extra <= threshold) {
+    return null;
+  }
+
+  return gallery;
+}
+
+function syncGalleryElevator() {
+  ensureGalleryElevator();
+  var elevator = document.getElementById("galleryElevator");
+  var gallery = document.querySelector("body > .gallery");
+  var longGallery = longGalleryElement();
+
+  elevator.hidden = !longGallery;
+
+  if (gallery === galleryElevatorObserved) {
+    return;
+  }
+
+  if (galleryElevatorObserver) {
+    galleryElevatorObserver.disconnect();
+  }
+
+  galleryElevatorObserved = gallery;
+
+  if (!gallery || typeof ResizeObserver !== "function") {
+    return;
+  }
+
+  if (!galleryElevatorObserver) {
+    galleryElevatorObserver = new ResizeObserver(scheduleGalleryElevatorSync);
+  }
+
+  galleryElevatorObserver.observe(gallery);
+}
+
+function scheduleGalleryElevatorSync() {
+  if (galleryElevatorFrame) {
+    return;
+  }
+
+  galleryElevatorFrame = window.requestAnimationFrame(function () {
+    galleryElevatorFrame = 0;
+    syncGalleryElevator();
+  });
+}
+
 ensureSiteNav();
 updateSiteNavVisibility();
+syncGalleryElevator();
+window.addEventListener("resize", scheduleGalleryElevatorSync);
 
 document.addEventListener("click", function (event) {
   if (!event.target.closest(".backToMenuButton")) {
@@ -2863,6 +3600,10 @@ if (
 ) {
   applyMenuFromHistory();
 } else {
-  replaceNavState("hero");
-  heroHoldTimer = setTimeout(openMenuFromHero, HERO_HOLD_MS);
+  markMenuSeen();
+  heroTransitionStarted = true;
+  showMenu(true);
+  replaceNavState("menu");
 }
+
+armIssueDateline();

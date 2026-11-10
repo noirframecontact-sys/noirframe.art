@@ -1,0 +1,1017 @@
+/* Newspaper Edition — homepage only.
+   Subpages keep website/styles.css. This file styles .npaper. */
+
+html:has(.menuWrapper.npaper),
+body:has(.menuWrapper.npaper) {
+  overflow: hidden;
+  height: 100dvh;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  background-color: #d9cdbf;
+  background-image: url("../images/layouts/layout_PC.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+@media (orientation: portrait), (max-width: 699px) {
+  html:has(.menuWrapper.npaper),
+  body:has(.menuWrapper.npaper) {
+    background-image: url("../images/layouts/layout_02.jpg");
+  }
+}
+
+html:has(.menuWrapper.npaper) #siteNav {
+  display: none;
+}
+
+body:not(:has(.container)) .menuWrapper.npaper,
+.menuWrapper.npaper {
+  position: relative;
+  inset: auto;
+  display: block;
+  width: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  background-image: none;
+}
+
+.menuWrapper.npaper.fade,
+.menuWrapper.npaper.fade.show {
+  opacity: 1;
+  filter: none;
+  transition: none;
+}
+
+.npaper-stage {
+  height: 100%;
+  min-height: 0;
+  display: block;
+  padding: 0;
+  background: transparent;
+}
+
+.npaper-sheet {
+  --npaper-u: min(1cqw, 1.5dvh);
+  container-type: inline-size;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 1.12fr);
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "kicker kicker"
+    "mast mast"
+    "nav nav"
+    "story photo"
+    "services cnc";
+  column-gap: calc(var(--npaper-u) * 2);
+  row-gap: 0;
+  padding: calc(var(--npaper-u) * 1.5) calc(var(--npaper-u) * 2) calc(var(--npaper-u) * 1.35);
+  color: #1a120c;
+  background: transparent;
+  box-shadow: none;
+}
+
+.npaper-sheet::before,
+.npaper-sheet::after {
+  content: none;
+}
+
+.npaper-kicker,
+.npaper-mast,
+.npaper-nav,
+.npaper-story,
+.npaper-photo,
+.npaper-services,
+.npaper-cnc {
+  position: relative;
+  z-index: 4;
+}
+
+.npaper-kicker {
+  grid-area: kicker;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 0 calc(var(--npaper-u) * 0.45);
+  border-bottom: 1px solid #1a120c;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: calc(var(--npaper-u) * 1.25);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.npaper-kicker span:nth-child(2) {
+  text-align: center;
+}
+
+.npaper-kicker span:last-child {
+  text-align: right;
+}
+
+.npaper-mast {
+  position: relative;
+  grid-area: mast;
+  margin: calc(var(--npaper-u) * 0.15) 0 0;
+  padding: calc(var(--npaper-u) * 0.1) 0 0.22em;
+  overflow: hidden;
+  border-bottom: 3px solid #1a120c;
+  font-family: "Oswald", "Arial Narrow", Impact, sans-serif;
+  font-size: calc(var(--npaper-u) * 8.4);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 0.82;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #140e0a;
+  text-shadow: 0.5px 0 0 rgba(48, 24, 8, 0.28);
+}
+
+.npaper-mast__line {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.npaper-mast__ghost {
+  position: absolute;
+  top: 0;
+  color: #140e0a;
+  opacity: 0.15;
+  letter-spacing: inherit;
+  text-shadow: none;
+  pointer-events: none;
+  user-select: none;
+}
+
+.npaper-mast__ghost--before {
+  right: 100%;
+}
+
+.npaper-mast__ghost--after {
+  left: 100%;
+}
+
+.npaper-r {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+
+.npaper-l {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: #cc0000;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-transform: inherit;
+  text-shadow: none;
+  vertical-align: baseline;
+  appearance: none;
+  -webkit-appearance: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+.npaper-l:focus {
+  outline: none;
+}
+
+.npaper-l:focus-visible {
+  outline: 1px solid #cc0000;
+  outline-offset: 0.08em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .npaper-l:hover {
+    color: #cc0000;
+    text-shadow: 0 0 0.08em rgba(204, 0, 0, 0.5);
+  }
+}
+
+.npaper-nav {
+  grid-area: nav;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0;
+  margin: 0 0 calc(var(--npaper-u) * 1);
+  border-top: 1px solid #1a120c;
+  border-bottom: 1px solid #1a120c;
+}
+
+.npaper-nav__link {
+  flex: 1 1 auto;
+  appearance: none;
+  margin: 0;
+  padding: calc(var(--npaper-u) * 0.55) calc(var(--npaper-u) * 0.4);
+  border: 0;
+  background: transparent;
+  color: #1a120c;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: calc(var(--npaper-u) * 1.28);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.15;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.npaper-nav__link:hover,
+.npaper-nav__link:focus-visible {
+  background: rgba(26, 18, 12, 0.08);
+}
+
+.npaper-nav__link:focus-visible,
+.npaper-service:focus-visible,
+.npaper-cnc:focus-visible {
+  outline: 2px solid #1a120c;
+  outline-offset: -2px;
+}
+
+.npaper-nav__rule {
+  flex: 0 0 1px;
+  align-self: stretch;
+  margin: calc(var(--npaper-u) * 0.45) 0;
+  background: #1a120c;
+}
+
+.npaper-story {
+  grid-area: story;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-width: 0;
+  min-height: 0;
+  padding: calc(var(--npaper-u) * 0.4) 0 calc(var(--npaper-u) * 0.8);
+}
+
+.npaper-headline {
+  margin: 0;
+  font-family: "Oswald", "Arial Narrow", Impact, sans-serif;
+  font-size: calc(var(--npaper-u) * 4.15);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.npaper-deck {
+  max-width: 16em;
+  margin: calc(var(--npaper-u) * 0.9) 0 0;
+  padding-top: calc(var(--npaper-u) * 0.7);
+  border-top: 1px solid #1a120c;
+  font-family: "Libre Baskerville", "Palatino Linotype", Palatino, serif;
+  font-size: calc(var(--npaper-u) * 1.55);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.npaper-archive {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: calc(var(--npaper-u) * 0.9);
+  overflow: hidden;
+}
+
+.npaper-archive__text {
+  height: 100%;
+  columns: 3;
+  column-gap: calc(var(--npaper-u) * 0.8);
+  column-fill: auto;
+  font-family: "Libre Baskerville", "Palatino Linotype", Palatino, serif;
+  font-size: calc(var(--npaper-u) * 0.7);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.28;
+  color: rgba(26, 18, 12, 0.4);
+  text-align: left;
+  hyphens: manual;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 52%, rgba(0, 0, 0, 0.45) 76%, transparent 94%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 52%, rgba(0, 0, 0, 0.45) 76%, transparent 94%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+.npaper-archive p {
+  margin: 0 0 0.42em;
+}
+
+.npaper-photo {
+  grid-area: photo;
+  margin: calc(var(--npaper-u) * 0.7) 0;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #1a120c;
+  box-shadow: inset 0 0 0 1px rgba(20, 14, 10, 0.85);
+}
+
+.npaper-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% 42%;
+  filter: grayscale(1) contrast(1.08);
+}
+
+.npaper-photo__plate {
+  display: none;
+}
+
+@media (min-width: 1200px) and (hover: hover) and (pointer: fine) {
+  .npaper-photo img.npaper-photo__plate {
+    display: block;
+    position: absolute;
+    inset: 0;
+    filter: none;
+    opacity: 0;
+    transition: opacity 5s linear;
+    pointer-events: none;
+  }
+
+  .npaper-photo:hover img.npaper-photo__plate {
+    opacity: 1;
+  }
+}
+
+.npaper-services {
+  grid-area: services;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: stretch;
+  min-width: 0;
+  border-top: 1px solid #1a120c;
+}
+
+.npaper-service {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--npaper-u) * 0.35);
+  min-width: 0;
+  min-height: calc(var(--npaper-u) * 5.6);
+  margin: 0;
+  padding: calc(var(--npaper-u) * 0.7) calc(var(--npaper-u) * 0.2) calc(var(--npaper-u) * 0.55);
+  border: 0;
+  border-right: 1px solid rgba(26, 18, 12, 0.35);
+  background: transparent;
+  color: #1a120c;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: calc(var(--npaper-u) * 1.15);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.npaper-service:last-child {
+  border-right: 0;
+}
+
+.npaper-service:hover,
+.npaper-service:focus-visible {
+  background: rgba(26, 18, 12, 0.08);
+}
+
+.npaper-service svg {
+  width: calc(var(--npaper-u) * 2.3);
+  height: calc(var(--npaper-u) * 2.3);
+  display: block;
+}
+
+.npaper-service[aria-expanded="true"] {
+  background: rgba(26, 18, 12, 0.08);
+}
+
+.npaper-note {
+  position: fixed;
+  z-index: 40;
+  width: min(268px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  margin: 0;
+  padding: 11px 13px 12px;
+  overflow: auto;
+  border: 1px solid #1a120c;
+  background: #f3e6cf;
+  color: #1a120c;
+  box-shadow: 0 12px 28px rgba(20, 14, 10, 0.16);
+}
+
+.npaper-note[hidden] {
+  display: none;
+}
+
+.npaper-note__kicker {
+  margin: 0 0 7px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #1a120c;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+}
+
+.npaper-note__body {
+  margin: 0;
+  font-family: "Libre Baskerville", "Palatino Linotype", Palatino, serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.npaper-cnc {
+  grid-area: cnc;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: calc(var(--npaper-u) * 0.35);
+  min-width: 0;
+  margin-top: calc(var(--npaper-u) * 0.7);
+  padding: calc(var(--npaper-u) * 0.9) calc(var(--npaper-u) * 1.1);
+  background: #16110d;
+  color: #f3e6cf;
+  text-decoration: none;
+}
+
+.npaper-cnc__brand {
+  font-family: "Oswald", "Arial Narrow", sans-serif;
+  font-size: calc(var(--npaper-u) * 1.9);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.npaper-cnc__note {
+  font-family: "Libre Baskerville", Palatino, serif;
+  font-size: calc(var(--npaper-u) * 1.2);
+  font-style: italic;
+  line-height: 1.35;
+  color: #eadcc4;
+}
+
+.npaper-cnc__cta {
+  display: inline-block;
+  margin-top: calc(var(--npaper-u) * 0.35);
+  padding: calc(var(--npaper-u) * 0.45) calc(var(--npaper-u) * 0.8);
+  background: #f3e6cf;
+  color: #16110d;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: calc(var(--npaper-u) * 1.25);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.npaper-cnc:hover .npaper-cnc__cta,
+.npaper-cnc:focus-visible .npaper-cnc__cta {
+  background: #fff8ec;
+}
+
+/* Tablet Edition, 700–1199.
+   Phone stays at 699 and below. Desktop stays at 1200 and above. */
+@media (min-width: 700px) and (max-width: 1199px) {
+  .npaper-sheet {
+    column-gap: 22px;
+    padding: 16px 22px 16px;
+  }
+
+  .npaper-kicker {
+    padding-bottom: 8px;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+  }
+
+  .npaper-nav {
+    margin-bottom: 12px;
+  }
+
+  .npaper-nav__link {
+    padding: 11px 6px;
+    font-size: 15px;
+    letter-spacing: 0.055em;
+  }
+
+  .npaper-nav__rule {
+    margin: 10px 0;
+  }
+
+  .npaper-photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    align-self: start;
+    margin: 0;
+  }
+
+  .npaper-photo img {
+    object-position: 46% 40%;
+  }
+
+  .npaper-service {
+    gap: 8px;
+    min-height: 78px;
+    padding: 10px 4px 8px;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+  }
+
+  .npaper-service svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .npaper-cnc {
+    margin-top: 12px;
+    padding: 16px 18px;
+    gap: 6px;
+  }
+
+  .npaper-cnc__brand {
+    font-size: 22px;
+  }
+
+  .npaper-cnc__note {
+    font-size: 15px;
+  }
+
+  .npaper-cnc__cta {
+    margin-top: 4px;
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 1199px) and (orientation: landscape) {
+  .npaper-sheet {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+    height: 100%;
+    padding: 12px 20px 14px;
+  }
+
+  .npaper-mast {
+    margin-top: 2px;
+    padding: 4px 0 8px;
+    font-size: 72px;
+  }
+
+  .npaper-story {
+    justify-content: flex-start;
+    min-height: 0;
+    padding: 6px 0 0;
+  }
+
+  .npaper-headline {
+    font-size: 38px;
+  }
+
+  .npaper-deck {
+    max-width: 24em;
+    margin-top: 10px;
+    padding-top: 10px;
+    font-size: 16px;
+  }
+
+  .npaper-archive {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-top: 12px;
+  }
+
+  .npaper-archive__text {
+    columns: 2;
+    column-gap: 16px;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .npaper-photo {
+    align-self: start;
+    width: 100%;
+    margin-top: 6px;
+  }
+
+  .npaper-services,
+  .npaper-cnc {
+    align-self: stretch;
+  }
+
+  .npaper-cnc {
+    justify-content: center;
+    margin-top: 12px;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 1199px) and (orientation: portrait) {
+  .npaper-sheet {
+    grid-template-columns: minmax(0, 1.08fr) minmax(280px, 1fr);
+    grid-template-rows: auto auto auto auto auto minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      "kicker kicker"
+      "mast mast"
+      "nav nav"
+      "headline photo"
+      "deck photo"
+      "archive archive"
+      "services services"
+      "cnc cnc";
+    height: 100%;
+    padding: 18px 24px 16px;
+    column-gap: 24px;
+  }
+
+  .npaper-mast {
+    margin-top: 4px;
+    padding: 8px 0 12px;
+    font-size: 86px;
+  }
+
+  .npaper-story {
+    display: contents;
+  }
+
+  .npaper-headline {
+    grid-area: headline;
+    align-self: end;
+    padding-top: 10px;
+    font-size: 44px;
+  }
+
+  .npaper-deck {
+    grid-area: deck;
+    max-width: none;
+    margin-top: 14px;
+    padding-top: 12px;
+    font-size: 18px;
+  }
+
+  .npaper-archive {
+    grid-area: archive;
+    min-height: 0;
+    margin-top: 18px;
+  }
+
+  .npaper-archive__text {
+    columns: 2;
+    column-gap: 22px;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .npaper-photo {
+    grid-area: photo;
+    align-self: end;
+    width: 100%;
+    margin-bottom: 2px;
+  }
+
+  .npaper-services {
+    grid-area: services;
+    margin-top: 4px;
+  }
+
+  .npaper-service {
+    min-height: 86px;
+    font-size: 14px;
+  }
+
+  .npaper-cnc {
+    grid-area: cnc;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 22px;
+    margin-top: 12px;
+    padding: 18px 22px;
+  }
+
+  .npaper-cnc__note {
+    flex: 1 1 16em;
+  }
+
+  .npaper-cnc__cta {
+    margin-top: 0;
+  }
+}
+
+/* Mobile: a vertical front page, not a reduced desktop. */
+@media (max-width: 699px) {
+  html:has(.menuWrapper.npaper),
+  body:has(.menuWrapper.npaper) {
+    height: auto;
+    min-height: 100dvh;
+    max-height: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  body:not(:has(.container)) .menuWrapper.npaper,
+  .menuWrapper.npaper {
+    height: auto;
+    min-height: 100dvh;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .npaper-stage {
+    display: block;
+    height: auto;
+    min-height: 100dvh;
+    padding: 0;
+  }
+
+  .npaper-sheet {
+    width: 100%;
+    height: auto;
+    aspect-ratio: auto;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 16px 22px;
+    box-shadow: none;
+  }
+
+  .npaper-kicker {
+    order: 1;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px 10px;
+    padding-bottom: 6px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-align: center;
+  }
+
+  .npaper-kicker span {
+    text-align: center;
+  }
+
+  .npaper-kicker span:nth-child(2) {
+    flex: 1 1 100%;
+  }
+
+  .npaper-mast {
+    order: 2;
+    padding: 8px 0 10px;
+    font-size: clamp(46px, 15vw, 72px);
+    line-height: 0.84;
+  }
+
+  .npaper-mast__ghost {
+    display: none;
+  }
+
+  .npaper-nav {
+    order: 3;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 0 14px;
+  }
+
+  .npaper-nav__rule {
+    display: none;
+  }
+
+  .npaper-nav__link {
+    flex: 1 1 46%;
+    padding: 10px 6px;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    white-space: normal;
+  }
+
+  .npaper-photo {
+    order: 4;
+    margin: 0 0 12px;
+    aspect-ratio: 4 / 3;
+    max-height: 34dvh;
+  }
+
+  .npaper-story {
+    order: 5;
+    padding: 0 0 8px;
+  }
+
+  .npaper-headline {
+    font-size: clamp(36px, 11vw, 52px);
+  }
+
+  .npaper-deck {
+    margin-top: 12px;
+    padding-top: 12px;
+    font-size: 17px;
+  }
+
+  .npaper-archive {
+    flex: 0 0 auto;
+    height: 4.2rem;
+    max-height: 4.2rem;
+    margin-top: 10px;
+  }
+
+  .npaper-archive__text {
+    columns: 1;
+    column-gap: 0;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .npaper-services {
+    order: 6;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    margin-top: 10px;
+  }
+
+  .npaper-service {
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    min-height: 62px;
+    padding: 8px 2px;
+    border-right: 1px solid rgba(26, 18, 12, 0.28);
+    border-bottom: 0;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .npaper-service svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .npaper-note {
+    width: min(340px, calc(100vw - 32px));
+    padding: 16px 16px 18px;
+  }
+
+  .npaper-note__kicker {
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+
+  .npaper-note__body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .npaper-cnc {
+    order: 7;
+    margin: 16px 0 0;
+    padding: 16px;
+    gap: 8px;
+  }
+
+  .npaper-cnc__brand {
+    font-size: 26px;
+  }
+
+  .npaper-cnc__note {
+    font-size: 16px;
+  }
+
+  .npaper-cnc__cta {
+    margin-top: 6px;
+    padding: 12px 14px;
+    font-size: 16px;
+  }
+}
+
+@media (orientation: portrait) {
+  .menuWrapper.npaper {
+    background-image: none;
+  }
+}
+
+/* Shared elevator for every long gallery screen. */
+.galleryElevator {
+  position: fixed;
+  z-index: 30;
+  right: max(8px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.galleryElevator[hidden] {
+  display: none;
+}
+
+.galleryElevator__btn {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  width: 44px;
+  min-height: 44px;
+  margin: 0;
+  padding: 6px 4px 5px;
+  border: 1px solid #1a120c;
+  background: #f3e6cf;
+  color: #1a120c;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.galleryElevator__btn svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.galleryElevator__btn:hover,
+.galleryElevator__btn:focus-visible {
+  background: #e7d3b0;
+}
+
+.galleryElevator__btn:focus-visible {
+  outline: 2px solid #1a120c;
+  outline-offset: 2px;
+}
+
+@media (max-width: 699px) {
+  .galleryElevator {
+    right: max(4px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+    gap: 5px;
+  }
+
+  .galleryElevator__btn {
+    position: relative;
+    width: 44px;
+    min-height: 44px;
+    align-items: flex-end;
+    padding: 6px 2px 5px 0;
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .galleryElevator__btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 32px;
+    border: 1px solid #1a120c;
+    background: #f3e6cf;
+  }
+
+  .galleryElevator__btn svg,
+  .galleryElevator__btn span {
+    position: relative;
+    z-index: 1;
+    width: 30px;
+  }
+
+  .galleryElevator__btn svg {
+    height: 14px;
+  }
+}

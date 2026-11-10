@@ -1,0 +1,431 @@
+/* Shared editorial type and buttons for the publication screens.
+   Faces match the homepage: Oswald titles, Libre Baskerville text,
+   Barlow Condensed for navigation, metadata and captions.
+   The homepage keeps website/newspaper.css. */
+
+:root {
+  --nf-type-display: "Oswald", "Arial Narrow", Impact, sans-serif;
+  --nf-type-serif: "Libre Baskerville", "Palatino Linotype", Palatino, serif;
+  --nf-type-meta: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --nf-ink: #1a120c;
+  --nf-title: clamp(30px, 4.8vw, 58px);
+  --nf-subhead: clamp(22px, 2.5vw, 32px);
+  --nf-subhead-small: clamp(18px, 2vw, 24px);
+}
+
+.gallery {
+  font-family: var(--nf-type-serif);
+  color: var(--nf-ink);
+}
+
+.gallery h1,
+.gallery h2,
+.gallery h3 {
+  font-family: var(--nf-type-display);
+  color: var(--nf-ink);
+}
+
+.gallery.gallery--aktuell > h1,
+.gallery.gallery--angebote > h1,
+.gallery.gallery--about h1,
+.gallery.gallery--blog .blogHeader__title h1 {
+  font-family: var(--nf-type-display);
+  font-size: var(--nf-title);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 0.95;
+  text-indent: 0;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--nf-ink);
+}
+
+.gallery.gallery--aktuell > p,
+.gallery.gallery--blog .blogIntro,
+.gallery.gallery--blog .blogItem__caption p,
+.gallery.gallery--about .member__bioContent p,
+.gallery.gallery--angebote .angebotCard p,
+.gallery.gallery--angebote .angeboteNote,
+.gallery.gallery--aktuell .aktuellItem__features li {
+  font-family: var(--nf-type-serif);
+  color: var(--nf-ink);
+}
+
+.gallery.gallery--aktuell .aktuellItem__body h2,
+.gallery.gallery--blog .blogItem__caption h2 {
+  font-family: var(--nf-type-display);
+  font-size: var(--nf-subhead);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1.08;
+  text-wrap: balance;
+  hyphens: manual;
+  color: var(--nf-ink);
+}
+
+.gallery.gallery--blog .blogItem__caption h3,
+.gallery.gallery--angebote .angebotCard h3 {
+  font-family: var(--nf-type-display);
+  font-size: var(--nf-subhead-small);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+  text-wrap: balance;
+  color: var(--nf-ink);
+}
+
+.gallery.gallery--angebote .angebotCard,
+.gallery.gallery--angebote .angebotCard:hover,
+.gallery.gallery--angebote .angebotCard:focus,
+.gallery.gallery--angebote .angebotCard:focus-visible,
+.gallery.gallery--angebote .angebotCard:focus-within,
+.gallery.gallery--angebote .angebotCard:active {
+  border: 1px solid #1a120c;
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+}
+
+.gallery.gallery--aktuell .aktuellItem__subtitle,
+.gallery.gallery--aktuell .aktuellItem__hint,
+.gallery.gallery--aktuell .aktuellItem__price,
+.gallery.gallery--angebote .angebotCard p.angebotPrice,
+.gallery.gallery--angebote .angeboteNoteLead,
+.siteNav__trigger,
+.siteNav__link {
+  font-family: var(--nf-type-meta);
+}
+
+.siteNav__trigger,
+.siteNav__link {
+  font-weight: 600;
+}
+
+.backToMenuButton,
+.angeboteCta {
+  border-radius: 0;
+  box-shadow: none;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.gallery .backToMenuButton,
+.contactImpressumPage .backToMenuButton,
+.cncIntro__actions .backToMenuButton,
+.angeboteCtaStack .backToMenuButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 12px 22px;
+  border: 1px solid #1a120c;
+  border-radius: 0;
+  background: rgba(243, 236, 228, 0.88);
+  box-shadow: none;
+  color: #1a120c;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: background-color 0.35s ease;
+}
+
+.gallery .backToMenuButton i,
+.contactImpressumPage .backToMenuButton i {
+  color: #1a120c;
+  font-size: 1em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gallery .backToMenuButton:hover,
+  .gallery .backToMenuButton:focus-visible,
+  .contactImpressumPage .backToMenuButton:hover,
+  .cncIntro__actions .backToMenuButton:hover,
+  .angeboteCtaStack .backToMenuButton:hover {
+    background: rgba(26, 18, 12, 0.06);
+    border-color: #1a120c;
+    color: #1a120c;
+  }
+}
+
+.angeboteCta {
+  border-radius: 0;
+  box-shadow: none;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  letter-spacing: 0.14em;
+}
+
+.gallery--blog,
+.gallery--blog .blogIntro__headline,
+.gallery--blog .blogIntro__lead,
+.gallery--blog .blogItem__caption p,
+.gallery--blog .blogItem__signature,
+.gallery--blog h1,
+.gallery--blog h2,
+.gallery--blog h3 {
+  font-family: "Libre Baskerville", Palatino, serif;
+  color: #1a120c;
+}
+
+.gallery--blog h1,
+.gallery--blog h2,
+.gallery--blog h3,
+.gallery--blog .blogHeader__title h1 {
+  font-family: "Oswald", "Arial Narrow", sans-serif;
+  color: #1a120c;
+}
+
+.gallery.gallery--about {
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  height: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-height: none;
+  overflow: visible;
+  padding:
+    calc(var(--nf-nav-height) + 18px)
+    clamp(18px, 3vw, 42px)
+    40px;
+}
+
+@media (min-width: 1200px) {
+  .gallery.gallery--about {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+  }
+}
+
+.gallery.gallery--about h1 {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  font-size: var(--nf-title);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 0.95;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.gallery.gallery--about > p {
+  width: min(1180px, 100%);
+  max-width: 1180px;
+  margin: 10px auto 0;
+  font-family: "Libre Baskerville", Palatino, serif;
+  font-size: 16px;
+  font-style: italic;
+  color: #1a120c;
+  text-align: left;
+}
+
+.gallery.gallery--about .team,
+.gallery.gallery--about .team.team--focus {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 28px 40px;
+  width: min(1180px, 100%);
+  max-width: 1180px;
+  margin: 26px auto 0;
+  align-items: start;
+  flex-wrap: nowrap;
+}
+
+.gallery.gallery--about .member,
+.gallery.gallery--about .team.team--focus .member,
+.gallery.gallery--about .team .member.member--focus {
+  display: block;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  flex: none;
+  margin: 0;
+  text-align: left;
+  opacity: 1;
+  transform: none;
+}
+
+.gallery.gallery--about .member__photoFrame,
+.gallery.gallery--about .member.member--bio-expanded .member__photoFrame,
+.gallery.gallery--about .member.member--focus .member__photoFrame {
+  width: 100%;
+  max-width: none;
+  aspect-ratio: 4 / 3;
+  margin: 0 0 14px;
+  overflow: hidden;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.gallery.gallery--about .member__photoFrame img {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  object-fit: cover;
+  object-position: center 18%;
+}
+
+.gallery.gallery--about .member h3 {
+  margin: 0;
+  padding-top: 8px;
+  border-top: 1px solid #1a120c;
+  font-size: clamp(28px, 2.4vw, 36px);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  text-transform: none;
+}
+
+.gallery.gallery--about .member__bio {
+  text-align: left;
+}
+
+.gallery.gallery--about .member__role {
+  margin: 8px 0 0;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #1a120c;
+}
+
+.gallery.gallery--about .member__bioContent p {
+  margin: 14px 0 0;
+  font-family: "Libre Baskerville", Palatino, serif;
+  font-size: 16px;
+  font-style: normal;
+  line-height: 1.55;
+  color: #1a120c;
+}
+
+.gallery.gallery--about .member__sign {
+  margin: 18px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid #1a120c;
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1a120c;
+}
+
+.gallery.gallery--about .backToMenuButton {
+  align-self: center;
+}
+
+@media (max-width: 899px) {
+  .gallery.gallery--about .team,
+  .gallery.gallery--about .team.team--focus {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .gallery.gallery--about .member__photoFrame,
+  .gallery.gallery--about .team .member__photoFrame {
+    width: 100%;
+  }
+
+  .gallery.gallery--about .member h3,
+  .gallery.gallery--about .member__role,
+  .gallery.gallery--about .member__bio,
+  .gallery.gallery--about .member__sign {
+    padding-right: 56px;
+  }
+}
+
+/* Editorial crossfade. Pages dissolve; the paper layout does not move. */
+body > .is-leaving {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
+  margin: 0;
+  overflow: hidden;
+  z-index: 12;
+  pointer-events: none;
+  transition: opacity 400ms ease;
+}
+
+body > .is-leaving.is-gone {
+  opacity: 0;
+}
+
+body > .is-entering {
+  position: relative;
+  z-index: 14;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+body > .is-entering.show,
+body > .is-entering.fade.show {
+  opacity: 1;
+}
+
+.menuWrapper.npaper.fade.is-entering {
+  opacity: 0;
+  filter: none;
+  transition: opacity 400ms ease;
+}
+
+.menuWrapper.npaper.fade.is-entering.show {
+  opacity: 1;
+}
+
+.menuWrapper.npaper.fade.is-leaving {
+  opacity: 1;
+  filter: none;
+  transition: opacity 400ms ease;
+}
+
+.menuWrapper.npaper.fade.is-leaving.is-gone {
+  opacity: 0;
+}
+
+body.is-crossfade::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 16;
+  pointer-events: none;
+  background: rgba(243, 236, 228, 0.34);
+  opacity: 0;
+  animation: editorialCrossfadeWash 400ms ease;
+}
+
+@keyframes editorialCrossfadeWash {
+  0% {
+    opacity: 0;
+  }
+  42% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body > .is-leaving,
+  body > .is-entering,
+  .menuWrapper.npaper.fade.is-entering,
+  .menuWrapper.npaper.fade.is-leaving,
+  body.is-crossfade::after {
+    transition: none;
+    animation: none;
+  }
+}

@@ -3160,40 +3160,6 @@ body:has(.gallery--blog) {
 
 /* === Dark Side portal (local prototype — disable via DARK_SIDE_ENABLED) === */
 
-.darkSideMoon {
-  position: relative;
-  z-index: 1;
-  width: auto;
-  height: auto;
-  padding: 0;
-  margin: 0 0 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
-  color: var(--nf-gold);
-  transition: opacity var(--nf-transition), transform var(--nf-transition);
-}
-
-.darkSideMoon:hover,
-.darkSideMoon:active {
-  opacity: 0.72;
-  transform: scale(1.04);
-}
-
-.darkSideMoon .darkSideIcon {
-  width: 32px;
-  height: 32px;
-}
-
-.darkSideMoon i {
-  font-size: 20px;
-  line-height: 1;
-}
-
 .darkSideOverlay {
   position: fixed;
   inset: 0;
