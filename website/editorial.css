@@ -429,3 +429,38 @@ body.is-crossfade::after {
     animation: none;
   }
 }
+
+@media (max-width: 699px), ((max-height: 500px) and (hover: none) and (pointer: coarse)) {
+  .gallery.gallery--blog h1,
+  .gallery.gallery--blog h2,
+  .gallery.gallery--blog h3,
+  .gallery.gallery--about h1,
+  .gallery.gallery--about h3,
+  .gallery.gallery--aktuell h1,
+  .gallery.gallery--aktuell h2,
+  .gallery.gallery--angebote h1,
+  .gallery.gallery--angebote h3,
+  .gallery.gallery--blog .blogIntro__headline,
+  .gallery.gallery--blog .blogItem__signature {
+    text-align: center;
+  }
+
+  .gallery.gallery--blog .blogIntro,
+  .gallery.gallery--blog .blogItem__caption p,
+  .gallery.gallery--about .member__bioContent p,
+  .gallery.gallery--about > p,
+  .gallery.gallery--aktuell > p,
+  .gallery.gallery--aktuell .aktuellItem__features li,
+  .gallery.gallery--angebote .angebotCard p,
+  .gallery.gallery--angebote .angeboteNote {
+    text-align: justify;
+  }
+
+  .gallery.gallery--about .member__photoFrame,
+  .gallery.gallery--blog .blogMedia,
+  .gallery.gallery--aktuell img,
+  .gallery.gallery--angebote img {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

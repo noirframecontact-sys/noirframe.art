@@ -3273,3 +3273,72 @@ body:has(.gallery--blog) {
     transform: rotate(90deg);
   }
 }
+
+/* Phone drawer and paper behind the browser chrome.
+   Tablet from 700px and desktop keep their own bars. */
+@media (max-width: 699px), ((max-height: 500px) and (hover: none) and (pointer: coarse)) {
+  html,
+  body {
+    background-color: #d9cdbf;
+    overscroll-behavior: none;
+  }
+
+  html.is-phone-drawer,
+  html.is-phone-drawer body {
+    overflow: hidden;
+  }
+
+  .siteNav__toggle {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .siteNav__bar {
+    z-index: 2;
+  }
+
+  .siteNav__panel {
+    display: none;
+    position: fixed;
+    top: calc(var(--nf-nav-height) + env(safe-area-inset-top));
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    width: auto;
+    overflow: auto;
+    border-bottom: 0;
+    box-shadow: none;
+    background-color: #d9cdbf;
+    background-image: var(--nf-layout-portrait);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .siteNav--open .siteNav__panel {
+    display: flex;
+  }
+}
+
+@media (max-width: 699px) and (orientation: portrait) {
+  .siteNav__link {
+    justify-content: flex-start;
+    padding-top: calc(14px * 1.35);
+    padding-bottom: calc(14px * 1.35);
+    font-size: calc(10px * 1.35);
+    text-align: left;
+  }
+
+  .siteNav__link:not(:disabled):hover,
+  .siteNav__link:not(:disabled):active {
+    font-size: calc(11px * 1.35);
+  }
+
+  .siteNav__panelInner > .siteNav__divider {
+    margin-top: calc(4px * 1.35);
+    margin-bottom: calc(4px * 1.35);
+  }
+}

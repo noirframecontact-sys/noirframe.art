@@ -283,6 +283,7 @@ body:not(:has(.container)) .menuWrapper.npaper,
   margin: calc(var(--npaper-u) * 0.9) 0 0;
   padding-top: calc(var(--npaper-u) * 0.7);
   border-top: 1px solid #1a120c;
+  text-align: center;
   font-family: "Libre Baskerville", "Palatino Linotype", Palatino, serif;
   font-size: calc(var(--npaper-u) * 1.55);
   font-style: italic;
@@ -731,12 +732,27 @@ body:not(:has(.container)) .menuWrapper.npaper,
   }
 }
 
-/* Mobile: a vertical front page, not a reduced desktop. */
-@media (max-width: 699px) {
+/* Mobile: a vertical front page, not a reduced desktop.
+   Short touch landscape uses the same column, so a phone on its side
+   does not inherit the tablet grid. */
+@media (max-width: 699px), ((max-height: 500px) and (hover: none) and (pointer: coarse)) {
+  html:has(.menuWrapper.npaper) #siteNav {
+    display: block;
+  }
+
+  html:has(.gallery) #siteNav {
+    display: none;
+  }
+
+  html.is-phone-drawer:has(.menuWrapper.npaper),
+  html.is-phone-drawer:has(.menuWrapper.npaper) body {
+    overflow: hidden;
+  }
+
   html:has(.menuWrapper.npaper),
   body:has(.menuWrapper.npaper) {
     height: auto;
-    min-height: 100dvh;
+    min-height: 0;
     max-height: none;
     overflow-x: hidden;
     overflow-y: auto;
@@ -745,7 +761,7 @@ body:not(:has(.container)) .menuWrapper.npaper,
   body:not(:has(.container)) .menuWrapper.npaper,
   .menuWrapper.npaper {
     height: auto;
-    min-height: 100dvh;
+    min-height: 0;
     max-height: none;
     overflow: visible;
   }
@@ -753,15 +769,16 @@ body:not(:has(.container)) .menuWrapper.npaper,
   .npaper-stage {
     display: block;
     height: auto;
-    min-height: 100dvh;
-    padding: 0;
+    min-height: 0;
+    padding: calc(var(--nf-nav-height) + env(safe-area-inset-top)) 0 0;
   }
 
   .npaper-sheet {
+    --npaper-u: 1cqw;
     width: 100%;
     height: auto;
     aspect-ratio: auto;
-    min-height: 100dvh;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     padding: 16px 16px 22px;
@@ -799,10 +816,7 @@ body:not(:has(.container)) .menuWrapper.npaper,
   }
 
   .npaper-nav {
-    order: 3;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 0 0 14px;
+    display: none;
   }
 
   .npaper-nav__rule {
@@ -819,9 +833,28 @@ body:not(:has(.container)) .menuWrapper.npaper,
 
   .npaper-photo {
     order: 4;
+    position: relative;
+    flex: none;
+    align-self: flex-start;
+    box-sizing: content-box;
+    width: 100%;
+    height: 0;
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: auto;
     margin: 0 0 12px;
-    aspect-ratio: 4 / 3;
-    max-height: 34dvh;
+    padding: 0 0 75% 0;
+    overflow: hidden;
+  }
+
+  .npaper-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: cover;
+    object-position: 62% 42%;
   }
 
   .npaper-story {
@@ -829,11 +862,18 @@ body:not(:has(.container)) .menuWrapper.npaper,
     padding: 0 0 8px;
   }
 
+  .npaper-headline,
+  .npaper-deck {
+    text-align: center;
+  }
+
   .npaper-headline {
     font-size: clamp(36px, 11vw, 52px);
   }
 
   .npaper-deck {
+    align-self: center;
+    width: min(100%, 16em);
     margin-top: 12px;
     padding-top: 12px;
     font-size: 17px;
@@ -851,6 +891,7 @@ body:not(:has(.container)) .menuWrapper.npaper,
     column-gap: 0;
     font-size: 14px;
     line-height: 1.4;
+    text-align: justify;
   }
 
   .npaper-services {
